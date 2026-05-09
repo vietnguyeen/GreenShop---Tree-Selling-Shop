@@ -1,0 +1,198 @@
+{% extends 'store/base.html' %}
+{% block title %}Kho Cây – GreenShop{% endblock %}
+
+{% block extra_css %}
+/* ── PAGE HEADER ── */
+.kho-header {
+  background: var(--forest); padding: 80px 5vw 64px;
+  position: relative; overflow: hidden;
+  margin-top: -68px; padding-top: calc(68px + 56px);
+}
+.kho-header::before {
+  content: '🌳'; position: absolute; right: 4vw; top: 50%;
+  transform: translateY(-50%);
+  font-size: 16rem; opacity: 0.05; pointer-events: none; line-height: 1;
+}
+.kho-header-inner { position: relative; z-index: 1; }
+.kho-header .section-eyebrow { color: var(--gold); }
+.kho-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700; color: var(--white); line-height: 1.15; margin-bottom: 0.8rem;
+}
+.kho-header p { font-size: 0.92rem; color: rgba(245,237,224,0.6); max-width: 480px; }
+
+/* ── SEARCH BAR ── */
+.search-bar-section {
+  background: var(--cream); padding: 1.8rem 5vw;
+  border-bottom: 1px solid var(--mist);
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.search-form {
+  display: flex; flex: 1; min-width: 260px; max-width: 620px;
+  background: var(--white); border: 1.5px solid var(--mist);
+  border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.search-form:focus-within {
+  border-color: var(--moss); box-shadow: 0 0 0 3px rgba(74,140,98,0.12);
+}
+.search-input {
+  flex: 1; padding: 13px 18px; border: none; outline: none;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  color: var(--ink); background: transparent;
+}
+.search-input::placeholder { color: var(--muted); }
+.search-btn {
+  background: var(--jungle); color: var(--white); border: none;
+  padding: 0 26px; font-family: 'DM Sans', sans-serif;
+  font-weight: 600; font-size: 0.85rem; cursor: pointer;
+  display: flex; align-items: center; gap: 7px;
+  transition: background var(--transition); white-space: nowrap;
+}
+.search-btn:hover { background: var(--forest); }
+
+/* Filter chips */
+.filter-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.chip {
+  padding: 6px 16px; border-radius: 50px; font-size: 0.78rem; font-weight: 600;
+  text-decoration: none; border: 1.5px solid var(--mist);
+  color: var(--muted); background: var(--white);
+  transition: all var(--transition); white-space: nowrap;
+}
+.chip:hover, .chip.active { background: var(--jungle); color: var(--white); border-color: var(--jungle); }
+
+/* Results meta */
+.results-meta {
+  padding: 1.5rem 5vw 0;
+  display: flex; align-items: baseline; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.5rem;
+}
+.results-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.35rem; font-weight: 700; color: var(--forest);
+}
+.results-count { font-size: 0.82rem; color: var(--muted); }
+.results-count strong { color: var(--jungle); font-weight: 700; }
+
+/* Grid wrap */
+.kho-body { padding: 2rem 5vw 6rem; }
+
+/* Empty state */
+.empty-state { grid-column: 1/-1; text-align: center; padding: 5rem 1rem; }
+.empty-icon  { font-size: 4.5rem; opacity: 0.4; margin-bottom: 1rem; }
+.empty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem; font-weight: 700; color: var(--forest); margin-bottom: 0.5rem;
+}
+.empty-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+{% endblock %}
+
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+<div class="kho-header">
+  <div class="kho-header-inner">
+    <div class="section-eyebrow">Danh Mục Sản Phẩm</div>
+    <h1>Toàn Bộ Kho Cây</h1>
+    <p>Tìm kiếm theo tên, loại cây để chọn đúng giống cây bạn cần.</p>
+  </div>
+</div>
+
+<!-- SEARCH + FILTER -->
+<div class="search-bar-section">
+  <form method="GET" action="{% url 'kho_cay' %}" class="search-form">
+    <input type="text" name="q" class="search-input"
+           placeholder="Tìm theo tên hoặc loại cây... (Xoài, Nhãn, Mận...)"
+           value="{{ query }}">
+    <button type="submit" class="search-btn">🔍 Tìm Kiếm</button>
+  </form>
+
+  <!-- Category quick-filter chips -->
+  <div class="filter-chips">
+    <a href="{% url 'kho_cay' %}"
+       class="chip {% if not query %}active{% endif %}">Tất Cả</a>
+    {% for cat in categories %}
+    <a href="{% url 'kho_cay' %}?q={{ cat.name }}"
+       class="chip {% if query == cat.name %}active{% endif %}">{{ cat.name }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- RESULTS META -->
+<div class="results-meta">
+  <span class="results-title">
+    {% if query %}"{{ query }}"{% else %}Tất Cả Sản Phẩm{% endif %}
+  </span>
+  <span class="results-count">Tìm thấy <strong>{{ plants|length }}</strong> cây</span>
+</div>
+
+<!-- PRODUCT GRID -->
+<div class="kho-body">
+  <div class="product-grid">
+    {% for plant in plants %}
+    <div class="card product-card">
+
+      <!-- Ảnh + Quick View
+           Yêu cầu #1: Sửa nháy đơn lồng → dùng nháy kép cho default filter -->
+      <div class="product-img-wrap"
+           onclick="openQuickView(
+             '{{ plant.id }}',
+             '{{ plant.name|escapejs }}',
+             '{% if plant.image %}{{ plant.image.url }}{% endif %}',
+             '{{ plant.girth|default:""|escapejs }}',
+             '{{ plant.height|default:""|escapejs }}',
+             '{{ plant.diameter|default:""|escapejs }}',
+             '{{ plant.formatted_price|escapejs }}',
+             '{{ plant.stock }}',
+             '{{ plant.category.name|default:"Cây Giống"|escapejs }}'
+           )">
+        {% if plant.image %}
+          <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
+        {% else %}
+          <div class="product-img-placeholder">🌳</div>
+        {% endif %}
+        <div class="qv-overlay"><span class="qv-overlay-btn">👁 Xem Nhanh</span></div>
+
+        {% if not plant.is_available %}
+          <div style="position:absolute;top:.8rem;left:.8rem;background:var(--danger);color:#fff;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;z-index:2;">Hết Hàng</div>
+        {% elif plant.stock <= 3 %}
+          <div style="position:absolute;top:.8rem;left:.8rem;background:var(--amber);color:#fff;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;z-index:2;">Sắp Hết – Còn {{ plant.stock }}</div>
+        {% endif %}
+      </div>
+
+      <!-- Thông tin -->
+      <div class="product-body">
+        <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
+        <div class="product-name">{{ plant.name }}</div>
+        <div class="product-specs">
+          <div><strong>Hoành:</strong>     {{ plant.girth|default:"N/A" }}</div>
+          <div><strong>Cao:</strong>        {{ plant.height|default:"N/A" }}</div>
+          <div><strong>Đường kính:</strong> {{ plant.diameter|default:"N/A" }}</div>
+          <div><strong>Tồn kho:</strong>    {{ plant.stock }}</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">{{ plant.formatted_price }}</span>
+          {% if plant.is_available %}
+            <!-- Yêu cầu #2: Thẻ <a> thẳng, không chặn phone -->
+            <a href="{% url 'add_to_cart' plant.id %}" class="btn btn-primary btn-sm">🛒 Thêm giỏ</a>
+          {% else %}
+            <span class="stock-badge-out">Hết Hàng</span>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+    {% empty %}
+    <div class="empty-state">
+      <div class="empty-icon">🌿</div>
+      <div class="empty-title">Không Tìm Thấy Cây Nào</div>
+      <p class="empty-sub">Thử từ khóa khác hoặc xem toàn bộ kho cây.</p>
+      <a href="{% url 'kho_cay' %}" class="btn btn-outline-dark btn-md">Xem Tất Cả</a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,11 @@
+# BẮT BUỘC PHẢI CÓ
+.env
+__pycache__/
+*.pyc
+
+# Thư mục chứa ảnh người dùng tải lên (không push lên code)
+media/
+
+# Môi trường ảo (nếu bạn có dùng venv)
+venv/
+env/

@@ -1,0 +1,213 @@
+{% extends 'store/base.html' %}
+{% block title %}Giỏ Hàng – GreenShop{% endblock %}
+
+{% block extra_css %}
+.cart-page { padding: 3rem 5vw 6rem; }
+.cart-page-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+  font-weight: 700; color: var(--forest); margin-bottom: 0.4rem;
+}
+.cart-page-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 2.5rem; }
+
+.cart-layout {
+  display: grid; grid-template-columns: 1.65fr 1fr;
+  gap: 2.5rem; align-items: start;
+}
+@media (max-width: 860px) { .cart-layout { grid-template-columns: 1fr; } }
+
+/* Cart panel */
+.cart-panel {
+  background: var(--white); border-radius: var(--radius-xl);
+  border: 1.5px solid var(--mist); overflow: hidden;
+}
+.cart-panel-header {
+  padding: 1.4rem 2rem; border-bottom: 1px solid var(--mist);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.cart-panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 700; color: var(--forest);
+}
+.cart-count-badge {
+  background: var(--mist); color: var(--jungle);
+  font-size: 0.75rem; font-weight: 700; padding: 4px 12px; border-radius: 50px;
+}
+.cart-item {
+  display: flex; align-items: center; gap: 1.2rem;
+  padding: 1.35rem 2rem; border-bottom: 1px solid var(--mist);
+  transition: background var(--transition);
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item:hover { background: var(--cream); }
+.cart-item-img {
+  width: 74px; height: 74px; border-radius: var(--radius-md); overflow: hidden;
+  flex-shrink: 0; background: var(--mist);
+  display: flex; align-items: center; justify-content: center; font-size: 1.8rem;
+}
+.cart-item-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name {
+  font-weight: 600; color: var(--forest); font-size: 0.95rem;
+  margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cart-item-cat { font-size: 0.75rem; color: var(--muted); margin-bottom: 0.6rem; }
+.qty-row { display: flex; align-items: center; gap: 8px; }
+.qty-btn {
+  width: 30px; height: 30px; border-radius: 8px; background: var(--mist);
+  border: none; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; font-size: 1.1rem; font-weight: 700;
+  color: var(--jungle); text-decoration: none; line-height: 1;
+  transition: background var(--transition), color var(--transition);
+}
+.qty-btn:hover { background: var(--jungle); color: var(--white); }
+.qty-num { font-weight: 700; color: var(--forest); font-size: 0.95rem; min-width: 22px; text-align: center; }
+.remove-btn {
+  margin-left: auto; background: none; border: none; cursor: pointer;
+  color: #ccc; font-size: 1.1rem; padding: 4px 6px; border-radius: 6px;
+  text-decoration: none; display: flex; align-items: center;
+  transition: color var(--transition), background var(--transition);
+}
+.remove-btn:hover { color: var(--danger); background: #fdecea; }
+.cart-item-subtotal {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700; font-size: 1.1rem; color: var(--amber); white-space: nowrap; flex-shrink: 0;
+}
+
+/* Empty */
+.cart-empty { padding: 4.5rem 2rem; text-align: center; }
+.cart-empty-icon { font-size: 4rem; opacity: 0.35; margin-bottom: 1rem; }
+.cart-empty-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 700; color: var(--forest); margin-bottom: 0.5rem;
+}
+.cart-empty-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.6rem; }
+
+/* Checkout panel */
+.checkout-panel {
+  background: var(--white); border-radius: var(--radius-xl);
+  border: 1.5px solid var(--mist); overflow: hidden;
+  position: sticky; top: 84px;
+}
+.checkout-panel-header { padding: 1.4rem 2rem; border-bottom: 1px solid var(--mist); }
+.checkout-panel-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.25rem; font-weight: 700; color: var(--forest);
+}
+.checkout-panel-body { padding: 1.6rem 2rem 2rem; }
+.order-divider { height: 1px; background: var(--mist); margin: 1.2rem 0; }
+.order-total-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 1.1rem 0; border-top: 2px solid var(--mist); margin-bottom: 1.3rem;
+}
+.order-total-label { font-weight: 600; color: var(--forest); font-size: 0.95rem; }
+.order-total-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem; font-weight: 700; color: var(--amber);
+}
+.trust-list { display: flex; flex-direction: column; gap: 0.55rem; margin-bottom: 1.5rem; }
+.trust-item { display: flex; align-items: center; gap: 9px; font-size: 0.8rem; color: var(--muted); }
+{% endblock %}
+
+{% block content %}
+<div class="cart-page">
+  <h1 class="cart-page-heading">🛒 Giỏ Hàng</h1>
+  <p class="cart-page-sub">Kiểm tra lại đơn hàng trước khi xác nhận thanh toán.</p>
+
+  <div class="cart-layout">
+
+    <!-- CART ITEMS -->
+    <div class="cart-panel">
+      <div class="cart-panel-header">
+        <span class="cart-panel-title">Sản Phẩm Đã Chọn</span>
+        <span class="cart-count-badge">{{ cart_items|length }} sản phẩm</span>
+      </div>
+
+      {% if cart_items %}
+        {% for item in cart_items %}
+        <div class="cart-item">
+          <div class="cart-item-img">
+            {% if item.plant.image %}<img src="{{ item.plant.image.url }}" alt="{{ item.plant.name }}">
+            {% else %}🌳{% endif %}
+          </div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">{{ item.plant.name }}</div>
+            <div class="cart-item-cat">{{ item.plant.category.name|default:"Cây Giống" }}</div>
+            <div class="qty-row">
+              <a class="qty-btn" href="{% url 'update_cart' item.plant.id 'decrease' %}">−</a>
+              <span class="qty-num">{{ item.quantity }}</span>
+              <a class="qty-btn" href="{% url 'update_cart' item.plant.id 'increase' %}">+</a>
+            </div>
+          </div>
+          <span class="cart-item-subtotal">{{ item.subtotal|floatformat:"0" }} đ</span>
+          <a class="remove-btn" href="{% url 'remove_from_cart' item.plant.id %}" title="Xoá">🗑</a>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="cart-empty">
+          <div class="cart-empty-icon">🪴</div>
+          <div class="cart-empty-title">Giỏ Hàng Đang Trống</div>
+          <p class="cart-empty-sub">Hãy khám phá kho cây và thêm sản phẩm vào giỏ nhé!</p>
+          <a href="{% url 'kho_cay' %}" class="btn btn-primary btn-md">🌱 Xem Kho Cây</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- CHECKOUT FORM -->
+    <div class="checkout-panel">
+      <div class="checkout-panel-header">
+        <div class="checkout-panel-title">Thông Tin Đặt Hàng</div>
+      </div>
+      <div class="checkout-panel-body">
+        <form method="POST" action="{% url 'checkout' %}">
+          {% csrf_token %}
+
+          <div class="form-group">
+            <label>Họ và Tên Người Nhận</label>
+            <!-- Yêu cầu #3: Tự điền từ session nếu đã đặt hàng lần trước -->
+            <input type="text" name="name" class="form-control"
+                   placeholder="Nguyễn Văn A"
+                   value="{{ request.session.customer_name|default:'' }}"
+                   required>
+          </div>
+
+          <div class="form-group">
+            <label>Số Điện Thoại</label>
+            <input type="tel" name="phone" class="form-control"
+                   placeholder="09xx xxx xxx"
+                   value="{{ request.session.phone_number|default:'' }}"
+                   required>
+          </div>
+
+          <div class="form-group">
+            <label>Địa Chỉ Giao Hàng</label>
+            <input type="text" name="address" class="form-control"
+                   placeholder="Số nhà, đường, phường, quận..."
+                   value="{{ request.session.customer_address|default:'' }}"
+                   required>
+          </div>
+
+          <div class="order-divider"></div>
+
+          <div class="order-total-row">
+            <span class="order-total-label">Tổng Thanh Toán</span>
+            <span class="order-total-value">{{ total_price|floatformat:"0" }} đ</span>
+          </div>
+
+          <div class="trust-list">
+            <div class="trust-item">✅ Thanh toán khi nhận hàng (COD)</div>
+            <div class="trust-item">🚚 Giao hàng toàn TP.HCM & tỉnh lân cận</div>
+            <div class="trust-item">📞 Shop gọi xác nhận trong 30 phút</div>
+          </div>
+
+          <button type="submit" class="btn btn-accent btn-full"
+                  {% if not cart_items %}disabled{% endif %}>
+            Xác Nhận Đặt Hàng 🛒
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock content %}

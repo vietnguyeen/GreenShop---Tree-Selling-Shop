@@ -1,0 +1,387 @@
+{% extends 'store/base.html' %}
+{% block title %}GreenShop – Cây Giống Sạch Hóc Môn{% endblock %}
+
+{% block extra_css %}
+/* ══════════════════════════════════════════════════════════
+   HERO  –  đã xóa toàn bộ CSS hero-stats / hero-stat*
+══════════════════════════════════════════════════════════ */
+#hero {
+  min-height: 100vh; position: relative;
+  display: flex; align-items: center;
+  padding: 0 5vw; overflow: hidden;
+  margin-top: -68px; padding-top: 68px;
+}
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    linear-gradient(
+      105deg,
+      rgba(14,31,21,0.90) 0%,
+      rgba(14,31,21,0.60) 55%,
+      rgba(14,31,21,0.20) 100%
+    ),
+    url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1800&q=80')
+    center / cover no-repeat;
+}
+.hero-bg::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 80% 20%, rgba(200,168,75,0.07) 0%, transparent 50%),
+    radial-gradient(circle at 15% 85%, rgba(74,140,98,0.09) 0%, transparent 40%);
+}
+.hero-content {
+  position: relative; z-index: 1; max-width: 630px;
+  animation: heroFadeUp 0.85s cubic-bezier(0.22,1,0.36,1) both;
+}
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(36px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-size: 0.7rem; font-weight: 600; letter-spacing: 0.24em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 1.4rem;
+}
+.hero-eyebrow span {
+  width: 30px; height: 1px;
+  background: var(--gold); opacity: 0.55; display: block;
+}
+.hero-content h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3rem, 7.5vw, 5.8rem);
+  font-weight: 700; color: var(--white);
+  line-height: 1.05; margin-bottom: 1.4rem;
+}
+.hero-content h1 em { color: var(--gold); font-style: italic; }
+.hero-content p {
+  font-size: 1.05rem; color: rgba(245,237,224,0.80);
+  line-height: 1.8; max-width: 460px; margin-bottom: 2.4rem;
+}
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+@media (max-width: 640px) {
+  .hero-content h1 { font-size: 2.6rem; }
+}
+
+/* ══════════════════════════════════════════════════════════
+   CATEGORIES
+══════════════════════════════════════════════════════════ */
+#categories { background: var(--cream); position: relative; overflow: hidden; }
+#categories::after {
+  content: '🌿'; position: absolute; right: -1rem; bottom: -2rem;
+  font-size: 20rem; opacity: 0.04; pointer-events: none; transform: rotate(-10deg);
+}
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 1.25rem; margin-top: 3rem;
+}
+.cat-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  border: 1.5px solid var(--mist); overflow: hidden;
+  text-decoration: none; color: var(--ink); display: flex; flex-direction: column;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.cat-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 50px rgba(42,92,63,0.18);
+  border-color: var(--sage);
+}
+.cat-img-wrap {
+  height: 155px; overflow: hidden;
+  background: linear-gradient(135deg, var(--mist), var(--parchment));
+  display: flex; align-items: center; justify-content: center;
+}
+.cat-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+.cat-card:hover .cat-img-wrap img { transform: scale(1.07); }
+.cat-emoji { font-size: 3.8rem; }
+.cat-body  { padding: 1.1rem 1.2rem 1.3rem; }
+.cat-name  {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.05rem; font-weight: 700; color: var(--forest); margin-bottom: 3px;
+}
+.cat-cta { font-size: 0.72rem; color: var(--gold); font-weight: 600; }
+
+/* ══════════════════════════════════════════════════════════
+   WHY US
+══════════════════════════════════════════════════════════ */
+#why { background: var(--forest); padding: 80px 5vw; }
+#why .section-title { color: var(--white); }
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1.5rem; margin-top: 2.8rem;
+}
+.why-card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(200,168,75,0.18);
+  border-radius: var(--radius-lg); padding: 2rem 1.6rem;
+  transition: background var(--transition), transform var(--transition);
+}
+.why-card:hover { background: rgba(255,255,255,0.09); transform: translateY(-4px); }
+.why-icon  { font-size: 2rem; margin-bottom: 1rem; }
+.why-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.15rem; font-weight: 700; color: var(--cream); margin-bottom: 0.55rem;
+}
+.why-text  { font-size: 0.84rem; color: rgba(245,237,224,0.58); line-height: 1.75; }
+
+/* ══════════════════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════════════════ */
+#contact { background: var(--cream); }
+.contact-layout {
+  display: grid; grid-template-columns: 1fr 1.25fr;
+  gap: 5rem; margin-top: 3.5rem; align-items: start;
+}
+@media (max-width: 800px) {
+  .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+.contact-info-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.55rem; font-weight: 700; color: var(--forest); margin-bottom: 2rem;
+}
+.contact-detail { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 1.5rem; }
+.contact-icon {
+  width: 44px; height: 44px; border-radius: 12px; background: var(--mist);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.contact-text strong {
+  display: block; font-size: 0.73rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em; color: var(--jungle); margin-bottom: 3px;
+}
+.contact-text span { font-size: 0.9rem; color: var(--muted); }
+.contact-form-card {
+  background: var(--white); border-radius: var(--radius-xl);
+  padding: 2.5rem; box-shadow: 0 6px 40px rgba(14,31,21,0.09);
+  border: 1.5px solid var(--mist);
+}
+.contact-form-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-weight: 700; color: var(--forest); margin-bottom: 1.8rem;
+}
+{% endblock %}
+
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO  –  đã xóa khối <div class="hero-stats">
+══════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span></span> Vườn Ươm Hóc Môn · TP.HCM <span></span>
+    </div>
+    <h1>Cây Giống Sạch<br/><em>Vườn Nhà</em> Xanh Tươi</h1>
+    <p>Chuyên cung cấp cây ăn trái chất lượng cao – Xoài, Nhãn, Mận, Sapo.
+       Cây khỏe, gốc đẹp, cam kết chính gốc từ vườn ươm.</p>
+    <div class="hero-btns">
+      <a href="{% url 'kho_cay' %}" class="btn btn-accent btn-lg">Xem Kho Cây 🌱</a>
+      <a href="#contact"            class="btn btn-outline-light btn-lg">Đặt Lịch Cắt Tỉa ✂️</a>
+    </div>
+  </div>
+  <!-- hero-stats đã được xóa hoàn toàn -->
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     DANH MỤC
+══════════════════════════════════════════════════════════ -->
+<section id="categories">
+  <div class="section-eyebrow">Danh Mục</div>
+  <h2 class="section-title">Khám Phá Theo Loại Cây</h2>
+  <p class="section-sub">Chọn loại cây ăn trái bạn muốn tìm hiểu từ kho hàng phong phú của GreenShop.</p>
+
+  <div class="cat-grid">
+    {% for cat in categories %}
+    <a class="cat-card" href="{% url 'kho_cay' %}?q={{ cat.name }}">
+      <div class="cat-img-wrap">
+        {% if cat.image %}
+          <img src="{{ cat.image.url }}" alt="{{ cat.name }}" loading="lazy">
+        {% else %}
+          <span class="cat-emoji">🌿</span>
+        {% endif %}
+      </div>
+      <div class="cat-body">
+        <div class="cat-name">{{ cat.name }}</div>
+        <div class="cat-cta">Xem tất cả →</div>
+      </div>
+    </a>
+    {% empty %}
+      <p style="color:var(--muted)">Chưa có danh mục. Vui lòng thêm qua trang Admin.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     TẠI SAO CHỌN CHÚNG TÔI
+══════════════════════════════════════════════════════════ -->
+<section id="why">
+  <div class="section-eyebrow">Cam Kết</div>
+  <h2 class="section-title">Tại Sao Chọn GreenShop?</h2>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon">🌱</div>
+      <div class="why-title">Cây Chính Gốc</div>
+      <p class="why-text">100% cây được ươm từ giống chuẩn, kiểm định nguồn gốc, không pha tạp.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">🚚</div>
+      <div class="why-title">Giao Tận Vườn</div>
+      <p class="why-text">Đóng gói bảo vệ bộ rễ, giao hàng TP.HCM, Bình Dương, Long An, Đồng Nai.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">✂️</div>
+      <div class="why-title">Dịch Vụ Cắt Tỉa</div>
+      <p class="why-text">Đội ngũ thợ vườn 10+ năm, chăm sóc tận tâm từng khu vườn của khách hàng.</p>
+    </div>
+    <div class="why-card">
+      <div class="why-icon">💬</div>
+      <div class="why-title">Tư Vấn Miễn Phí</div>
+      <p class="why-text">Hỗ trợ kỹ thuật trồng, chăm sóc sau mua, giải đáp qua điện thoại 7 ngày/tuần.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     SẢN PHẨM NỔI BẬT
+══════════════════════════════════════════════════════════ -->
+<section id="products">
+  <div class="section-eyebrow">Sản Phẩm Nổi Bật</div>
+  <h2 class="section-title">Kho Cây Chọn Lọc</h2>
+  <p class="section-sub">Những cây ăn trái đẹp nhất, khỏe nhất đang có mặt tại vườn ươm.</p>
+
+  <div class="product-grid">
+    {% for plant in plants %}
+    <div class="card product-card">
+
+      <div class="product-img-wrap"
+           onclick="openQuickView(
+             '{{ plant.id }}',
+             '{{ plant.name|escapejs }}',
+             '{% if plant.image %}{{ plant.image.url }}{% endif %}',
+             '{{ plant.girth|default:""|escapejs }}',
+             '{{ plant.height|default:""|escapejs }}',
+             '{{ plant.diameter|default:""|escapejs }}',
+             '{{ plant.formatted_price|escapejs }}',
+             '{{ plant.stock }}',
+             '{{ plant.category.name|default:"Cây Giống"|escapejs }}'
+           )">
+        {% if plant.image %}
+          <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
+        {% else %}
+          <div class="product-img-placeholder">🌳</div>
+        {% endif %}
+        <div class="qv-overlay"><span class="qv-overlay-btn">👁 Xem Nhanh</span></div>
+        {% if not plant.is_available %}
+          <div style="position:absolute;top:.8rem;left:.8rem;background:var(--danger);color:#fff;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;">
+            Hết Hàng
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="product-body">
+        <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
+        <div class="product-name">{{ plant.name }}</div>
+        <div class="product-specs">
+          <div><strong>Hoành:</strong>      {{ plant.girth|default:"N/A" }}</div>
+          <div><strong>Cao:</strong>         {{ plant.height|default:"N/A" }}</div>
+          <div><strong>Đường kính:</strong>  {{ plant.diameter|default:"N/A" }}</div>
+          <div><strong>Tồn kho:</strong>     {{ plant.stock }}</div>
+        </div>
+        <div class="product-footer">
+          <span class="product-price">{{ plant.formatted_price }}</span>
+          {% if plant.is_available %}
+            <a href="{% url 'add_to_cart' plant.id %}" class="btn btn-primary btn-sm">🛒 Thêm giỏ</a>
+          {% else %}
+            <span class="stock-badge-out">Hết Hàng</span>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+    {% empty %}
+      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:3rem 0">
+        Hiện chưa có sản phẩm.
+      </p>
+    {% endfor %}
+  </div>
+
+  <div style="text-align:center; margin-top:3rem">
+    <a href="{% url 'kho_cay' %}" class="btn btn-outline-dark btn-md">
+      Xem Toàn Bộ Kho Cây →
+    </a>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     LIÊN HỆ / ĐẶT LỊCH CẮT TỈA
+══════════════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="section-eyebrow">Liên Hệ</div>
+  <h2 class="section-title">Đặt Lịch Cắt Tỉa Cây</h2>
+  <p class="section-sub">Điền thông tin bên dưới, GreenShop sẽ liên hệ xác nhận trong vòng 30 phút.</p>
+
+  <div class="contact-layout">
+
+    <div>
+      <div class="contact-info-title">Thông Tin Liên Hệ</div>
+      <div class="contact-detail">
+        <div class="contact-icon">📍</div>
+        <div class="contact-text">
+          <strong>Địa Chỉ Vườn</strong>
+          <span>Xã Hóc Môn, TP.HCM – Mở cửa 7:00–17:30</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">📞</div>
+        <div class="contact-text">
+          <strong>Hotline</strong>
+          <span>0912 345 678 – Hỗ trợ 7 ngày/tuần</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">🚚</div>
+        <div class="contact-text">
+          <strong>Khu Vực Giao Hàng</strong>
+          <span>TP.HCM, Bình Dương, Long An, Đồng Nai</span>
+        </div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-text">
+          <strong>Email</strong>
+          <span>contact@greenshop.vn</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-form-card">
+      <div class="contact-form-title">✂️ Đặt Lịch Cắt Tỉa</div>
+      <form method="POST" action="{% url 'pruning_request' %}">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Họ và Tên *</label>
+          <input type="text" name="name" class="form-control"
+                 placeholder="Nguyễn Văn A" required>
+        </div>
+        <div class="form-group">
+          <label>Số Điện Thoại *</label>
+          <input type="tel" name="phone_number" class="form-control"
+                 placeholder="09xx xxx xxx" required>
+        </div>
+        <div class="form-group">
+          <label>Mô Tả Yêu Cầu</label>
+          <textarea name="message" class="form-control"
+                    placeholder="Số lượng cây, loại cây, địa chỉ vườn..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Gửi Đăng Ký ✔</button>
+      </form>
+    </div>
+
+  </div>
+</section>
+
+{% endblock content %}
