@@ -7,7 +7,8 @@ from django.template.loader   import render_to_string
 from django.utils.html        import strip_tags
 from django.conf              import settings
 
-from .models import Category, Plant, PruningRequest, Order, OrderItem
+from .forms                   import ServiceOrderForm
+from .models                  import Category, Plant, PruningRequest, Order, OrderItem, ServiceOrder
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -25,36 +26,34 @@ def _cart_item_count(request):
     return sum(item['quantity'] for item in _get_cart(request).values())
 
 def _send_html_email(subject, html_content, to_email):
-    """
-    Helper dùng chung: gửi email HTML + text fallback.
-    Dùng EmailMultiAlternatives để client mail cũ vẫn đọc được bản text thuần.
-    Lỗi email không được làm crash luồng chính → dùng try/except + fail_silently.
-    """
     try:
         text_content = strip_tags(html_content)
         msg = EmailMultiAlternatives(
             subject  = subject,
-            body     = text_content,           # bản text thuần (fallback)
+            body     = text_content,
             from_email = settings.EMAIL_HOST_USER,
             to       = [settings.EMAIL_HOST_USER],
         )
-        msg.attach_alternative(html_content, "text/html")  # bản HTML đẹp
+        msg.attach_alternative(html_content, "text/html")
         msg.send(fail_silently=False)
     except Exception as exc:
-        # Log lỗi ra console, KHÔNG raise để không hỏng luồng nghiệp vụ
-        print(f"[GreenShop] ⚠️  Lỗi gửi email: {exc}")
+        print(f"[Hoa Kiểng Hoàng Nam] ⚠️  Lỗi gửi email: {exc}")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# TRANG CHỦ
+# TRANG CHỦ (Đã fix lỗi hiển thị Slider)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def index(request):
-    categories = Category.objects.all()
-    plants     = Plant.objects.select_related('category').all()[:6]
+    # Lấy toàn bộ cây đang có hàng để phục vụ cho tab Khám Phá (Slider)
+    all_plants = Plant.objects.select_related('category').filter(stock__gt=0)
+    
+    # Lấy 8 cây mới nhất để hiển thị ở phần Sản Phẩm Nổi Bật
+    featured_plants = Plant.objects.select_related('category').filter(stock__gt=0).order_by('-id')[:8]
+    
     return render(request, 'store/index.html', {
-        'categories':      categories,
-        'plants':          plants,
+        'all_plants':      all_plants,
+        'featured_plants': featured_plants,
         'cart_item_count': _cart_item_count(request),
     })
 
@@ -82,7 +81,7 @@ def kho_cay(request):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# SET PHONE  (giữ lại để URL không 404)
+# SET PHONE
 # ─────────────────────────────────────────────────────────────────────────────
 
 def set_phone(request):
@@ -113,10 +112,7 @@ def add_to_cart(request, plant_id):
         if cart[key]['quantity'] < plant.stock:
             cart[key]['quantity'] += 1
         else:
-            messages.warning(
-                request,
-                f'"{plant.name}" đã đạt giới hạn tồn kho ({plant.stock}).'
-            )
+            messages.warning(request, f'"{plant.name}" đã đạt giới hạn tồn kho ({plant.stock}).')
     else:
         cart[key] = {
             'price':    plant.price,
@@ -193,7 +189,6 @@ def checkout(request):
         messages.error(request, 'Giỏ hàng đang trống.')
         return redirect('cart_detail')
 
-    # ── Lấy & lưu ngầm thông tin khách vào session ───────────────────────
     customer_name = request.POST.get('name',    '').strip()
     phone_number  = request.POST.get('phone',   '').strip()
     address       = request.POST.get('address', '').strip()
@@ -203,7 +198,6 @@ def checkout(request):
     request.session['customer_address'] = address
     request.session.modified = True
 
-    # ── Tạo Order ─────────────────────────────────────────────────────────
     order = Order.objects.create(
         customer_name = customer_name,
         phone_number  = phone_number,
@@ -212,23 +206,20 @@ def checkout(request):
     )
 
     total      = 0
-    items_data = []   # dữ liệu truyền vào template email
+    items_data = []
 
     for plant_id_str, item in cart.items():
         plant = get_object_or_404(Plant, id=int(plant_id_str))
         qty   = item['quantity']
         price = item['price']
 
-        OrderItem.objects.create(
-            order=order, plant=plant, quantity=qty, price=price,
-        )
+        OrderItem.objects.create(order=order, plant=plant, quantity=qty, price=price)
 
-        # Trừ stock – thread-safe bằng F expression
         Plant.objects.filter(id=plant.id).update(stock=F('stock') - qty)
         Plant.objects.filter(id=plant.id, stock__lt=0).update(stock=0)
 
-        subtotal    = price * qty
-        total      += subtotal
+        subtotal = price * qty
+        total   += subtotal
         items_data.append({
             'plant':      plant,
             'quantity':   qty,
@@ -239,8 +230,6 @@ def checkout(request):
     order.total_amount = total
     order.save()
 
-    # ── Gửi email hóa đơn ─────────────────────────────────────────────────
-    # Render template HTML thành chuỗi, truyền đầy đủ context
     html_content = render_to_string('store/email_bill.html', {
         'order': order,
         'items': items_data,
@@ -251,7 +240,6 @@ def checkout(request):
         to_email     = settings.EMAIL_HOST_USER,
     )
 
-    # ── Xóa giỏ hàng ─────────────────────────────────────────────────────
     if 'cart' in request.session:
         del request.session['cart']
     request.session.modified = True
@@ -268,7 +256,7 @@ def order_success(request, order_id):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CẮT TỈA
+# CẮT TỈA (Cũ - Đã đổi tên)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def pruning_request_view(request):
@@ -279,68 +267,27 @@ def pruning_request_view(request):
     phone_number = request.POST.get('phone_number', '').strip()
     message      = request.POST.get('message',      '').strip()
 
-    # ── Lưu DB ────────────────────────────────────────────────────────────
     PruningRequest.objects.create(
         name         = name,
         phone_number = phone_number,
         message      = message,
     )
 
-    # ── Gửi email thông báo nhanh cho chủ shop ────────────────────────────
-    # Dùng f-string HTML inline vì nội dung đơn giản, không cần file template riêng
     html_content = f"""
     <!DOCTYPE html>
     <html lang="vi">
     <head><meta charset="UTF-8"></head>
     <body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:20px;margin:0;">
-      <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;
-                  overflow:hidden;border:1px solid #e0e0e0;">
-
+      <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e0e0e0;">
         <div style="background:#1a3a24;padding:24px 28px;text-align:center;">
-          <h2 style="color:#c8a84b;margin:0;font-family:Georgia,serif;font-size:1.3rem;">
-            🌿 GREENSHOP – YÊU CẦU CẮT TỈA MỚI
-          </h2>
+          <h2 style="color:#c8a84b;margin:0;font-family:Georgia,serif;font-size:1.3rem;">🌿 HOA KIỂNG HOÀNG NAM – YÊU CẦU CẮT TỈA MỚI</h2>
         </div>
-
         <div style="padding:28px;">
-          <p style="font-size:0.78rem;font-weight:700;text-transform:uppercase;
-                    letter-spacing:0.15em;color:#4a8c62;margin:0 0 10px;">
-            Thông Tin Khách Hàng
-          </p>
-          <div style="background:#f5ede0;border-radius:8px;padding:16px 18px;">
-            <table style="width:100%;font-size:0.9rem;border-collapse:collapse;">
-              <tr>
-                <td style="font-weight:700;color:#1a3a24;width:110px;padding:5px 0;">Họ tên:</td>
-                <td style="color:#333;padding:5px 0;">{name}</td>
-              </tr>
-              <tr>
-                <td style="font-weight:700;color:#1a3a24;padding:5px 0;">SĐT:</td>
-                <td style="color:#333;padding:5px 0;">
-                  <a href="tel:{phone_number}"
-                     style="color:#d4863a;font-weight:700;text-decoration:none;">
-                    {phone_number}
-                  </a>
-                </td>
-              </tr>
-              <tr>
-                <td style="font-weight:700;color:#1a3a24;padding:5px 0;vertical-align:top;">
-                  Yêu cầu:
-                </td>
-                <td style="color:#333;padding:5px 0;line-height:1.6;">
-                  {message if message else '<em style="color:#999;">Không có ghi chú</em>'}
-                </td>
-              </tr>
-            </table>
-          </div>
-
-          <p style="margin-top:20px;font-size:0.85rem;color:#666;line-height:1.7;">
-            ⏰ Vui lòng gọi lại cho khách trong thời gian sớm nhất để xác nhận lịch.
-          </p>
-        </div>
-
-        <div style="border-top:1px solid #eee;padding:16px 28px;
-                    text-align:center;font-size:0.78rem;color:#999;">
-          Email tự động từ hệ thống <strong>GreenShop</strong>.
+          <table style="width:100%;font-size:0.9rem;border-collapse:collapse;">
+            <tr><td style="font-weight:700;color:#1a3a24;width:110px;padding:5px 0;">Họ tên:</td><td style="padding:5px 0;">{name}</td></tr>
+            <tr><td style="font-weight:700;color:#1a3a24;padding:5px 0;">SĐT:</td><td style="padding:5px 0;">{phone_number}</td></tr>
+            <tr><td style="font-weight:700;color:#1a3a24;padding:5px 0;">Yêu cầu:</td><td style="padding:5px 0;">{message}</td></tr>
+          </table>
         </div>
       </div>
     </body>
@@ -355,3 +302,52 @@ def pruning_request_view(request):
 
     messages.success(request, 'Đã gửi yêu cầu cắt tỉa! Chúng tôi sẽ liên hệ sớm.')
     return redirect('home')
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DỊCH VỤ CẢNH QUAN
+# ─────────────────────────────────────────────────────────────────────────────
+
+def service_booking(request):
+    if request.method == 'POST':
+        form = ServiceOrderForm(request.POST)
+
+        if form.is_valid():
+            service_order = form.save()
+            service_label = service_order.get_service_type_display()
+            
+            # Đã thay thế chuỗi HTML cứng bằng render từ file template mới
+            html_content = render_to_string('store/email_service.html', {
+                'service_order': service_order,
+            })
+
+            _send_html_email(
+                subject      = (
+                    f'🌿 DỊCH VỤ MỚI [{service_label}] – '
+                    f'{service_order.customer_name} ({service_order.phone_number})'
+                ),
+                html_content = html_content,
+                to_email     = settings.EMAIL_HOST_USER,
+            )
+
+            messages.success(
+                request,
+                'Đã gửi yêu cầu dịch vụ! Chúng tôi sẽ liên hệ xác nhận sớm nhất.'
+            )
+            return redirect('service_success')
+
+        return render(request, 'store/service_booking.html', {
+            'form':            form,
+            'cart_item_count': _cart_item_count(request),
+        })
+
+    form = ServiceOrderForm()
+    return render(request, 'store/service_booking.html', {
+        'form':            form,
+        'cart_item_count': _cart_item_count(request),
+    })
+
+def service_success(request):
+    return render(request, 'store/service_success.html', {
+        'cart_item_count': _cart_item_count(request),
+    })

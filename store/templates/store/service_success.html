@@ -1,0 +1,68 @@
+{% extends 'store/base.html' %}
+{% block title %}Đặt Dịch Vụ Thành Công – Hoa Kiểng Hoàng Nam{% endblock %}
+
+{% block extra_css %}
+.success-page {
+  min-height: calc(100vh - 68px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 4rem 5vw;
+  background: radial-gradient(ellipse at 55% 0%, var(--mist) 0%, var(--white) 55%);
+}
+.success-card {
+  background: var(--white); border-radius: var(--radius-xl);
+  padding: 3.5rem 3rem; max-width: 520px; width: 100%;
+  border: 1.5px solid var(--mist);
+  box-shadow: var(--shadow-lg); text-align: center;
+  animation: successIn 0.55s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes successIn {
+  from { opacity: 0; transform: scale(0.9) translateY(24px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.success-icon {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--moss), var(--jungle));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.8rem; margin: 0 auto 1.6rem;
+  box-shadow: 0 12px 40px rgba(42,92,63,0.3);
+  animation: popIn 0.45s 0.25s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes popIn {
+  from { transform: scale(0); } to { transform: scale(1); }
+}
+.success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem; font-weight: 700; color: var(--forest); margin-bottom: 0.8rem;
+}
+.success-sub {
+  font-size: 0.9rem; color: var(--muted); line-height: 1.8; margin-bottom: 2rem;
+}
+.success-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.success-note {
+  margin-top: 2rem; padding: 1.1rem 1.3rem;
+  background: rgba(74,140,98,0.08); border-radius: var(--radius-sm);
+  border-left: 3px solid var(--moss);
+  font-size: 0.82rem; color: var(--jungle); line-height: 1.65; text-align: left;
+}
+{% endblock %}
+
+{% block content %}
+<div class="success-page">
+  <div class="success-card">
+    <div class="success-icon">✓</div>
+    <h1 class="success-title">Đặt Dịch Vụ Thành Công!</h1>
+    <p class="success-sub">
+      Yêu cầu của bạn đã được ghi nhận.<br>
+      Đội ngũ Hoa Kiểng Hoàng Nam sẽ liên hệ xác nhận lịch trong vòng <strong>30–60 phút</strong>
+      (7:00–17:30 hằng ngày).
+    </p>
+    <div class="success-actions">
+      <a href="{% url 'home' %}"            class="btn btn-primary btn-md">← Về Trang Chủ</a>
+      <a href="{% url 'service_booking' %}" class="btn btn-outline-dark btn-md">📋 Đặt Thêm Dịch Vụ</a>
+    </div>
+    <div class="success-note">
+      📞 Cần hỗ trợ khẩn, gọi thẳng <strong>0913 661 945</strong>.
+    </div>
+  </div>
+</div>
+{% endblock content %}

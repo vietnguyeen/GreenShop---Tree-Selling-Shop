@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}GreenShop – Cây Giống & Cắt Tỉa{% endblock %}</title>
+  <title>{% block title %} Hoa Kiểng Hoàng Nam – Cây Giống & Cắt Tỉa{% endblock %}</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -217,11 +217,11 @@
     }
     .product-price {
       font-family: 'Cormorant Garamond', serif;
-    font-size:      1.5rem;          /* tăng từ 1.2rem → 1.5rem     */
-    font-weight:    800;             /* đậm hơn: 700 → 800           */
-    color:          var(--amber);
-    letter-spacing: 0.02em;          /* thêm mới: dễ đọc hơn         */
-    line-height:    1;               /* căn giữa đẹp với nút bên cạnh */
+      font-size:      1.5rem;          
+      font-weight:    800;             
+      color:          var(--amber);
+      letter-spacing: 0.02em;          
+      line-height:    1;               
     }
     .stock-badge-out {
       display: inline-block; font-size: 0.7rem; font-weight: 600;
@@ -324,7 +324,6 @@
 
   {% include 'store/components/_navbar.html' %}
 
-  <!-- Django messages → Toast -->
   {% if messages %}
   <div class="toast-container" id="toastContainer">
     {% for msg in messages %}
@@ -344,40 +343,37 @@
 
   <main>{% block content %}{% endblock content %}</main>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-grid">
       <div>
-        <span class="footer-logo">🌿 GreenShop</span>
+        <span class="footer-logo">🌿Hoa Kiểng Hoàng Nam</span>
         <p class="footer-desc">Chuyên cung cấp cây giống sạch chất lượng cao từ vườn ươm Hóc Môn. Uy tín – Tận tâm – Cam kết chính gốc.</p>
       </div>
       <div class="footer-col">
         <h4>Sản Phẩm</h4>
         <a href="{% url 'kho_cay' %}">Toàn Bộ Kho Cây</a>
-        <a href="{% url 'kho_cay' %}?q=Xoài">Cây Xoài</a>
-        <a href="{% url 'kho_cay' %}?q=Nhãn">Cây Nhãn</a>
-        <a href="{% url 'kho_cay' %}?q=Chôm Chôm">Chôm Chôm</a>
+        <a href="{% url 'kho_cay' %}?q=Cây ăn quả">Cây ăn quả</a>
+        <a href="{% url 'kho_cay' %}?q=Cây kiểng">Cây kiểng</a>
+        <a href="{% url 'kho_cay' %}?q=Hoa">Hoa</a>
       </div>
       <div class="footer-col">
         <h4>Liên Hệ</h4>
         <a href="#">📍 Hóc Môn, TP.HCM</a>
-        <a href="#">📞 0912 345 678</a>
-        <a href="{% url 'home' %}#contact">✂️ Đặt Lịch Cắt Tỉa</a>
+        <a href="#">📞 Anh Khanh: 0913 661 945</a>
+        <a href="{% url 'service_booking' %}">✂️ Đặt Dịch Vụ Cảnh Quan</a>
         <a href="{% url 'cart_detail' %}">🛒 Giỏ Hàng</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2026 GreenShop. All rights reserved.</span>
+      <span>© 2026 HoaKiengHoangNam. All rights reserved.</span>
       <span><span class="footer-dot"></span>Vườn ươm đạt chuẩn VietGAP</span>
     </div>
   </footer>
 
-  <a class="floating-cta" href="{% url 'home' %}#contact">✂️ Đặt Lịch Cắt Tỉa</a>
+  <a class="floating-cta" href="{% url 'service_booking' %}">✂️ Đặt Dịch Vụ Cảnh Quan</a>
 
-  <!-- Quick View Modal -->
   {% include 'store/components/_quick_view.html' %}
 
-  <!-- Base Scripts -->
   <script>
     /* Navbar shrink on scroll */
     var nav = document.getElementById('mainNav');

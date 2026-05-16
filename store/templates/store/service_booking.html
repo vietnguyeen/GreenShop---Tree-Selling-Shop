@@ -1,0 +1,330 @@
+{% extends 'store/base.html' %}
+{% block title %}Đặt Dịch Vụ Cảnh Quan – Hoa Kiểng Hoàng Nam{% endblock %}
+
+{% block extra_css %}
+/* ── PAGE HEADER ── */
+.service-header {
+  background: var(--forest); padding: 80px 5vw 64px;
+  position: relative; overflow: hidden;
+  margin-top: -68px; padding-top: calc(68px + 56px);
+}
+.service-header::before {
+  content: '✂️'; position: absolute; right: 5vw; top: 50%;
+  transform: translateY(-50%);
+  font-size: 14rem; opacity: 0.06; pointer-events: none; line-height: 1;
+}
+.service-header-inner { position: relative; z-index: 1; }
+.service-header .section-eyebrow { color: var(--gold); }
+.service-header h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 700; color: var(--white); line-height: 1.15; margin-bottom: 0.8rem;
+}
+.service-header p {
+  font-size: 0.92rem; color: rgba(245,237,224,0.65); max-width: 500px;
+}
+
+/* ── LAYOUT ── */
+.service-page { padding: 4rem 5vw 6rem; }
+.service-layout {
+  display: grid; grid-template-columns: 1fr 1.5fr;
+  gap: 4rem; align-items: start; max-width: 1100px; margin: 0 auto;
+}
+@media (max-width: 860px) {
+  .service-layout { grid-template-columns: 1fr; gap: 2.5rem; }
+}
+
+/* ── SIDEBAR INFO ── */
+.service-info-card {
+  background: var(--white); border-radius: var(--radius-xl);
+  border: 1.5px solid var(--mist); padding: 2.2rem;
+  position: sticky; top: 88px;
+}
+.service-info-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.45rem; font-weight: 700; color: var(--forest); margin-bottom: 1.8rem;
+}
+.service-item {
+  display: flex; gap: 14px; align-items: flex-start; margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem; border-bottom: 1px solid var(--mist);
+}
+.service-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.service-item-icon {
+  width: 46px; height: 46px; border-radius: var(--radius-sm);
+  background: var(--mist); display: flex; align-items: center;
+  justify-content: center; font-size: 1.3rem; flex-shrink: 0;
+}
+.service-item-name {
+  font-weight: 700; color: var(--forest); font-size: 0.95rem; margin-bottom: 4px;
+}
+.service-item-desc {
+  font-size: 0.82rem; color: var(--muted); line-height: 1.6;
+}
+.service-item-tag {
+  display: inline-block; margin-top: 6px;
+  background: var(--mist); color: var(--jungle);
+  font-size: 0.68rem; font-weight: 600; padding: 2px 10px; border-radius: 50px;
+}
+
+/* ── FORM CARD ── */
+.service-form-card {
+  background: var(--white); border-radius: var(--radius-xl);
+  border: 1.5px solid var(--mist); overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+.service-form-header {
+  background: linear-gradient(135deg, var(--forest), var(--jungle));
+  padding: 1.8rem 2.2rem;
+}
+.service-form-header h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.55rem; font-weight: 700; color: var(--white); margin-bottom: 4px;
+}
+.service-form-header p { font-size: 0.82rem; color: rgba(245,237,224,0.7); }
+.service-form-body { padding: 2rem 2.2rem 2.4rem; }
+
+/* Grass option wrapper – ẩn mặc định, JS sẽ toggle */
+#grassOptionWrapper {
+  display: none;
+  background: linear-gradient(135deg, rgba(74,140,98,0.08), rgba(200,168,75,0.06));
+  border: 1.5px dashed var(--sage);
+  border-radius: var(--radius-md); padding: 1.2rem 1.4rem;
+  margin-bottom: 1.1rem;
+  animation: fadeSlideDown 0.25s ease;
+}
+@keyframes fadeSlideDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+#grassOptionWrapper .grass-label {
+  font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--jungle); margin-bottom: 0.8rem; display: block;
+}
+#grassOptionWrapper .grass-hint {
+  font-size: 0.78rem; color: var(--muted); margin-top: 0.5rem; display: block;
+}
+
+/* Form errors */
+.field-errors {
+  margin-top: 5px;
+}
+.field-error {
+  font-size: 0.78rem; color: var(--danger);
+  display: flex; align-items: center; gap: 5px; margin-top: 3px;
+}
+
+/* Divider */
+.form-divider {
+  height: 1px; background: var(--mist);
+  margin: 1.4rem 0; border: none;
+}
+
+/* Service type selector */
+.service-type-select {
+  position: relative;
+}
+.service-type-select select {
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234a8c62' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px;
+}
+{% endblock %}
+
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+<div class="service-header">
+  <div class="service-header-inner">
+    <div class="section-eyebrow">Dịch Vụ Chuyên Nghiệp</div>
+    <h1>Đặt Dịch Vụ Cảnh Quan</h1>
+    <p>Điền thông tin bên dưới, đội ngũ Hoa Kiểng Hoàng Nam sẽ liên hệ xác nhận lịch trong vòng 30 phút.</p>
+  </div>
+</div>
+
+<div class="service-page">
+  <div class="service-layout">
+
+    <!-- SIDEBAR: Giới thiệu dịch vụ -->
+    <div class="service-info-card">
+      <div class="service-info-title">🌿 Các Dịch Vụ Của Chúng Tôi</div>
+
+      <div class="service-item">
+        <div class="service-item-icon">✂️</div>
+        <div>
+          <div class="service-item-name">Cắt Tỉa</div>
+          <p class="service-item-desc">
+            Tạo dáng, cắt tỉa chuyên nghiệp cho mọi loại cây cảnh, cây ăn trái.
+            Đội ngũ thợ lành nghề 10+ năm kinh nghiệm.
+          </p>
+          <span class="service-item-tag">Theo yêu cầu</span>
+        </div>
+      </div>
+
+      <div class="service-item">
+        <div class="service-item-icon">🛠️</div>
+        <div>
+          <div class="service-item-name">Bảo Dưỡng</div>
+          <p class="service-item-desc">
+            Chăm sóc định kỳ: bón phân, phun thuốc, tưới nước và xử lý sâu bệnh
+            cho khu vườn, công trình xanh.
+          </p>
+          <span class="service-item-tag">Hợp đồng dài hạn</span>
+        </div>
+      </div>
+
+      <div class="service-item">
+        <div class="service-item-icon">🌾</div>
+        <div>
+          <div class="service-item-name">Lợp Thảm Cỏ</div>
+          <p class="service-item-desc">
+            Thi công thảm cỏ sân vườn, sân golf mini, khuôn viên nhà ở.
+            Hai loại cỏ chất lượng cao sẵn có.
+          </p>
+          <span class="service-item-tag">Cỏ Thái</span>
+          <span class="service-item-tag" style="margin-left:4px">Cỏ Lá Gừng</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM ĐẶT DỊCH VỤ -->
+    <div class="service-form-card">
+      <div class="service-form-header">
+        <h2>Đặt Lịch Ngay</h2>
+        <p>Tất cả thông tin sẽ được bảo mật và chỉ dùng để liên hệ xác nhận.</p>
+      </div>
+
+      <div class="service-form-body">
+        <form method="POST" action="{% url 'service_booking' %}" id="serviceForm"
+              novalidate>
+          {% csrf_token %}
+
+          <!-- Tên -->
+          <div class="form-group">
+            <label>{{ form.customer_name.label }}</label>
+            {{ form.customer_name }}
+            {% if form.customer_name.errors %}
+              <div class="field-errors">
+                {% for err in form.customer_name.errors %}
+                  <span class="field-error">⚠ {{ err }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- SĐT -->
+          <div class="form-group">
+            <label>{{ form.phone_number.label }}</label>
+            {{ form.phone_number }}
+            {% if form.phone_number.errors %}
+              <div class="field-errors">
+                {% for err in form.phone_number.errors %}
+                  <span class="field-error">⚠ {{ err }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Địa chỉ -->
+          <div class="form-group">
+            <label>{{ form.address.label }}</label>
+            {{ form.address }}
+            {% if form.address.errors %}
+              <div class="field-errors">
+                {% for err in form.address.errors %}
+                  <span class="field-error">⚠ {{ err }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <hr class="form-divider">
+
+          <!-- Loại dịch vụ -->
+          <div class="form-group">
+            <label>{{ form.service_type.label }}</label>
+            <div class="service-type-select">
+              {{ form.service_type }}
+            </div>
+            {% if form.service_type.errors %}
+              <div class="field-errors">
+                {% for err in form.service_type.errors %}
+                  <span class="field-error">⚠ {{ err }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+
+          <!--
+            Tùy chọn cỏ – chỉ hiện khi chọn "Lợp thảm cỏ".
+            JS bên dưới xử lý show/hide và bật/tắt required.
+          -->
+          <div id="grassOptionWrapper">
+            <span class="grass-label">🌾 Chọn Loại Cỏ *</span>
+            {{ form.grass_option }}
+            {% if form.grass_option.errors %}
+              <div class="field-errors">
+                {% for err in form.grass_option.errors %}
+                  <span class="field-error">⚠ {{ err }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+            <span class="grass-hint">
+              Cỏ Thái phù hợp sân chơi, Cỏ Lá Gừng chịu hạn tốt hơn.
+            </span>
+          </div>
+
+          <!-- Ghi chú -->
+          <div class="form-group">
+            <label>{{ form.note.label }}</label>
+            {{ form.note }}
+          </div>
+
+          <hr class="form-divider">
+
+          <button type="submit" class="btn btn-primary btn-full">
+            Gửi Yêu Cầu Dịch Vụ 🌿
+          </button>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock content %}
+
+
+{% block extra_js %}
+<script>
+  (function () {
+    var serviceSelect = document.getElementById('id_service_type');
+    var grassWrapper  = document.getElementById('grassOptionWrapper');
+    var grassSelect   = document.getElementById('id_grass_option');
+
+    /**
+     * Toggle hiển thị dropdown cỏ.
+     * Đồng thời bật/tắt `required` để tránh submit form trống.
+     */
+    function toggleGrassOption() {
+      var isLopThamCo = serviceSelect.value === 'lop_tham_co';
+
+      if (isLopThamCo) {
+        grassWrapper.style.display = 'block';
+        grassSelect.setAttribute('required', 'required');
+      } else {
+        grassWrapper.style.display = 'none';
+        grassSelect.removeAttribute('required');
+        grassSelect.value = '';   // reset giá trị khi ẩn
+      }
+    }
+
+    // Chạy ngay khi load (trường hợp form bị lỗi & Django render lại)
+    toggleGrassOption();
+
+    // Lắng nghe mỗi khi user thay đổi lựa chọn
+    serviceSelect.addEventListener('change', toggleGrassOption);
+  })();
+</script>
+{% endblock %}

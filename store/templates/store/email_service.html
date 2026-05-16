@@ -18,17 +18,6 @@
     .info-row:last-child { margin-bottom: 0; }
     .info-key   { font-weight: 700; color: #1a3a24; min-width: 110px; }
     .info-val   { color: #444; }
-    table       { width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 0.88rem; }
-    thead tr    { background: #1a3a24; }
-    thead th    {
-      color: #c8a84b; padding: 10px 14px; text-align: left;
-      font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase;
-    }
-    tbody tr    { border-bottom: 1px solid #eee; }
-    tbody tr:last-child { border-bottom: none; }
-    tbody td    { padding: 11px 14px; color: #333; vertical-align: top; }
-    .total-row  { background: #f5ede0; }
-    .total-row td { font-weight: 700; font-size: 1rem; color: #d4863a; }
     .footer     {
       border-top: 1px solid #eee; padding: 18px 32px;
       text-align: center; font-size: 0.78rem; color: #999; line-height: 1.7;
@@ -40,7 +29,7 @@
 
     <div class="header">
       <h1>🌿 HOA KIỂNG HOÀNG NAM</h1>
-      <p>Thông Báo Đơn Hàng Mới – Mã #{{ order.id }}</p>
+      <p>Thông Báo Đặt Dịch Vụ Mới – Mã #SV{{ service_order.id }}</p>
     </div>
 
     <div class="body">
@@ -49,53 +38,47 @@
       <div class="info-box">
         <div class="info-row">
           <span class="info-key">Họ tên:</span>
-          <span class="info-val">{{ order.customer_name }}</span>
+          <span class="info-val">{{ service_order.customer_name }}</span>
         </div>
         <div class="info-row">
           <span class="info-key">SĐT:</span>
-          <span class="info-val">{{ order.phone_number }}</span>
+          <span class="info-val">{{ service_order.phone_number }}</span>
         </div>
         <div class="info-row">
           <span class="info-key">Địa chỉ:</span>
-          <span class="info-val">{{ order.address }}</span>
+          <span class="info-val">{{ service_order.address }}</span>
         </div>
         <div class="info-row">
-          <span class="info-key">Thời gian:</span>
-          <span class="info-val">{{ order.created_at|date:"H:i – d/m/Y" }}</span>
+          <span class="info-key">Thời gian đặt:</span>
+          <span class="info-val">{{ service_order.created_at|date:"H:i – d/m/Y" }}</span>
         </div>
       </div>
 
-      <div class="sec-label">Chi Tiết Đơn Hàng</div>
-      <table>
-        <thead>
-          <tr>
-            <th>Sản Phẩm</th>
-            <th>SL</th>
-            <th>Đơn Giá</th>
-            <th>Thành Tiền</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for item in items %}
-          <tr>
-            <td>{{ item.plant.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.price|floatformat:"0" }} đ</td>
-            <td>{{ item.total_item|floatformat:"0" }} đ</td>
-          </tr>
-          {% endfor %}
-          <tr class="total-row">
-            <td colspan="3" style="text-align:right; padding-right:20px">TỔNG CỘNG:</td>
-            <td>{{ order.total_amount|floatformat:"0" }} VNĐ</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="sec-label">Chi Tiết Dịch Vụ</div>
+      <div class="info-box">
+        <div class="info-row">
+          <span class="info-key">Loại dịch vụ:</span>
+          <span class="info-val" style="color: #d4863a; font-weight: 700;">{{ service_order.get_service_type_display }}</span>
+        </div>
+        
+        {% if service_order.service_type == 'lop_tham_co' %}
+        <div class="info-row">
+          <span class="info-key">Loại cỏ:</span>
+          <span class="info-val" style="color: #4a8c62; font-weight: 600;">{{ service_order.get_grass_option_display }}</span>
+        </div>
+        {% endif %}
+
+        <div class="info-row">
+          <span class="info-key">Ghi chú:</span>
+          <span class="info-val">{{ service_order.note|default:"Không có" }}</span>
+        </div>
+      </div>
 
     </div>
 
     <div class="footer">
       <p>Email này được gửi tự động từ hệ thống <strong>Hoa Kiểng Hoàng Nam</strong>.</p>
-      <p>Vui lòng liên hệ khách hàng qua <strong>{{ order.phone_number }}</strong> để xác nhận đơn sớm nhất.</p>
+      <p>Vui lòng gọi ngay cho khách qua số <strong>{{ service_order.phone_number }}</strong> để chốt lịch hẹn.</p>
     </div>
 
   </div>

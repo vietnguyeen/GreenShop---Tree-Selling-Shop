@@ -1,0 +1,127 @@
+{# _plant_card.html – nhận biến `plant` từ {% include ... with plant=plant %} #}
+
+<style>
+  /* CSS Mini Slider chạy mượt bên trong Card */
+  .mini-slider-container {
+    display: flex; width: 100%; height: 100%;
+    overflow-x: auto; scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Ẩn scrollbar Firefox */
+    scroll-behavior: smooth;
+  }
+  .mini-slider-container::-webkit-scrollbar { display: none; } /* Ẩn scrollbar Chrome/Safari */
+  
+  .mini-slider-container > img,
+  .mini-slider-container > .product-img-placeholder {
+    flex: 0 0 100%; width: 100%; height: 100%;
+    object-fit: cover; scroll-snap-align: start;
+  }
+  
+  /* Nút điều hướng 2 bên ảnh */
+  .mini-nav-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 26px; height: 26px; border-radius: 50%;
+    background: rgba(255,255,255,0.85); color: var(--forest);
+    border: none; cursor: pointer; z-index: 3;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    opacity: 0; transition: all 0.2s;
+  }
+  .product-img-wrap:hover .mini-nav-btn { opacity: 1; }
+  .mini-nav-btn:hover { background: var(--forest); color: white; }
+  .mini-prev { left: 6px; }
+  .mini-next { right: 6px; }
+</style>
+
+<div class="card product-card">
+
+  {% with p_girth=plant.girth|default:"N/A" p_height=plant.height|default:"N/A" p_diameter=plant.diameter|default:"N/A" p_cat=plant.category.name|default:"Cây Giống" %}
+  
+  <div class="product-img-wrap"
+       onclick="openQuickView(
+         '{{ plant.id }}',
+         '{{ plant.name|escapejs }}',
+         '{% if plant.image %}{{ plant.image.url }}{% endif %}',
+         '{{ p_girth|escapejs }}',
+         '{{ p_height|escapejs }}',
+         '{{ p_diameter|escapejs }}',
+         '{{ plant.formatted_price|escapejs }}',
+         '{{ plant.stock }}',
+         '{{ p_cat|escapejs }}'
+       )">
+    
+    <div class="mini-slider-container">
+      {% if plant.image %}
+        <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
+      {% endif %}
+      
+      {% if plant.image2 %}
+        <img src="{{ plant.image2.url }}" alt="{{ plant.name }} - Ảnh 2" loading="lazy">
+      {% endif %}
+      
+      {% if not plant.image and not plant.image2 %}
+        <div class="product-img-placeholder">🌳</div>
+      {% endif %}
+    </div>
+
+    {% if plant.image and plant.image2 %}
+      <button class="mini-nav-btn mini-prev" onclick="event.stopPropagation(); slideMini(this, -1)">❮</button>
+      <button class="mini-nav-btn mini-next" onclick="event.stopPropagation(); slideMini(this, 1)">❯</button>
+    {% endif %}
+
+    <div class="qv-overlay">
+      <span class="qv-overlay-btn">👁 Xem Nhanh</span>
+    </div>
+
+    {% if not plant.is_available %}
+      <div style="position:absolute;top:.7rem;left:.7rem;
+                  background:var(--danger);color:#fff;
+                  font-size:.65rem;font-weight:700;
+                  padding:3px 10px;border-radius:50px;z-index:2;">
+        Hết Hàng
+      </div>
+    {% elif plant.stock <= 3 %}
+      <div style="position:absolute;top:.7rem;left:.7rem;
+                  background:var(--amber);color:#fff;
+                  font-size:.65rem;font-weight:700;
+                  padding:3px 10px;border-radius:50px;z-index:2;">
+        Còn {{ plant.stock }}
+      </div>
+    {% endif %}
+  </div>
+  
+  {% endwith %}
+
+  <div class="product-body">
+    <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
+    <div class="product-name">{{ plant.name }}</div>
+    <div class="product-specs">
+      <div><strong>Hoành:</strong>     {{ plant.girth|default:"N/A" }}</div>
+      <div><strong>Cao:</strong>        {{ plant.height|default:"N/A" }}</div>
+      <div><strong>ĐK:</strong>         {{ plant.diameter|default:"N/A" }}</div>
+      <div><strong>Kho:</strong>        {{ plant.stock }}</div>
+    </div>
+    <div class="product-footer">
+      <span class="product-price">{{ plant.formatted_price }}</span>
+      {% if plant.is_available %}
+        <a href="{% url 'add_to_cart' plant.id %}" class="btn btn-primary btn-sm">
+          🛒 Thêm giỏ
+        </a>
+      {% else %}
+        <span class="stock-badge-out">Hết Hàng</span>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+
+<script>
+  if (typeof window.slideMini !== 'function') {
+    window.slideMini = function(btn, direction) {
+      var wrap = btn.closest('.product-img-wrap');
+      var slider = wrap.querySelector('.mini-slider-container');
+      var width = slider.offsetWidth;
+      // Trượt ảnh mượt mà dựa vào chiều rộng của khung
+      slider.scrollBy({ left: direction * width, behavior: 'smooth' });
+    };
+  }
+</script>

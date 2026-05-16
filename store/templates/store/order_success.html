@@ -1,5 +1,5 @@
 {% extends 'store/base.html' %}
-{% block title %}Đặt Hàng Thành Công – GreenShop{% endblock %}
+{% block title %}Đặt Hàng Thành Công – Hoa Kiểng Hoàng Nam{% endblock %}
 
 {% block extra_css %}
 .success-page {
@@ -50,7 +50,6 @@
 }
 .success-sub strong { color: var(--jungle); }
 
-/* Order detail grid – đã xóa ô Trạng Thái */
 .order-detail-grid {
   background: var(--cream); border-radius: var(--radius-md);
   padding: 1.5rem; margin-bottom: 2rem;
@@ -92,44 +91,36 @@
     <h1 class="success-title">Đặt Hàng Thành Công!</h1>
 
     <p class="success-sub">
-      Cảm ơn <strong>{{ order.customer_name }}</strong> đã tin tưởng GreenShop.<br>
+      Cảm ơn <strong>{{ order.customer_name }}</strong> đã tin tưởng Hoa Kiểng Hoàng Nam.<br>
       Chúng tôi sẽ liên hệ qua <strong>{{ order.phone_number }}</strong>
       để xác nhận đơn hàng sớm nhất.
     </p>
 
-    <!-- Chi tiết đơn – đã xóa ô Trạng Thái -->
     <div class="order-detail-grid">
-
       <div>
         <div class="order-detail-label">Khách Hàng</div>
         <div class="order-detail-value">{{ order.customer_name }}</div>
       </div>
-
       <div>
         <div class="order-detail-label">Điện Thoại</div>
         <div class="order-detail-value">{{ order.phone_number }}</div>
       </div>
-
       <div style="grid-column: 1 / -1">
         <div class="order-detail-label">Địa Chỉ Giao Hàng</div>
         <div class="order-detail-value">{{ order.address }}</div>
       </div>
-
       <div>
         <div class="order-detail-label">Tổng Tiền</div>
         <div class="order-detail-value order-detail-total">{{ order.formatted_total }}</div>
       </div>
-
       <div>
         <div class="order-detail-label">Thanh Toán</div>
         <div class="order-detail-value">💵 COD – Khi nhận hàng</div>
       </div>
-
       <div style="grid-column: 1 / -1">
         <div class="order-detail-label">Thời Gian Đặt</div>
         <div class="order-detail-value">{{ order.created_at|date:"H:i – d/m/Y" }}</div>
       </div>
-
     </div>
 
     <div class="success-actions">
@@ -138,9 +129,9 @@
     </div>
 
     <div class="success-note">
-      📞 <strong>Lưu ý:</strong> GreenShop sẽ gọi xác nhận trong vòng 30–60 phút
+      📞 <strong>Lưu ý:</strong> Hoa Kiểng Hoàng Nam sẽ gọi xác nhận trong vòng 30–60 phút
       (7:00–17:30 hằng ngày). Nếu cần hỗ trợ khẩn, vui lòng gọi thẳng
-      <strong>0912 345 678</strong>.
+      <strong>0913 661 945</strong>.
     </div>
 
   </div>

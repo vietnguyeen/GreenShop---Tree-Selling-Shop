@@ -2,7 +2,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
-
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
@@ -14,7 +14,12 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'hoakienghoangnam.id.vn',
+    'www.hoakienghoangnam.id.vn',
+    '.onrender.com',       # Để test lúc Render mới cấp link
+    '127.0.0.1', 'localhost' 
+    ]
 
 
 # Application definition
@@ -31,6 +36,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -104,6 +110,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -118,7 +125,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'vietng1308@gmail.com' # Thay bằng email của bạn
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') # Thay bằng email của bạn
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # Thay bằng Mật khẩu ứng dụng (App Password)
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+

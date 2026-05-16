@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Plant, PruningRequest, Order, OrderItem
+from .models import Category, Plant, PruningRequest, Order, OrderItem, ServiceOrder
 
 
 @admin.register(Category)
@@ -34,10 +34,12 @@ class PlantAdmin(admin.ModelAdmin):
     @admin.display(description='Trạng thái kho')
     def stock_status(self, obj):
         if obj.stock <= 0:
-            return format_html('<span style="color:#c0392b;font-weight:700">● Hết hàng</span>')
+            # Đã fix: Truyền chữ vào thông qua {}
+            return format_html('<span style="color:#c0392b;font-weight:700">{}</span>', '● Hết hàng')
         if obj.stock <= 3:
             return format_html('<span style="color:#d4863a;font-weight:700">⚡ Sắp hết ({})</span>', obj.stock)
-        return format_html('<span style="color:#2a5c3f;font-weight:700">✓ Còn hàng</span>')
+        # Đã fix: Truyền chữ vào thông qua {}
+        return format_html('<span style="color:#2a5c3f;font-weight:700">{}</span>', '✓ Còn hàng')
 
     @admin.display(description='Ảnh')
     def preview_image(self, obj):
@@ -80,3 +82,10 @@ class PruningRequestAdmin(admin.ModelAdmin):
     @admin.display(description='Ghi chú')
     def short_message(self, obj):
         return obj.message[:60] + '…' if len(obj.message) > 60 else obj.message
+    
+@admin.register(ServiceOrder)
+class ServiceOrderAdmin(admin.ModelAdmin):
+    list_display  = ['customer_name', 'phone_number', 'service_type', 'grass_option', 'created_at']
+    list_filter   = ['service_type']
+    search_fields = ['customer_name', 'phone_number']
+    ordering      = ['-created_at']
