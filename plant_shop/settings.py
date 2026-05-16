@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "store",  # This is your shop app
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -117,8 +118,20 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# CẤU HÌNH MEDIA (KHO ẢNH)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Khi đẩy lên mạng (Render), hệ thống tự động bẻ lái lưu ảnh về 123HOST vĩnh viễn
+if 'RENDER' in os.environ:
+    # Kích hoạt bộ truyền file FTP
+    DEFAULT_FILE_STORAGE = 'storages.backends.ftp.FTPStorage'
+    
+    # Lấy thông tin đăng nhập từ biến môi trường bí mật trên Render
+    FTP_STORAGE_LOCATION = os.environ.get('FTP_STORAGE_LOCATION')
+    
+    # URL hiển thị ảnh trỏ thẳng về tên miền chính thức của bạn
+    MEDIA_URL = 'https://hoakienghoangnam.id.vn/media/'
 
 
 # Sessions lưu trong DB
