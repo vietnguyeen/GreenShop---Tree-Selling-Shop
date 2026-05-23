@@ -77,24 +77,20 @@
 /* --- Slider Cơ Bản --- */
 .slider-wrapper { position: relative; padding: 0 5px; }
 
-/* Flexbox cuộn ngang, ẩn scrollbar */
+/* Flexbox cuộn ngang, ẩn scrollbar, khoảng cách rộng hơn */
 .tab-product-grid {
-  display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 1.1rem;
+  display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 1.5rem;
   scroll-behavior: smooth; scroll-snap-type: x mandatory;
-  padding-bottom: 1rem; /* Tạo khoảng trống cho shadow */
-  scrollbar-width: none; /* Firefox */
+  padding-bottom: 1.5rem; 
+  scrollbar-width: none; 
 }
-.tab-product-grid::-webkit-scrollbar { display: none; /* Chrome/Safari */ }
+.tab-product-grid::-webkit-scrollbar { display: none; }
 
-/* Chia cột để hiện đúng 6 cây (desktop) */
+/* Chia cột 4 item để Card to, rõ ràng */
 .tab-product-grid .product-card {
-  flex: 0 0 calc(16.666% - 0.95rem); 
+  flex: 0 0 calc(25% - 1.125rem); 
   scroll-snap-align: start;
 }
-.tab-product-grid .product-img-wrap { height: 170px; }
-.tab-product-grid .product-name { font-size: 1.15rem; }
-.tab-product-grid .product-price { font-size: 1.1rem; }
-.tab-product-grid .btn-sm { font-size: 0.72rem; padding: 6px 12px; }
 
 /* Nút Trượt Trái / Phải */
 .slider-btn {
@@ -110,23 +106,22 @@
 .slider-btn.next { right: -18px; }
 
 /* Responsive Grid/Slider */
-@media (max-width: 1200px) { .tab-product-grid .product-card { flex: 0 0 calc(25% - 0.8rem); } } /* Hiện 4 item */
-@media (max-width: 900px) { .tab-product-grid .product-card { flex: 0 0 calc(33.333% - 0.8rem); } } /* Hiện 3 item */
+@media (max-width: 1200px) { .tab-product-grid .product-card { flex: 0 0 calc(33.333% - 1rem); } } /* Hiện 3 item */
+@media (max-width: 900px) { .tab-product-grid .product-card { flex: 0 0 calc(50% - 0.75rem); } } /* Hiện 2 item */
 @media (max-width: 768px) { 
-  .tab-product-grid .product-card { flex: 0 0 calc(50% - 0.6rem); } /* Hiện 2 item */
   .all-products-header { flex-direction: column; align-items: flex-start; } 
   .filter-controls { flex-direction: column; align-items: flex-start; gap: 1.2rem; } 
 }
-@media (max-width: 500px) { 
-  .slider-btn { display: none; } /* Trên mobile để khách tự vuốt (swipe) */
-  .tab-product-grid .product-card { flex: 0 0 80%; } /* Lòi 1 xíu của item kế tiếp để user biết có thể vuốt ngang */
+@media (max-width: 600px) { 
+  .slider-btn { display: none; } 
+  .tab-product-grid .product-card { flex: 0 0 85%; } /* Hiện 1 item rưỡi trên mobile */
 }
 
 .tab-empty { width: 100%; text-align: center; padding: 3rem 1rem; color: var(--muted); font-size: 0.9rem; }
 .tab-empty .tab-empty-icon { font-size: 2.5rem; opacity: 0.4; margin-bottom: 0.6rem; }
 
 /* ══════════════════════════════════════════════════════════
-   SẢN PHẨM NỔI BẬT (Giữ nguyên lưới)
+   SẢN PHẨM NỔI BẬT
 ══════════════════════════════════════════════════════════ */
 #featured-products { background: var(--white); }
 .featured-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.4rem; margin-top: 2.5rem; }
@@ -284,7 +279,7 @@
         </div>
       </div>
     {% empty %}
-      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:3rem 0">Bug hệ thống: Hiện chưa có sản phẩm nổi bật nào.</p>
+      <p style="grid-column:1/-1;text-align:center;color:var(--muted);padding:3rem 0">Hiện chưa có sản phẩm nổi bật nào.</p>
     {% endfor %}
   </div>
 
