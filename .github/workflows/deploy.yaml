@@ -1,0 +1,24 @@
+name: Tự động Deploy lên VPS
+
+# Kịch bản này sẽ chạy mỗi khi bạn push code lên nhánh "main"
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Kết nối SSH và Cập nhật code
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_IP }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT }}
+          # Đây là các lệnh robot sẽ gõ thay bạn trên VPS
+          script: |
+            cd /var/www/GreenShop---Tree-Selling-Shop
+            git pull origin main
+            docker-compose up -d --build
