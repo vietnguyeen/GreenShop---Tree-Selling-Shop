@@ -9,7 +9,7 @@
   
   /* ── Trái: Khu vực Ảnh Chính ── */
   .qv-left { width: 45%; padding: 1.5rem; display: flex; flex-direction: column; background: var(--white); }
-  .qv-main-img-wrap { width: 100%; height: 100%; aspect-ratio: 4/5; border-radius: var(--radius-md); overflow: hidden; position: relative; background: var(--mist); cursor: zoom-in; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); }
+  .qv-main-img-wrap { width: 100%; height: 100%; aspect-ratio: 4/5; border-radius: var(--radius-md); overflow: hidden; position: relative; background: var(--mist); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); }
   .qv-main-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; display: block; }
   .qv-main-img-wrap:hover img { transform: scale(1.03); }
   
@@ -41,36 +41,12 @@
   .qv-btn-add { background: var(--forest); color: var(--white); }
   .qv-btn-add:hover { background: var(--jungle); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(26,58,36,0.2); }
   .qv-btn-sold { background: #dcdcdc; color: #888; cursor: not-allowed; }
-  
-  /* ── Phóng to ảnh (Lightbox Messenger Style) ── */
-  .qv-lightbox { display: none; position: fixed; inset: 0; z-index: 10000; background: rgba(0,0,0,0.95); flex-direction: row; }
-  .qv-lb-main { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 2rem; cursor: zoom-out; }
-  .qv-lb-main img { max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 4px; filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5)); cursor: default; }
-  
-  /* Thanh cuộn mini bên phải trong Lightbox */
-  .qv-lb-sidebar { width: 130px; background: rgba(0,0,0,0.3); border-left: 1px solid rgba(255,255,255,0.1); padding: 1.5rem 0; display: flex; flex-direction: column; align-items: center; gap: 12px; overflow-y: auto; }
-  .qv-lb-thumb { width: 85px; height: 85px; border-radius: 8px; cursor: pointer; border: 2px solid transparent; opacity: 0.4; transition: 0.2s; flex-shrink: 0; overflow: hidden; }
-  .qv-lb-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .qv-lb-thumb.active { opacity: 1; border-color: var(--moss); box-shadow: 0 0 15px rgba(74,140,98,0.5); }
-  .qv-lb-thumb:hover { opacity: 1; }
-
-  .qv-lb-close { position: absolute; top: 1.5rem; right: 1.5rem; background: rgba(255,255,255,0.1); color: white; border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: 0.2s; z-index: 10; display: flex; align-items: center; justify-content: center; }
-  .qv-lb-close:hover { background: var(--danger); }
-  .qv-lb-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; width: 54px; height: 54px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; z-index: 5; }
-  .qv-lb-nav:hover { background: rgba(255,255,255,0.3); scale: 1.1; }
-  .qv-lb-prev { left: 3rem; }
-  .qv-lb-next { right: 3rem; }
 
   /* Mobile Responsive */
   @media (max-width: 768px) { 
     .qv-content { flex-direction: column; max-height: 90vh; overflow-y: auto; } 
     .qv-left, .qv-right { width: 100%; border-left: none; } 
     .qv-main-img-wrap { aspect-ratio: 1/1; }
-    .qv-lightbox { flex-direction: column; }
-    .qv-lb-main { padding: 1rem; height: calc(100vh - 100px); }
-    .qv-lb-sidebar { width: 100%; height: 100px; flex-direction: row; justify-content: center; border-left: none; border-top: 1px solid rgba(255,255,255,0.1); padding: 0 1rem; }
-    .qv-lb-thumb { width: 65px; height: 65px; }
-    .qv-lb-prev { left: 1rem; } .qv-lb-next { right: 1rem; }
   }
 </style>
 
@@ -80,14 +56,14 @@
     <button class="qv-close" onclick="closeQuickView()">✕</button>
 
     <div class="qv-left">
-      <div class="qv-main-img-wrap" onclick="openLightbox()">
+      <div class="qv-main-img-wrap" onclick="openImageNewTab()">
         <div class="qv-badge" id="qvBadge">Đã Bán</div>
         <img id="qvMainImage" src="" alt="">
         
         <button class="qv-main-nav qv-main-prev" onclick="navMainImage(event, -1)">❮</button>
         <button class="qv-main-nav qv-main-next" onclick="navMainImage(event, 1)">❯</button>
         
-        <div class="qv-zoom-hint">🔍 Phóng to</div>
+        <div class="qv-zoom-hint">↗️ Mở tab mới</div>
       </div>
     </div>
 
@@ -119,17 +95,6 @@
       <a href="#" class="qv-btn" id="qvBtn">🛒 Thêm Vào Giỏ Hàng</a>
     </div>
   </div>
-</div>
-
-<div class="qv-lightbox" id="qvLightbox">
-  <div class="qv-lb-main" onclick="closeLightbox(event)">
-    <button class="qv-lb-close" onclick="closeLightbox(event)">✕</button>
-    <button class="qv-lb-nav qv-lb-prev" onclick="navLightbox(event, -1)">❮</button>
-    <img id="qvLightboxImg" src="" alt="" onclick="event.stopPropagation()">
-    <button class="qv-lb-nav qv-lb-next" onclick="navLightbox(event, 1)">❯</button>
-  </div>
-
-  <div class="qv-lb-sidebar" id="qvLbThumbnails"></div>
 </div>
 
 <script>
@@ -177,7 +142,7 @@
       btn.href = baseUrl.replace('123456', id); 
       btn.onclick = null;
       badge.style.display = 'none';
-      statusWrap.style.display = 'none'; // Đã ẩn dòng chữ "Cây duy nhất"
+      statusWrap.style.display = 'none'; // Ẩn dòng chữ "Cây duy nhất"
     } else {
       btn.className = 'qv-btn qv-btn-sold';
       btn.innerHTML = '🚫 Đã Bán';
@@ -205,60 +170,13 @@
   // Set ảnh chính
   function setMainImage(idx) {
     currentImageIdx = idx;
-    
     document.getElementById('qvMainImage').src = galleryImages[idx];
-    
-    const lbImg = document.getElementById('qvLightboxImg');
-    if (lbImg) lbImg.src = galleryImages[idx];
-
-    document.querySelectorAll('.qv-lb-thumb').forEach((t, i) => {
-      t.classList.toggle('active', i === idx);
-    });
   }
 
-  /* ── XỬ LÝ LIGHTBOX (PHÓNG TO MÀN HÌNH) ── */
-  function openLightbox() {
-    if(galleryImages.length === 0) return;
-    document.getElementById('qvLightbox').style.display = 'flex';
-    document.getElementById('qvLightboxImg').src = galleryImages[currentImageIdx];
-    renderLightboxThumbnails();
-  }
-
-  function closeLightbox(e) {
-    e.stopPropagation();
-    document.getElementById('qvLightbox').style.display = 'none';
-  }
-
-  function navLightbox(e, dir) {
-    e.stopPropagation();
-    if (galleryImages.length <= 1) return;
-    let nextIdx = (currentImageIdx + dir + galleryImages.length) % galleryImages.length;
-    setMainImage(nextIdx);
-  }
-
-  function renderLightboxThumbnails() {
-    const container = document.getElementById('qvLbThumbnails');
-    container.innerHTML = '';
-    
-    const lbNavs = document.querySelectorAll('.qv-lb-nav');
-    if (galleryImages.length <= 1) {
-      container.style.display = 'none';
-      lbNavs.forEach(n => n.style.display = 'none');
-      return;
+  // MỞ ẢNH TRONG TAB MỚI
+  function openImageNewTab() {
+    if (galleryImages.length > 0 && galleryImages[currentImageIdx]) {
+      window.open(galleryImages[currentImageIdx], '_blank');
     }
-
-    container.style.display = 'flex';
-    lbNavs.forEach(n => n.style.display = 'flex');
-
-    galleryImages.forEach((imgUrl, idx) => {
-      const thumb = document.createElement('div');
-      thumb.className = 'qv-lb-thumb' + (idx === currentImageIdx ? ' active' : '');
-      thumb.onclick = (e) => { 
-        e.stopPropagation(); 
-        setMainImage(idx); 
-      };
-      thumb.innerHTML = `<img src="${imgUrl}" alt="">`;
-      container.appendChild(thumb);
-    });
   }
 </script>
