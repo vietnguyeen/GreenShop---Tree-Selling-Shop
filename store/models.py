@@ -23,16 +23,25 @@ class Plant(models.Model):
     )
     name     = models.CharField(max_length=200, verbose_name='Tên cây')
     image    = models.ImageField(
-        upload_to='plant_images/', null=True, blank=True, verbose_name='Ảnh'
+        upload_to='plant_images/', null=True, blank=True, verbose_name='Ảnh đại diện'
     )
     image2   = models.ImageField(
-        upload_to='plant_images/', null=True, blank=True, verbose_name='Ảnh 2'
+        upload_to='plant_images/', null=True, blank=True, verbose_name='Ảnh phụ 1'
+    )
+    image3 = models.ImageField(
+        upload_to='plant_images/', null=True, blank=True, verbose_name="Ảnh phụ 2"
+    )
+    # Đã thêm dấu đóng ngoặc ) cho image4
+    image4 = models.ImageField(
+        upload_to='plant_images/', null=True, blank=True, verbose_name="Ảnh phụ 3"
     )
     price    = models.PositiveIntegerField(default=0,  verbose_name='Giá (VNĐ)')
     girth    = models.CharField(max_length=50,  null=True, blank=True, verbose_name='Hoành gốc')
     height   = models.CharField(max_length=50,  null=True, blank=True, verbose_name='Chiều cao')
-    diameter = models.CharField(max_length=50,  null=True, blank=True, verbose_name='Đường kính')
-    stock    = models.PositiveIntegerField(default=10, verbose_name='Tồn kho')
+    diameter = models.CharField(max_length=50,  null=True, blank=True, verbose_name='Đường kính tán')
+    
+    # Đã thay thế hoàn toàn 'stock' bằng 'is_available'
+    is_available = models.BooleanField(default=True, verbose_name='Còn hàng / Sẵn sàng giao')
 
     class Meta:
         verbose_name        = 'Cây'
@@ -45,10 +54,6 @@ class Plant(models.Model):
     @property
     def formatted_price(self):
         return f"{self.price:,}".replace(',', '.') + " VNĐ"
-
-    @property
-    def is_available(self):
-        return self.stock > 0
 
 
 class PruningRequest(models.Model):

@@ -1,7 +1,7 @@
 from django.shortcuts         import render, redirect, get_object_or_404
 from django.contrib           import messages
 from django.db                import transaction
-from django.db.models         import F, Q
+from django.db.models         import Q
 from django.core.mail         import EmailMultiAlternatives
 from django.template.loader   import render_to_string
 from django.utils.html        import strip_tags
@@ -41,15 +41,15 @@ def _send_html_email(subject, html_content, to_email):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# TRANG CHỦ (Đã fix lỗi hiển thị Slider)
+# TRANG CHỦ
 # ─────────────────────────────────────────────────────────────────────────────
 
 def index(request):
-    # Lấy toàn bộ cây đang có hàng để phục vụ cho tab Khám Phá (Slider)
-    all_plants = Plant.objects.select_related('category').filter(stock__gt=0)
+    # Lấy toàn bộ cây đang có hàng (is_available=True) cho Slider
+    all_plants = Plant.objects.select_related('category').filter(is_available=True)
     
-    # Lấy 8 cây mới nhất để hiển thị ở phần Sản Phẩm Nổi Bật
-    featured_plants = Plant.objects.select_related('category').filter(stock__gt=0).order_by('-id')[:8]
+    # Lấy 10 cây mới nhất chưa bán để hiển thị
+    featured_plants = Plant.objects.select_related('category').filter(is_available=True).order_by('-id')[:10]
     
     return render(request, 'store/index.html', {
         'all_plants':      all_plants,
@@ -95,30 +95,30 @@ def set_phone(request):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# GIỎ HÀNG
+# GIỎ HÀNG (Logic Độc Bản)
 # ─────────────────────────────────────────────────────────────────────────────
 
 def add_to_cart(request, plant_id):
     plant = get_object_or_404(Plant, id=plant_id)
 
+    # Chặn nếu cây đã có chủ
     if not plant.is_available:
-        messages.error(request, f'"{plant.name}" hiện đã hết hàng.')
+        messages.error(request, f'Rất tiếc, "{plant.name}" hiện đã có chủ.')
         return redirect(request.META.get('HTTP_REFERER', 'kho_cay'))
 
     cart = _get_cart(request)
     key  = str(plant_id)
 
+    # Nếu cây đã nằm trong giỏ thì không tăng số lượng, chỉ báo lỗi nhẹ
     if key in cart:
-        if cart[key]['quantity'] < plant.stock:
-            cart[key]['quantity'] += 1
-        else:
-            messages.warning(request, f'"{plant.name}" đã đạt giới hạn tồn kho ({plant.stock}).')
+        messages.warning(request, f'"{plant.name}" đã nằm trong giỏ hàng của bạn rồi (sản phẩm độc bản).')
     else:
         cart[key] = {
             'price':    plant.price,
             'quantity': 1,
             'name':     plant.name,
         }
+        messages.success(request, f'Đã thêm "{plant.name}" vào giỏ hàng!')
 
     _save_cart(request, cart)
     return redirect('cart_detail')
@@ -134,11 +134,12 @@ def cart_detail(request):
             plant = Plant.objects.get(id=int(plant_id_str))
         except Plant.DoesNotExist:
             continue
-        subtotal = item['price'] * item['quantity']
+            
+        subtotal = item['price'] * 1 # Ép số lượng = 1
         total   += subtotal
         cart_items.append({
             'plant':    plant,
-            'quantity': item['quantity'],
+            'quantity': 1,
             'price':    item['price'],
             'subtotal': subtotal,
         })
@@ -151,18 +152,14 @@ def cart_detail(request):
 
 
 def update_cart(request, plant_id, action):
+    # Với hàng độc bản, nút tăng/giảm đã bị gỡ.
+    # Hàm này chủ yếu dùng để dự phòng nếu khách gọi xóa sản phẩm
     cart = _get_cart(request)
     key  = str(plant_id)
 
     if key in cart:
-        if action == 'increase':
-            plant = get_object_or_404(Plant, id=plant_id)
-            if cart[key]['quantity'] < plant.stock:
-                cart[key]['quantity'] += 1
-        elif action == 'decrease':
-            cart[key]['quantity'] -= 1
-            if cart[key]['quantity'] <= 0:
-                del cart[key]
+        if action == 'decrease':
+            del cart[key]
 
     _save_cart(request, cart)
     return redirect('cart_detail')
@@ -210,13 +207,18 @@ def checkout(request):
 
     for plant_id_str, item in cart.items():
         plant = get_object_or_404(Plant, id=int(plant_id_str))
-        qty   = item['quantity']
+        qty   = 1 # Ép số lượng = 1
         price = item['price']
+
+        # Chặn nếu cây vừa bị người khác mua trước đó vài giây
+        if not plant.is_available:
+            messages.error(request, f'Xin lỗi, cây "{plant.name}" vừa được khách khác đặt mua. Vui lòng chọn cây khác!')
+            return redirect('cart_detail')
 
         OrderItem.objects.create(order=order, plant=plant, quantity=qty, price=price)
 
-        Plant.objects.filter(id=plant.id).update(stock=F('stock') - qty)
-        Plant.objects.filter(id=plant.id, stock__lt=0).update(stock=0)
+        # Chuyển trạng thái cây thành ĐÃ BÁN (is_available = False)
+        Plant.objects.filter(id=plant.id).update(is_available=False)
 
         subtotal = price * qty
         total   += subtotal
@@ -256,55 +258,6 @@ def order_success(request, order_id):
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CẮT TỈA (Cũ - Đã đổi tên)
-# ─────────────────────────────────────────────────────────────────────────────
-
-def pruning_request_view(request):
-    if request.method != 'POST':
-        return redirect('home')
-
-    name         = request.POST.get('name',         '').strip()
-    phone_number = request.POST.get('phone_number', '').strip()
-    message      = request.POST.get('message',      '').strip()
-
-    PruningRequest.objects.create(
-        name         = name,
-        phone_number = phone_number,
-        message      = message,
-    )
-
-    html_content = f"""
-    <!DOCTYPE html>
-    <html lang="vi">
-    <head><meta charset="UTF-8"></head>
-    <body style="font-family:Arial,sans-serif;background:#f5f5f5;padding:20px;margin:0;">
-      <div style="max-width:520px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;border:1px solid #e0e0e0;">
-        <div style="background:#1a3a24;padding:24px 28px;text-align:center;">
-          <h2 style="color:#c8a84b;margin:0;font-family:Georgia,serif;font-size:1.3rem;">🌿 HOA KIỂNG HOÀNG NAM – YÊU CẦU CẮT TỈA MỚI</h2>
-        </div>
-        <div style="padding:28px;">
-          <table style="width:100%;font-size:0.9rem;border-collapse:collapse;">
-            <tr><td style="font-weight:700;color:#1a3a24;width:110px;padding:5px 0;">Họ tên:</td><td style="padding:5px 0;">{name}</td></tr>
-            <tr><td style="font-weight:700;color:#1a3a24;padding:5px 0;">SĐT:</td><td style="padding:5px 0;">{phone_number}</td></tr>
-            <tr><td style="font-weight:700;color:#1a3a24;padding:5px 0;">Yêu cầu:</td><td style="padding:5px 0;">{message}</td></tr>
-          </table>
-        </div>
-      </div>
-    </body>
-    </html>
-    """
-
-    _send_html_email(
-        subject      = f'✂️ YÊU CẦU CẮT TỈA MỚI – {name} ({phone_number})',
-        html_content = html_content,
-        to_email     = settings.EMAIL_HOST_USER,
-    )
-
-    messages.success(request, 'Đã gửi yêu cầu cắt tỉa! Chúng tôi sẽ liên hệ sớm.')
-    return redirect('home')
-
-
-# ─────────────────────────────────────────────────────────────────────────────
 # DỊCH VỤ CẢNH QUAN
 # ─────────────────────────────────────────────────────────────────────────────
 
@@ -316,7 +269,6 @@ def service_booking(request):
             service_order = form.save()
             service_label = service_order.get_service_type_display()
             
-            # Đã thay thế chuỗi HTML cứng bằng render từ file template mới
             html_content = render_to_string('store/email_service.html', {
                 'service_order': service_order,
             })
@@ -346,6 +298,7 @@ def service_booking(request):
         'form':            form,
         'cart_item_count': _cart_item_count(request),
     })
+
 
 def service_success(request):
     return render(request, 'store/service_success.html', {

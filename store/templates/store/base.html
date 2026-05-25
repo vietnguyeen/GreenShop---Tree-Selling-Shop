@@ -77,7 +77,7 @@
     }
     .section-sub {
       margin-top: 0.9rem; color: var(--muted);
-      max-width: 550px; line-height: 1.8; font-size: 1.05rem; /* Cải thiện kích thước chữ dễ đọc hơn */
+      max-width: 550px; line-height: 1.8; font-size: 1.05rem;
     }
 
     /* ══════════════════════════════════════════════════════════
@@ -94,7 +94,7 @@
       font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;
       text-decoration: none; transition: var(--transition);
       white-space: nowrap; border-radius: 50px;
-      letter-spacing: 0.03em; /* Thêm khoảng cách chữ để nút sang trọng hơn */
+      letter-spacing: 0.03em;
     }
     .btn-sm   { font-size: 0.8rem;  padding: 8px 18px; }
     .btn-md   { font-size: 0.88rem; padding: 12px 26px; }
@@ -157,7 +157,7 @@
     .card:hover { transform: translateY(-7px); box-shadow: var(--shadow-lg); }
 
     /* ══════════════════════════════════════════════════════════
-       PRODUCT CARD  (shared: index + kho_cay)
+       PRODUCT CARD
     ══════════════════════════════════════════════════════════ */
     .product-grid {
       display: grid;
@@ -200,36 +200,45 @@
     }
     .product-tag {
       display: inline-block; background: var(--mist); color: var(--jungle);
-      font-size: 0.67rem; font-weight: 600; padding: 3px 12px;
-      border-radius: 50px; margin-bottom: 0.55rem;
-      text-transform: uppercase; letter-spacing: 0.06em;
+      font-size: 0.75rem; font-weight: 700; padding: 3px 12px;
+      border-radius: 50px; margin-bottom: 0.6rem;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      align-self: flex-start; /* THUỘC TÍNH NÀY GIÚP BOX KHÔNG BỊ KÉO DÀI TRÀN VIỀN */
     }
     .product-name {  
       font-family: 'Playfair Display', serif; 
-      font-size: 1.35rem; /* Cải thiện font size to và nét hơn */
+      font-size: 1.5rem; 
       font-weight: 700; 
       color: var(--forest);
-      line-height: 1.35; 
-      margin-bottom: 0.7rem;
+      line-height: 1.3; 
+      margin-bottom: 0.8rem;
     }
     .product-specs {
       display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0.35rem 0.5rem; background: var(--cream);
-      border-radius: 9px; padding: 0.75rem;
-      font-size: 0.76rem; color: var(--muted); margin-bottom: auto;
+      gap: 0.4rem 0.6rem; background: var(--cream);
+      border-radius: 9px; padding: 0.9rem 1rem;
+      font-size: 0.85rem; color: var(--muted); margin-bottom: auto;
     }
     .product-specs strong { color: var(--jungle); }
     .product-footer {
       display: flex; align-items: center;
-      justify-content: space-between; margin-top: 1rem;
+      justify-content: space-between; margin-top: 1.2rem;
     }
     .product-price {
       font-family: 'Playfair Display', serif;
-      font-size:      1.55rem; /* Giá tiền to, rõ */         
-      font-weight:    800;             
-      color:          var(--moss); /* Đổi sang màu xanh đậm cho dễ đọc và sang hơn */
+      font-size: 1.45rem;  /* GIẢM SIZE GIÁ TIỀN CHO GỌN GÀNG HƠN */
+      font-weight: 800;             
+      color: var(--amber);
       letter-spacing: 0.02em;          
-      line-height:    1;               
+      line-height: 1;               
+    }
+    .currency {
+      font-size: 0.65em; 
+      font-weight: 600;
+      font-family: 'Be Vietnam Pro', sans-serif; 
+      opacity: 0.85; 
+      vertical-align: baseline; 
+      margin-left: 2px;
     }
     .stock-badge-out {
       display: inline-block; font-size: 0.7rem; font-weight: 600;
@@ -391,6 +400,13 @@
   </script>
 
   {% block extra_js %}{% endblock %}
-
+  <script>
+    /* Tự động thu nhỏ chữ VNĐ cho toàn bộ giá tiền trên web */
+    document.addEventListener("DOMContentLoaded", function() {
+      document.querySelectorAll('.product-price').forEach(function(el) {
+        el.innerHTML = el.innerHTML.replace(/(VNĐ|VND|đ)/gi, '<span class="currency">$1</span>');
+      });
+    });
+  </script>
 </body>
 </html>
