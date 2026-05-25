@@ -77,11 +77,11 @@ WSGI_APPLICATION = 'plant_shop.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME':     os.getenv('POSTGRES_DB'      ),
-        'USER':     os.getenv('POSTGRES_USER'     ),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST':     os.getenv('DB_HOST'           ),
-        'PORT':     os.getenv('DB_PORT'          ),
+        'NAME': 'greenshop_db',
+        'USER': 'vietng',
+        'PASSWORD': '130804', # Hãy đổi pass nếu bạn đã đặt pass khác
+        'HOST': 'db', # Tên service database trong docker-compose.yml
+        'PORT': '5432',
     }
 }
 
