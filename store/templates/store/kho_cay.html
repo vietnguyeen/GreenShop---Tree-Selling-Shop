@@ -2,6 +2,7 @@
 {% block title %}Kho Cây – Hoa Kiểng Hoàng Nam{% endblock %}
 
 {% block extra_css %}
+<style>
 .kho-header { background: var(--forest); padding: 80px 5vw 64px; position: relative; overflow: hidden; margin-top: -68px; padding-top: calc(68px + 56px); }
 .kho-header::before { content: '🌳'; position: absolute; right: 4vw; top: 50%; transform: translateY(-50%); font-size: 16rem; opacity: 0.05; pointer-events: none; line-height: 1; }
 .kho-header-inner { position: relative; z-index: 1; }
@@ -9,124 +10,176 @@
 .kho-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 700; color: var(--white); line-height: 1.15; margin-bottom: 0.8rem; }
 .kho-header p { font-size: 0.92rem; color: rgba(245,237,224,0.6); max-width: 480px; }
 
-.search-bar-section { background: var(--cream); padding: 1.8rem 5vw; border-bottom: 1px solid var(--mist); display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-.search-form { display: flex; flex: 1; min-width: 260px; max-width: 620px; background: var(--white); border: 1.5px solid var(--mist); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); transition: border-color var(--transition), box-shadow var(--transition); }
-.search-form:focus-within { border-color: var(--moss); box-shadow: 0 0 0 3px rgba(74,140,98,0.12); }
-.search-input { flex: 1; padding: 13px 18px; border: none; outline: none; font-family: 'Be Vietnam Pro', sans-serif; font-size: 0.9rem; color: var(--ink); background: transparent; }
-.search-input::placeholder { color: var(--muted); }
-.search-btn { background: var(--jungle); color: var(--white); border: none; padding: 0 26px; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; gap: 7px; transition: background var(--transition); white-space: nowrap; }
-.search-btn:hover { background: var(--forest); }
+.search-bar-section { background: var(--cream); padding: 1.8rem 5vw; border-bottom: 1px solid var(--mist); display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+.search-form { display: flex; gap: 12px; flex: 1; max-width: 600px; }
+.search-input-wrapper { position: relative; flex: 1; }
+.search-input-wrapper i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 1.1rem; }
+.search-control { width: 100%; padding: 14px 16px 14px 46px; border: 1px solid #dcd6cd; border-radius: var(--radius-md); font-family: inherit; font-size: 0.95rem; background: var(--white); transition: all var(--transition); }
+.search-control:focus { border-color: var(--forest); box-shadow: 0 0 0 4px rgba(26,58,36,0.08); outline: none; }
 
-.filter-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-.chip { padding: 6px 16px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; text-decoration: none; border: 1.5px solid var(--mist); color: var(--muted); background: var(--white); transition: all var(--transition); white-space: nowrap; }
-.chip:hover, .chip.active { background: var(--jungle); color: var(--white); border-color: var(--jungle); }
+.filter-group { display: flex; gap: 10px; align-items: center; }
+.filter-select { padding: 13px 40px 13px 16px; border: 1px solid #dcd6cd; border-radius: var(--radius-md); font-family: inherit; font-size: 0.9rem; font-weight: 500; color: var(--forest); background: var(--white) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a3a24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 16px center / 16px; -webkit-appearance: none; -moz-appearance: none; appearance: none; cursor: pointer; transition: all var(--transition); min-width: 160px; }
+.filter-select:focus { border-color: var(--forest); outline: none; }
 
-.results-meta { padding: 1.5rem 5vw 0; display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem; }
-.results-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--forest); }
-.results-count { font-size: 0.82rem; color: var(--muted); }
-.results-count strong { color: var(--jungle); font-weight: 700; }
+.kho-layout { display: flex; gap: 3rem; padding: 4rem 5vw; background: #faf8f5; min-height: 60vh; }
+.sidebar-filters { width: 260px; flex-shrink: 0; display: flex; flex-direction: column; gap: 2rem; }
+.filter-box { background: var(--white); border: 1px solid var(--mist); border-radius: var(--radius-xl); padding: 1.8rem; box-shadow: var(--shadow-sm); }
+.filter-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--forest); margin-bottom: 1.2rem; display: flex; align-items: center; justify-content: space-between; }
+.cat-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.cat-item a { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; border-radius: var(--radius-md); color: var(--muted); font-size: 0.92rem; font-weight: 500; text-decoration: none; transition: all var(--transition); }
+.cat-item a:hover { background: var(--cream); color: var(--forest); }
+.cat-item.active a { background: var(--forest); color: var(--white); font-weight: 600; }
+.cat-count { font-size: 0.75rem; background: var(--mist); color: var(--forest); padding: 2px 8px; border-radius: 20px; font-weight: 600; transition: all var(--transition); }
+.cat-item.active .cat-count { background: rgba(255,255,255,0.2); color: var(--white); }
 
-.kho-body { padding: 2rem 5vw 6rem; }
+.products-grid-wrapper { flex: 1; display: flex; flex-direction: column; gap: 3rem; }
+.results-meta { display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 0.92rem; font-weight: 500; }
+.products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2rem; }
 
-.empty-state { grid-column: 1/-1; text-align: center; padding: 5rem 1rem; }
-.empty-icon  { font-size: 4.5rem; opacity: 0.4; margin-bottom: 1rem; }
-.empty-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--forest); margin-bottom: 0.5rem; }
-.empty-sub { color: var(--muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+@media (max-width: 992px) {
+  .kho-layout { flex-direction: column; gap: 2rem; }
+  .sidebar-filters { width: 100%; }
+}
+</style>
 {% endblock %}
 
 {% block content %}
-
-<div class="kho-header">
+<header class="kho-header">
   <div class="kho-header-inner">
-    <div class="section-eyebrow">Danh Mục Sản Phẩm</div>
-    <h1>Toàn Bộ Kho Cây</h1>
-    <p>Tìm kiếm theo tên, loại cây để chọn đúng giống cây bạn cần.</p>
+    <span class="section-eyebrow">SHOWROOM SINH ĐỘNG</span>
+    <h1>Kho Cây Thực Tế</h1>
+    <p>Tất cả hình ảnh tại Hoàng Nam đều được chụp thực tế tại vườn, minh bạch thông số đường kính gốc, chiều cao để quý khách dễ dàng lựa chọn.</p>
   </div>
-</div>
+</header>
 
-<div class="search-bar-section">
+<section class="search-bar-section">
   <form method="GET" action="{% url 'kho_cay' %}" class="search-form">
-    <input type="text" name="q" class="search-input"
-           placeholder="Tìm theo tên hoặc loại cây... (Xoài, Nhãn, Mận...)"
-           value="{{ query }}">
-    <button type="submit" class="search-btn">🔍 Tìm Kiếm</button>
+    <div class="search-input-wrapper">
+      <i>🔍</i>
+      <input type="text" name="q" value="{{ query|default:'' }}" class="search-control" placeholder="Tìm tên cây, mã kiểng, loại hoa...">
+    </div>
+    {% if current_category %}
+      <input type="hidden" name="category" value="{{ current_category }}">
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Tìm Kiếm</button>
   </form>
-  <div class="filter-chips">
-    <a href="{% url 'kho_cay' %}" class="chip {% if not query %}active{% endif %}">Tất Cả</a>
-    {% for cat in categories %}
-    <a href="{% url 'kho_cay' %}?q={{ cat.name }}" class="chip {% if query == cat.name %}active{% endif %}">{{ cat.name }}</a>
-    {% endfor %}
+
+  <div class="filter-group">
+    <form method="GET" id="sortForm">
+      {% if query %}<input type="hidden" name="q" value="{{ query }}">{% endif %}
+      {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+      <select name="sort" class="filter-select" onchange="document.getElementById('sortForm').submit()">
+        <option value="default" {% if current_sort == 'default' %}selected{% endif %}>Sắp xếp mặc định</option>
+        <option value="price_asc" {% if current_sort == 'price_asc' %}selected{% endif %}>Giá: Thấp đến Cao</option>
+        <option value="price_desc" {% if current_sort == 'price_desc' %}selected{% endif %}>Giá: Cao đến Thấp</option>
+        <option value="newest" {% if current_sort == 'newest' %}selected{% endif %}>Cây mới lên sàn</option>
+      </select>
+    </form>
   </div>
-</div>
+</section>
 
-<div class="results-meta">
-  <span class="results-title">
-    {% if query %}"{{ query }}"{% else %}Tất Cả Sản Phẩm{% endif %}
-  </span>
-  <span class="results-count">Tìm thấy <strong>{{ plants|length }}</strong> cây</span>
-</div>
+<div class="kho-layout">
+  <aside class="sidebar-filters">
+    <div class="filter-box">
+      <div class="filter-title">Danh Mục Cây Kiểng <span>🌿</span></div>
+      <ul class="cat-list">
+        <li class="cat-item {% if not current_category %}active{% endif %}">
+          <a href="{% url 'kho_cay' %}{% if query %}?q={{ query }}{% endif %}">
+            <span>Tất Cả Sản Phẩm</span>
+            <span class="cat-count">{{ total_count }}</span>
+          </a>
+        </li>
+        {% for cat in categories %}
+        <li class="cat-item {% if current_category == cat.id|slugify %}active{% endif %}">
+          <a href="{% url 'kho_cay' %}?category={{ cat.id }}{% if query %}&q={{ query }}{% endif %}">
+            <span>{{ cat.name }}</span>
+            <span class="cat-count">{{ cat.plants.count }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </aside>
 
-<div class="kho-body">
-  <div class="product-grid">
-    {% for plant in plants %}
-    <div class="card product-card">
+  <main class="products-grid-wrapper">
+    <div class="results-meta">
+      <div>Tìm thấy <strong>{{ plants|length }}</strong> cây kiểng tương thích</div>
+      {% if query or current_category %}
+        <a href="{% url 'kho_cay' %}" style="color: var(--amber); font-weight: 600; text-decoration: none; font-size: 0.88rem;">❌ Xóa bộ lọc</a>
+      {% endif %}
+    </div>
 
-      {% with p_girth=plant.girth|default:"-" p_height=plant.height|default:"-" p_diameter=plant.diameter|default:"-" p_cat=plant.category.name|default:"Cây Giống" %}
-      <div class="product-img-wrap" onclick="openQuickView(
-           '{{ plant.id }}',
-           '{{ plant.name|escapejs }}',
-           '{% if plant.image %}{{ plant.image.url }}{% endif %}',
-           '{% if plant.image2 %}{{ plant.image2.url }}{% endif %}',
-           '{% if plant.image3 %}{{ plant.image3.url }}{% endif %}',
-           '{% if plant.image4 %}{{ plant.image4.url }}{% endif %}',
-           '{{ p_girth|escapejs }}',
-           '{{ p_height|escapejs }}',
-           '{{ p_diameter|escapejs }}',
-           '{{ plant.formatted_price|escapejs }}',
-           '{{ plant.is_available|yesno:"true,false" }}',
-           '{{ p_cat|escapejs }}'
-         )">
-        {% if plant.image %}
-          <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
-        {% else %}
-          <div class="product-img-placeholder">🌳</div>
-        {% endif %}
-        <div class="qv-overlay"><span class="qv-overlay-btn">👁 Xem Nhanh</span></div>
-        {% if not plant.is_available %}
-          <div style="position:absolute;top:.8rem;left:.8rem;background:var(--danger);color:#fff;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;z-index:2;">Hết Hàng</div>
-        {% endif %}
-      </div>
-      {% endwith %}
+    <div class="products-grid">
+      {% for plant in plants %}
+      <div class="product-card" data-aos="fade-up">
+        {% with images=plant.get_images %}
+        <div class="product-img-wrap">
+          <div class="mini-slider-container">
+            {% if images %}
+              {% for img in images %}
+                <img src="{{ img }}" alt="{{ plant.name }} - Ảnh {{ forloop.counter }}">
+              {% endfor %}
+            {% else %}
+              <div class="product-img-placeholder">📸 Chưa có ảnh thực tế</div>
+            {% endif %}
+          </div>
+          
+          {% if images|length > 1 %}
+            <button class="mini-slider-btn mini-slider-prev" onclick="slideMini(this, -1, event)">⟨</button>
+            <button class="mini-slider-btn mini-slider-next" onclick="slideMini(this, 1, event)">⟩</button>
+          {% endif %}
 
-      <div class="product-body">
-        <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
-        <div class="product-name">{{ plant.name }}</div>
-        
-        <div class="product-specs">
-          <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }} cm</div>
-          <div><strong>Cao:</strong> {{ plant.height|default:"-" }} m</div>
-        </div>
-        
-        <div class="product-footer">
-          <span class="product-price">{{ plant.formatted_price }}</span>
-          {% if plant.is_available %}
-            <a href="{% url 'add_to_cart' plant.id %}" class="btn btn-primary btn-sm">🛒 Thêm giỏ</a>
-          {% else %}
-            <span class="stock-badge-out">Hết Hàng</span>
+          <button class="quick-view-trigger" onclick="openQuickView(
+            '{{ plant.id }}', 
+            '{{ plant.name|escapejs }}', 
+            '{{ images.0|default:'' }}', 
+            '{{ images.1|default:'' }}', 
+            '{{ images.2|default:'' }}', 
+            '{{ images.3|default:'' }}', 
+            '{{ plant.girth|default:'-' }}', 
+            '{{ plant.height|default:'-' }}', 
+            '{{ plant.tuber_diameter|default:'-' }}', 
+            '{{ plant.formatted_price }}', 
+            '{{ plant.is_available|yesno:'true,false' }}', 
+            '{{ plant.category.name|default:'Cây kiểng'|escapejs }}'
+          )">👁️ Xem Nhanh</button>
+
+          {% if not plant.is_available %}
+            <div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;z-index:2;">Hết Hàng</div>
           {% endif %}
         </div>
+        {% endwith %}
+
+        <div class="product-body">
+          <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
+          <div class="product-name">{{ plant.name }}</div>
+          
+          <div class="product-specs">
+            <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }} cm</div>
+            <div><strong>Cao:</strong> {{ plant.height|default:"-" }} m</div>
+            {% if plant.tuber_diameter %}
+              <div><strong>Đường kính củ:</strong> {{ plant.tuber_diameter }} cm</div>
+            {% endif %}
+          </div>
+          
+          <div class="product-footer">
+            <span class="product-price">{{ plant.formatted_price }}</span>
+            {% if plant.is_available %}
+              <a href="{% url 'add_to_cart' plant.id %}\" class="btn btn-primary btn-sm">🛒 Thêm giỏ</a>
+            {% else %}
+              <span class="stock-badge-out">Hết Hàng</span>
+            {% endif %}
+          </div>
+        </div>
       </div>
-
+      {% empty %}
+      <div class="empty-state">
+        <div class="empty-icon">🌿</div>
+        <div class="empty-title">Không Tìm Thấy Cây Phù Hợp</div>
+        <div class="empty-desc">Vui lòng thử tìm kiếm với từ khóa khác hoặc xóa bộ lọc danh mục.</div>
+      </div>
+      {% endfor %}
     </div>
-    {% empty %}
-    <div class="empty-state">
-      <div class="empty-icon">🌿</div>
-      <div class="empty-title">Không Tìm Thấy Cây Nào</div>
-      <p class="empty-sub">Thử từ khóa khác hoặc xem toàn bộ kho cây.</p>
-      <a href="{% url 'kho_cay' %}" class="btn btn-outline-dark btn-md">Xem Tất Cả</a>
-    </div>
-    {% endfor %}
-  </div>
+  </main>
 </div>
-
 {% endblock content %}

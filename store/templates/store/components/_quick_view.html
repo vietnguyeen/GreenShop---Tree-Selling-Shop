@@ -28,6 +28,8 @@
   .qv-cat { font-size: 0.75rem; font-weight: 700; color: var(--moss); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
   .qv-name { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--forest); margin-bottom: 0.8rem; line-height: 1.2; }
   .qv-price { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--amber); margin-bottom: 1.5rem; }
+  
+  /* CSS Grid Specs: Hỗ trợ tự động giãn dòng khi xuất hiện thêm thông số */
   .qv-specs { background: var(--white); border: 1px solid var(--mist); border-radius: var(--radius-md); padding: 1.2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
   .qv-spec-item { display: flex; flex-direction: column; gap: 4px; }
   .qv-spec-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
@@ -63,7 +65,7 @@
         <button class="qv-main-nav qv-main-prev" onclick="navMainImage(event, -1)">❮</button>
         <button class="qv-main-nav qv-main-next" onclick="navMainImage(event, 1)">❯</button>
         
-        <div class="qv-zoom-hint">↗️ Mở tab mới</div>
+        <div class="qv-zoom-hint">↗️ Phóng to</div>
       </div>
     </div>
 
@@ -81,6 +83,10 @@
           <span class="qv-spec-label">Chiều cao</span>
           <span class="qv-spec-val" id="qvHeight"></span>
         </div>
+        <div class="qv-spec-item" id="qvTuberContainer" style="display: none;">
+          <span class="qv-spec-label">Đường kính củ</span>
+          <span class="qv-spec-val" id="qvTuber"></span>
+        </div>
       </div>
 
       <div class="qv-status" id="qvStatusWrap">
@@ -97,7 +103,8 @@
   let galleryImages = [];
   let currentImageIdx = 0;
 
-  function openQuickView(id, name, img1, img2, img3, img4, girth, height, diameter, price, isAvailable, cat) {
+  // Cập nhật lại thứ tự nhận tham số, thay thế vị trí của diameter bằng tuber_diameter
+  function openQuickView(id, name, img1, img2, img3, img4, girth, height, tuber_diameter, price, isAvailable, cat) {
     document.getElementById('qvModal').style.display = 'flex';
     document.getElementById('qvName').innerText = name;
     document.getElementById('qvCat').innerText = cat;
@@ -105,6 +112,14 @@
     document.getElementById('qvGirth').innerText = girth !== '-' ? girth + ' cm' : '-';
     document.getElementById('qvHeight').innerText = height !== '-' ? height + ' m' : '-';
 
+    // Logic kiểm tra và ẩn/hiện ô Đường kính củ động
+    const tuberContainer = document.getElementById('qvTuberContainer');
+    if (tuber_diameter && tuber_diameter !== '-' && tuber_diameter !== 'None') {
+      document.getElementById('qvTuber').innerText = tuber_diameter + ' cm';
+      tuberContainer.style.display = 'flex';
+    } else {
+      tuberContainer.style.display = 'none';
+    }
 
     // Đẩy ảnh vào mảng
     galleryImages = [];
@@ -138,14 +153,14 @@
       btn.href = baseUrl.replace('123456', id); 
       btn.onclick = null;
       badge.style.display = 'none';
-      statusWrap.style.display = 'none'; // Ẩn dòng chữ "Cây duy nhất"
+      statusWrap.style.display = 'none';
     } else {
       btn.className = 'qv-btn qv-btn-sold';
       btn.innerHTML = '🚫 Đã Bán';
       btn.href = 'javascript:void(0)';
       btn.onclick = function(e) { e.preventDefault(); };
       badge.style.display = 'block';
-      statusWrap.style.display = 'flex'; // Hiện lại cảnh báo nếu hết hàng
+      statusWrap.style.display = 'flex';
       statusDot.style.background = 'var(--danger)';
       statusText.innerText = 'Cây này đã có chủ';
     }

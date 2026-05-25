@@ -23,86 +23,76 @@
     background: rgba(255,255,255,0.85); color: var(--forest);
     border: none; cursor: pointer; z-index: 3;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    opacity: 0; transition: all 0.2s;
+    font-size: 14px; font-weight: bold; opacity: 0;
+    transition: all 0.2s ease; box-shadow: 0 1px 4px rgba(0,0,0,0.1);
   }
   .product-img-wrap:hover .mini-nav-btn { opacity: 1; }
-  .mini-nav-btn:hover { background: var(--forest); color: white; }
-  .mini-prev { left: 6px; }
-  .mini-next { right: 6px; }
+  .mini-nav-btn:hover { background: var(--white); color: var(--jungle); transform: translateY(-50%) scale(1.1); }
+  .mini-nav-prev { left: 8px; }
+  .mini-nav-next { right: 8px; }
 </style>
 
-<div class="card product-card">
-
-  {% with p_girth=plant.girth|default:"N/A" p_height=plant.height|default:"N/A" p_diameter=plant.diameter|default:"N/A" p_cat=plant.category.name|default:"Cây Giống" %}
-  
-  <div class="product-img-wrap"
-       onclick="openQuickView(
-         '{{ plant.id }}',
-         '{{ plant.name|escapejs }}',
-         '{% if plant.image %}{{ plant.image.url }}{% endif %}',
-         '{{ p_girth|escapejs }}',
-         '{{ p_height|escapejs }}',
-         '{{ p_diameter|escapejs }}',
-         '{{ plant.formatted_price|escapejs }}',
-         '{{ plant.stock }}',
-         '{{ p_cat|escapejs }}'
-       )">
-    
+<div class="product-card" data-aos="fade-up">
+  {% with images=plant.get_images %}
+  <div class="product-img-wrap">
     <div class="mini-slider-container">
-      {% if plant.image %}
-        <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
-      {% endif %}
-      
-      {% if plant.image2 %}
-        <img src="{{ plant.image2.url }}" alt="{{ plant.name }} - Ảnh 2" loading="lazy">
-      {% endif %}
-      
-      {% if not plant.image and not plant.image2 %}
-        <div class="product-img-placeholder">🌳</div>
+      {% if images %}
+        {% for img in images %}
+          <img src="{{ img }}" alt="{{ plant.name }} - Ảnh {{ forloop.counter }}">
+        {% endfor %}
+      {% else %}
+        <div class="product-img-placeholder">📸 Chưa có ảnh thực tế</div>
       {% endif %}
     </div>
 
-    {% if plant.image and plant.image2 %}
-      <button class="mini-nav-btn mini-prev" onclick="event.stopPropagation(); slideMini(this, -1)">❮</button>
-      <button class="mini-nav-btn mini-next" onclick="event.stopPropagation(); slideMini(this, 1)">❯</button>
+    {% if images|length > 1 %}
+      <button class="mini-nav-btn mini-nav-prev" onclick="slideMini(this, -1, event)">❮</button>
+      <button class="mini-nav-btn mini-nav-next" onclick="slideMini(this, 1, event)">❯</button>
     {% endif %}
 
-    <div class="qv-overlay">
-      <span class="qv-overlay-btn">👁 Xem Nhanh</span>
-    </div>
+    <button class="quick-view-trigger" onclick="openQuickView(
+      '{{ plant.id }}', 
+      '{{ plant.name|escapejs }}', 
+      '{{ images.0|default:'' }}', 
+      '{{ images.1|default:'' }}', 
+      '{{ images.2|default:'' }}', 
+      '{{ images.3|default:'' }}', 
+      '{{ plant.girth|default:'-' }}', 
+      '{{ plant.height|default:'-' }}', 
+      '{{ plant.tuber_diameter|default:'-' }}', 
+      '{{ plant.formatted_price }}', 
+      '{{ plant.is_available|yesno:'true,false' }}', 
+      '{{ plant.category.name|default:'Cây kiểng'|escapejs }}'
+    )">👁️ Xem Nhanh</button>
 
     {% if not plant.is_available %}
-      <div style="position:absolute;top:.7rem;left:.7rem;
-                  background:var(--danger);color:#fff;
-                  font-size:.65rem;font-weight:700;
-                  padding:3px 10px;border-radius:50px;z-index:2;">
-        Hết Hàng
+      <div class="stock-badge-out" style="position:absolute; top:10px; left:10px; background:var(--danger); color:#fff; font-size:.7rem; font-weight:700; padding:4px 12px; border-radius:50px; z-index:2;">
+        Đã Bán
       </div>
-    {% elif plant.stock <= 3 %}
-      <div style="position:absolute;top:.7rem;left:.7rem;
-                  background:var(--amber);color:#fff;
-                  font-size:.65rem;font-weight:700;
-                  padding:3px 10px;border-radius:50px;z-index:2;">
+    {% elif plant.stock <= 3 and plant.stock > 0 %}
+      <div class="stock-badge-low" style="position:absolute; top:10px; left:10px; background:var(--amber); color:#fff; font-size:.65rem; font-weight:700; padding:3px 10px; border-radius:50px; z-index:2;">
         Còn {{ plant.stock }}
       </div>
     {% endif %}
   </div>
-  
   {% endwith %}
 
   <div class="product-body">
     <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
     <div class="product-name">{{ plant.name }}</div>
+    
     <div class="product-specs">
-      <div><strong>Đường kính gốc:</strong>     {{ plant.girth|default:"N/A" }}</div>
-      <div><strong>Cao:</strong>        {{ plant.height|default:"N/A" }}</div>
-      <div><strong>Kho:</strong>        {{ plant.stock }}</div>
+      <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }} cm</div>
+      <div><strong>Cao:</strong> {{ plant.height|default:"-" }} m</div>
+      {% if plant.tuber_diameter %}
+        <div><strong>Đường kính củ:</strong> {{ plant.tuber_diameter }} cm</div>
+      {% endif %}
     </div>
+    
     <div class="product-footer">
       <span class="product-price">{{ plant.formatted_price }}</span>
       {% if plant.is_available %}
-        <a href="{% url 'add_to_cart' plant.id %}" class="btn btn-primary btn-sm">
+        <a href="{% url 'add_to_cart' plant.id %}\" class="btn btn-primary btn-sm">
           🛒 Thêm giỏ
         </a>
       {% else %}
@@ -110,17 +100,19 @@
       {% endif %}
     </div>
   </div>
-
 </div>
 
 <script>
+  // Script điều khiển slider mini cục bộ của từng thẻ card
   if (typeof window.slideMini !== 'function') {
-    window.slideMini = function(btn, direction) {
-      var wrap = btn.closest('.product-img-wrap');
-      var slider = wrap.querySelector('.mini-slider-container');
-      var width = slider.offsetWidth;
-      // Trượt ảnh mượt mà dựa vào chiều rộng của khung
-      slider.scrollBy({ left: direction * width, behavior: 'smooth' });
+    window.slideMini = function(btn, direction, event) {
+      if (event) event.stopPropagation();
+      var card = btn.closest('.product-img-wrap');
+      var container = card.querySelector('.mini-slider-container');
+      if (container) {
+        var width = container.offsetWidth;
+        container.scrollBy({ left: width * direction, behavior: 'smooth' });
+      }
     };
   }
 </script>
