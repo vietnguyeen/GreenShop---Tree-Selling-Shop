@@ -3,11 +3,8 @@ from .models import ServiceOrder
 
 
 class ServiceOrderForm(forms.ModelForm):
-    """
-    Form đặt dịch vụ cảnh quan.
-    grass_option chỉ bắt buộc khi service_type == 'lop_tham_co'.
-    Validation logic nằm trong clean() để giữ form DRY.
-    """
+   
+   
 
     class Meta:
         model  = ServiceOrder

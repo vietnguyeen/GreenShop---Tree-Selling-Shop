@@ -9,26 +9,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
+
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 'True'
+
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = [
     'hoakienghoangnam.id.vn',
     'www.hoakienghoangnam.id.vn',
-    '.onrender.com',       # Để test lúc Render mới cấp link
     '127.0.0.1', 'localhost' 
     ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://hoakienghoangnam.id.vn',
     'https://www.hoakienghoangnam.id.vn',
-    'https://*.onrender.com'
 ]
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -36,8 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "store",  # This is your shop app
-    'storages',
+    "store",  
 ]
 
 MIDDLEWARE = [
@@ -73,19 +70,19 @@ WSGI_APPLICATION = 'plant_shop.wsgi.application'
 
 # Database
 
-# Mặc định khi bạn code ở máy tính, nó sẽ dùng SQLite3
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'greenshop_db',
         'USER': 'vietng',
-        'PASSWORD': '130804', # Hãy đổi pass nếu bạn đã đặt pass khác
+        'PASSWORD': '130804', 
         'HOST': 'db', # Tên service database trong docker-compose.yml
         'PORT': '5432',
     }
 }
 
-# Nhưng khi đẩy lên mạng (Render), nó sẽ tự động bắt lấy DATABASE_URL để kết nối PostgreSQL
+
 if 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
 
@@ -126,16 +123,6 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-# Khi đẩy lên mạng (Render), hệ thống tự động bẻ lái lưu ảnh về 123HOST vĩnh viễn
-if 'RENDER' in os.environ:
-    # Kích hoạt bộ truyền file FTP
-    DEFAULT_FILE_STORAGE = 'storages.backends.ftp.FTPStorage'
-    
-    # Lấy thông tin đăng nhập từ biến môi trường bí mật trên Render
-    FTP_STORAGE_LOCATION = os.environ.get('FTP_STORAGE_LOCATION')
-    
-    # URL hiển thị ảnh trỏ thẳng về tên miền chính thức của bạn
-    MEDIA_URL = 'https://hoakienghoangnam.id.vn/media/'
 
 
 # Sessions lưu trong DB

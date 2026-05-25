@@ -15,7 +15,5 @@ urlpatterns = [
     path('order-success/<int:order_id>/', views.order_success, name='order_success'),
     path('dich-vu/', views.service_booking, name='service_booking'),
     path('dich-vu/thanh-cong/', views.service_success, name='service_success'),
-    
-    # Tiện ích
     path('set-phone/', views.set_phone, name='set_phone'),
 ]

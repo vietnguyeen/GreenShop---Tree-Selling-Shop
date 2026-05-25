@@ -8,7 +8,6 @@ class CategoryAdmin(admin.ModelAdmin):
 
 @admin.register(Plant)
 class PlantAdmin(admin.ModelAdmin):
-    # Đã thay 'stock' bằng 'is_available'
     list_display = ('name', 'category', 'price', 'is_available')
     list_editable = ('price', 'is_available')
     list_filter = ('category', 'is_available')
