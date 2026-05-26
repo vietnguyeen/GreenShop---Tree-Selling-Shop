@@ -2,168 +2,170 @@
 {% block title %}Hoa Kiểng Hoàng Nam – Cây Kiểng Hóc Môn{% endblock %}
 
 {% block extra_css %}
-<style>
 #hero { min-height: 100vh; position: relative; display: flex; align-items: center; padding: 0 5vw; overflow: hidden; margin-top: -68px; padding-top: 68px; }
 .hero-bg { position: absolute; inset: 0; z-index: 0; background: linear-gradient(105deg, rgba(14,31,21,0.90) 0%, rgba(14,31,21,0.60) 55%, rgba(14,31,21,0.20) 100%), url('https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1800&q=80') center / cover no-repeat; }
 .hero-bg::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(200,168,75,0.07) 0%, transparent 50%), radial-gradient(circle at 15% 85%, rgba(74,140,98,0.09) 0%, transparent 40%); }
-.hero-content { position: relative; z-index: 1; max-width: 620px; color: var(--white); }
-.hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 6vw, 4.2rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; letter-spacing: -0.01em; }
-.hero-desc { font-size: clamp(0.95rem, 1.5vw, 1.1rem); line-height: 1.7; color: rgba(255,255,255,0.85); margin-bottom: 2.5rem; font-weight: 400; }
-.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.hero-content { position: relative; z-index: 1; max-width: 850px; animation: heroFadeUp 0.85s cubic-bezier(0.22,1,0.36,1) both; }
+@keyframes heroFadeUp { from { opacity: 0; transform: translateY(36px); } to { opacity: 1; transform: translateY(0); } }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 10px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.24em; color: var(--gold); text-transform: uppercase; margin-bottom: 1.4rem; }
+.hero-eyebrow span { width: 30px; height: 1px; background: var(--gold); opacity: 0.55; display: block; }
+.hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 7.5vw, 5.8rem); font-weight: 700; color: var(--white); line-height: 1.05; margin-bottom: 1.4rem; }
+.hero-content h1 em { color: var(--gold); font-style: italic; }
+.hero-content p { font-size: 1.05rem; color: rgba(245,237,224,0.80); line-height: 1.8; max-width: 460px; margin-bottom: 2.4rem; }
+.hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+@media (max-width: 640px) { .hero-content h1 { font-size: 2.6rem; } }
 
-.features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; padding: 5rem 5vw; background: var(--white); position: relative; z-index: 2; margin-top: -40px; border-radius: var(--radius-xl) var(--radius-xl) 0 0; box-shadow: 0 -15px 30px rgba(0,0,0,0.03); }
-.feat-card { display: flex; gap: 1.2rem; align-items: flex-start; padding: 1rem; }
-.feat-icon { width: 52px; height: 52px; border-radius: var(--radius-md); background: var(--cream); color: var(--forest); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; font-weight: 700; }
-.feat-h { font-size: 1.05rem; font-weight: 700; color: var(--forest); margin-bottom: 0.4rem; }
-.feat-p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+#why { background: var(--forest); padding: 80px 5vw; }
+#why .section-title { color: var(--white); }
+.why-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 1.5rem; margin-top: 2.8rem; }
+.why-card { background: rgba(255,255,255,0.05); border: 1px solid rgba(200,168,75,0.18); border-radius: var(--radius-lg); padding: 2rem 1.6rem; transition: background var(--transition), transform var(--transition); }
+.why-card:hover { background: rgba(255,255,255,0.09); transform: translateY(-4px); }
+.why-icon  { font-size: 2rem; margin-bottom: 1rem; }
+.why-title { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--cream); margin-bottom: 0.6rem; }
+.why-text  { font-size: 0.95rem; color: rgba(245,237,224,0.75); line-height: 1.6; }
 
-#featured { padding: 6rem 5vw; background: #faf8f5; position: relative; }
-.slider-container-outer { position: relative; width: 100%; overflow: hidden; margin-top: 3rem; }
-.slider-track { display: flex; gap: 24px; transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1); width: max-content; }
-.slider-track .product-card { width: 285px; flex-shrink: 0; }
+#featured-products { background: var(--white); }
+.slider-wrapper { position: relative; padding: 0 5px; margin-top: 2.5rem; }
+.featured-slider { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 1.5rem; scroll-behavior: smooth; scroll-snap-type: x mandatory; padding-bottom: 1.5rem; scrollbar-width: none; }
+.featured-slider::-webkit-scrollbar { display: none; }
+.featured-slider .product-card { flex: 0 0 calc(25% - 1.125rem); scroll-snap-align: start; }
+.slider-btn { position: absolute; top: calc(50% - 1.5rem); transform: translateY(-50%); z-index: 10; width: 44px; height: 44px; border-radius: 50%; background: var(--white); border: 1.5px solid var(--mist); box-shadow: 0 4px 12px rgba(0,0,0,0.08); color: var(--forest); font-size: 1.2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--transition); }
+.slider-btn:hover { background: var(--forest); color: var(--white); border-color: var(--forest); }
+.slider-btn.prev { left: -18px; }
+.slider-btn.next { right: -18px; }
+@media (max-width: 1200px) { .featured-slider .product-card { flex: 0 0 calc(33.333% - 1rem); } }
+@media (max-width: 900px) { .featured-slider .product-card { flex: 0 0 calc(50% - 0.75rem); } }
+@media (max-width: 600px) { .slider-btn { display: none; } .featured-slider .product-card { flex: 0 0 85%; } }
 
-.slider-nav { display: flex; gap: 10px; position: absolute; top: 6rem; right: 5vw; z-index: 10; }
-.slider-arrow { width: 44px; height: 44px; border-radius: 50%; border: 1px solid #dcd6cd; background: var(--white); color: var(--forest); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all var(--transition); font-weight: 700; font-size: 1.1rem; }
-.slider-arrow:hover { background: var(--forest); color: var(--white); border-color: var(--forest); transform: scale(1.05); }
-
-@media (max-width: 992px) {
-  .features-grid { grid-template-columns: 1fr; gap: 1.5rem; padding: 4rem 5vw 2rem; }
-}
-</style>
+#contact { background: var(--cream); }
+.contact-layout { display: grid; grid-template-columns: 1fr 1.25fr; gap: 5rem; margin-top: 3.5rem; align-items: start; }
+@media (max-width: 800px) { .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; } }
+.contact-info-title { font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 700; color: var(--forest); margin-bottom: 2rem; }
+.contact-detail { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 1.5rem; }
+.contact-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--mist); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
+.contact-text strong { display: block; font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--jungle); margin-bottom: 3px; }
+.contact-text span { font-size: 0.9rem; color: var(--muted); }
+.contact-form-card { background: var(--white); border-radius: var(--radius-xl); padding: 2.5rem; box-shadow: 0 6px 40px rgba(14,31,21,0.09); border: 1.5px solid var(--mist); }
+.contact-form-title { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 700; color: var(--forest); margin-bottom: 1.8rem; text-align: center; }
 {% endblock %}
 
 {% block content %}
 <section id="hero">
   <div class="hero-bg"></div>
-  <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
-    <span class="section-eyebrow" style="color: var(--gold); margin-bottom: 1rem;">NHÀ VƯỜN HÓC MÔN</span>
-    <h1 class="hero-title">Mang Thiên Nhiên Vào Không Gian Sống</h1>
-    <p class="hero-desc">Hoa Kiểng Hoàng Nam chuyên cung cấp sỉ và lẻ cây công trình, cây bóng mát, bonsai nghệ thuật độc bản. Cam kết hình ảnh thực tế, minh bạch thông số kỹ thuật.</p>
-    <div class="hero-actions">
-      <a href="{% url 'kho_cay' %}" class="btn btn-primary btn-lg">🛒 Khám Phá Kho Cây</a>
-      <a href="#services" class="btn btn-outline btn-lg" style="color:white; border-color:white;">🌿 Dịch Vụ Sân Vườn</a>
+  <div class="hero-content">
+    <div class="hero-eyebrow"><span></span> Vườn Kiểng Hóc Môn · TP.HCM <span></span></div>
+    <h1>Cây Kiểng Đẹp<br/>
+      <em>Vườn Nhà</em> Xanh
+    </h1>
+    <p>Chuyên cung cấp cây ăn quả, cây kiểng và hoa chất lượng cao. Cây khỏe, gốc đẹp, cam kết chính gốc từ vườn Hoa Kiểng Hoàng Nam.</p>
+    <div class="hero-btns">
+      <a href="{% url 'kho_cay' %}" class="btn btn-accent btn-lg">Xem Kho Cây 🌱</a>
+      <a href="{% url 'service_booking' %}" class="btn btn-outline-light btn-lg">Đặt Dịch Vụ ✂️</a>
     </div>
   </div>
 </section>
 
-<section class="features-grid">
-  <div class="feat-card" data-aos="fade-up" data-aos-delay="100">
-    <div class="feat-icon">📸</div>
-    <div>
-      <div class="feat-h">Ảnh Thật 100% tại Vườn</div>
-      <div class="feat-p">Tuyệt đối không lấy ảnh mạng. Cây quý khách nhìn thấy trên website chính là cây sẽ được giao tận nhà.</div>
-    </div>
-  </div>
-  <div class="feat-card" data-aos="fade-up" data-aos-delay="200">
-    <div class="feat-icon">📏</div>
-    <div>
-      <div class="feat-h">Thông Số Minh Bạch</div>
-      <div class="feat-p">Chi tiết số đo đường kính gốc, chiều cao, và đường kính củ của bonsai giúp định hình chính xác không gian của bạn.</div>
-    </div>
-  </div>
-  <div class="feat-card" data-aos="fade-up" data-aos-delay="300">
-    <div class="feat-icon">🚚</div>
-    <div>
-      <div class="feat-h">Vận Chuyển An Toàn</div>
-      <div class="feat-p">Đội ngũ nhà vườn bứng cây, bó bầu chắc chắn và vận chuyển chuyên nghiệp, đảm bảo cây không mất sức.</div>
-    </div>
+<section id="why">
+  <div class="section-eyebrow">Cam Kết</div>
+  <h2 class="section-title">Tại Sao Chọn Hoa Kiểng Hoàng Nam?</h2>
+  <div class="why-grid">
+    <div class="why-card"><div class="why-icon">🌱</div><div class="why-title">Cây Chính Gốc</div><p class="why-text">100% cây được ươm từ giống chuẩn, kiểm định nguồn gốc, không pha tạp.</p></div>
+    <div class="why-card"><div class="why-icon">🚚</div><div class="why-title">Giao Tận Vườn</div><p class="why-text">Đóng gói bảo vệ bộ rễ, giao hàng TP.HCM, Bình Dương, Long An, Đồng Nai.</p></div>
+    <div class="why-card"><div class="why-icon">✂️</div><div class="why-title">Dịch Vụ Cảnh Quan</div><p class="why-text">Đội ngũ chuyên gia 10+ năm kinh nghiệm: Cắt tỉa, Bảo dưỡng, Lợp thảm cỏ.</p></div>
+    <div class="why-card"><div class="why-icon">💬</div><div class="why-title">Tư Vấn Miễn Phí</div><p class="why-text">Hỗ trợ kỹ thuật trồng, chăm sóc sau mua, giải đáp qua Zalo 7 ngày/tuần.</p></div>
   </div>
 </section>
 
-<section id="featured">
-  <span class="section-eyebrow">TUYỂN CHỌN ĐẶC SẮC</span>
-  <h2 class="section-title">Cây Kiểng Đắc Địa Mới Về</h2>
-  
-  <div class="slider-nav">
-    <button class="slider-arrow" id="featPrev">❮</button>
-    <button class="slider-arrow" id="featNext">❯</button>
-  </div>
+<section id="featured-products">
+  <div class="section-eyebrow">Sản Phẩm Nổi Bật</div>
+  <h2 class="section-title">Kho Cây Chọn Lọc</h2>
+  <p class="section-sub">Những cây đẹp nhất, khỏe nhất đang có mặt tại vườn – sẵn sàng giao tận nơi.</p>
 
-  <div class="slider-container-outer">
-    <div class="slider-track" id="featSlider">
-      {% for plant in featured_plants %}
-      <div class="product-card">
-        {% with images=plant.get_images %}
-        <div class="product-img-wrap">
-          <div class="mini-slider-container">
-            {% if images %}
-              {% for img in images %}
-                <img src="{{ img }}" alt="{{ plant.name }}">
-              {% endfor %}
-            {% else %}
-              <div class="product-img-placeholder">📸 Chưa có ảnh</div>
-            {% endif %}
+  <div class="slider-wrapper">
+    <button class="slider-btn prev" id="featPrev">❮</button>
+
+    <div class="featured-slider" id="featSlider">
+      {% for plant in featured_plants|slice:":10" %}
+        <div class="card product-card">
+
+          {% with p_girth=plant.girth|default:"-" p_height=plant.height|default:"-" p_diameter=plant.diameter|default:"-" p_cat=plant.category.name|default:"Cây Giống" %}
+          <div class="product-img-wrap" onclick="openQuickView(
+               '{{ plant.id }}',
+               '{{ plant.name|escapejs }}',
+               '{% if plant.image %}{{ plant.image.url }}{% endif %}',
+               '{% if plant.image2 %}{{ plant.image2.url }}{% endif %}',
+               '{% if plant.image3 %}{{ plant.image3.url }}{% endif %}',
+               '{% if plant.image4 %}{{ plant.image4.url }}{% endif %}',
+               '{{ p_girth|escapejs }}',
+               '{{ p_height|escapejs }}',
+               '{{ p_diameter|escapejs }}',
+               '{{ plant.formatted_price|escapejs }}',
+               '{{ plant.is_available|yesno:"true,false" }}',
+               '{{ p_cat|escapejs }}'
+             )">
+            {% if plant.image %}<img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">{% else %}<div class="product-img-placeholder">🌳</div>{% endif %}
+            <div class="qv-overlay"><span class="qv-overlay-btn">👁 Xem Nhanh</span></div>
+            {% if not plant.is_available %}<div style="position:absolute;top:.7rem;left:.7rem;background:var(--danger);color:#fff;font-size:.65rem;font-weight:700;padding:3px 10px;border-radius:50px;z-index:2;">Hết Hàng</div>{% endif %}
           </div>
-          
-          {% if images|length > 1 %}
-            <button class="mini-slider-btn mini-slider-prev" onclick="slideMini(this, -1, event)">⟨</button>
-            <button class="mini-slider-btn mini-slider-next" onclick="slideMini(this, 1, event)">⟩</button>
-          {% endif %}
+          {% endwith %}
 
-          <button class="quick-view-trigger" onclick="openQuickView(
-            '{{ plant.id }}', 
-            '{{ plant.name|escapejs }}', 
-            '{{ images.0|default:'' }}', 
-            '{{ images.1|default:'' }}', 
-            '{{ images.2|default:'' }}', 
-            '{{ images.3|default:'' }}', 
-            '{{ plant.girth|default:'-' }}', 
-            '{{ plant.height|default:'-' }}', 
-            '{{ plant.tuber_diameter|default:'-' }}', 
-            '{{ plant.formatted_price }}', 
-            '{{ plant.is_available|yesno:'true,false' }}', 
-            '{{ plant.category.name|default:'Cây kiểng'|escapejs }}'
-          )">👁️ Xem Nhanh</button>
-        </div>
-        {% endwith %}
+          <div class="product-body">
+            <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
+            <div class="product-name">{{ plant.name }}</div>
 
-        <div class="product-body">
-          <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
-          <div class="product-name">{{ plant.name }}</div>
-          
-          <div class="product-specs">
-            <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }} cm</div>
-            <div><strong>Cao:</strong> {{ plant.height|default:"-" }} m</div>
-            {% if plant.tuber_diameter %}
-              <div><strong>Đường kính củ:</strong> {{ plant.tuber_diameter }} cm</div>
-            {% endif %}
-          </div>
-          
-          <div class="product-footer">
-            <span class="product-price">{{ plant.formatted_price }}</span>
-            <a href="{% url 'add_to_cart' plant.id %}\" class="btn btn-primary btn-sm">🛒 Mua ngay</a>
+            <div class="product-specs">
+              <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }} cm</div>
+              <div><strong>Cao:</strong> {{ plant.height|default:"-" }} m</div>
+            </div>
+
+            <div class="product-footer">
+              <span class="product-price">{{ plant.formatted_price }}</span>
+              {% if plant.is_available %}<a href="{% url 'add_to_cart' plant.id %}" class="btn btn-primary btn-sm">🛒 Thêm giỏ</a>
+              {% else %}<span class="stock-badge-out">Hết Hàng</span>{% endif %}
+            </div>
           </div>
         </div>
-      </div>
+      {% empty %}
+        <p style="text-align:center;color:var(--muted);padding:3rem;width:100%;">Hiện chưa có sản phẩm nổi bật nào.</p>
       {% endfor %}
     </div>
+
+    <button class="slider-btn next" id="featNext">❯</button>
+  </div>
+
+  <div style="text-align:center; margin-top:2.5rem">
+    <a href="{% url 'kho_cay' %}" class="btn btn-outline-dark btn-md">Xem Toàn Bộ Kho Cây →</a>
   </div>
 </section>
 
-<section id="services" style="padding: 6rem 5vw; background: var(--white);">
-  <div style="text-align: center; max-width: 600px; margin: 0 auto 4rem;">
-    <span class="section-eyebrow">DỊCH VỤ CHUYÊN NGHIỆP</span>
-    <h2 class="section-title" style="font-size: 2.2rem;">Giải Pháp Cảnh Quan Toàn Diện</h2>
-  </div>
-  
-  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem;">
-    <div class="contact-form-card">
-      <div class="contact-form-title">🌲 Thi Công Sân Vườn</div>
-      <div style="text-align: center; padding: 1.5rem 1rem 0;">
-        <p style="color: var(--muted); margin-bottom: 2rem; line-height: 1.7; font-size: 0.95rem;">
-          Thiết kế phối cảnh 3D và trực tiếp trồng cây bóng mát, thiết lập hồ cá Koi, tiểu cảnh đá bộ theo phong thủy đại cát.
-        </p>
-        <a href="{% url 'service_booking' %}\" class="btn btn-primary btn-lg" style="width: 100%;">Liên Hệ Khảo Sát Tận Nhà ↗️</a>
+<section id="contact">
+  <div class="section-eyebrow">Dịch Vụ & Liên Hệ</div>
+  <h2 class="section-title">Chăm Sóc Khu Vườn Của Bạn</h2>
+  <p class="section-sub">Hoa Kiểng Hoàng Nam cung cấp các giải pháp chuyên nghiệp để khu vườn của bạn luôn xanh tươi.</p>
+
+  <div class="contact-layout">
+    <div>
+      <div class="contact-info-title">Thông Tin Liên Hệ</div>
+      <div class="contact-detail">
+        <div class="contact-icon">📍</div>
+        <div class="contact-text"><strong>ĐỊA CHỈ VƯỜN</strong><span>Xã Hóc Môn, TP.HCM – Mở cửa 7:00–17:30</span></div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">📞</div>
+        <div class="contact-text"><strong>HOTLINE / ZALO</strong><span>Mr. Khanh: 0913 661 945</span></div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon">✉️</div>
+        <div class="contact-text"><strong>EMAIL</strong><span>hoangthong01692424242@gmail.com</span></div>
       </div>
     </div>
     <div class="contact-form-card">
-      <div class="contact-form-card-badge">Phổ biến</div>
       <div class="contact-form-title">✂️ Dịch Vụ Cảnh Quan</div>
       <div style="text-align: center; padding: 1.5rem 1rem 0;">
         <p style="color: var(--muted); margin-bottom: 2rem; line-height: 1.7; font-size: 0.95rem;">
           Khám phá dịch vụ <strong>Cắt tỉa, Bảo dưỡng, và Lợp thảm cỏ</strong> trọn gói từ đội ngũ chuyên gia của chúng tôi. Tư vấn khảo sát hoàn toàn miễn phí.
         </p>
-        <a href="{% url 'service_booking' %}\" class="btn btn-primary btn-lg" style="width: 100%;">
+        <a href="{% url 'service_booking' %}" class="btn btn-primary btn-lg" style="width: 100%;">
           Xem Chi Tiết & Đặt Lịch Ngay 🌿
         </a>
       </div>
@@ -184,8 +186,8 @@
     nextBtn.addEventListener('click', function () {
       var card = slider.querySelector('.product-card');
       if (card) {
-        var scrollAmount = card.offsetWidth + 24; 
-        slider.parentElement.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        var scrollAmount = card.offsetWidth + 24;
+        slider.scrollLeft += scrollAmount * 2;
       }
     });
 
@@ -193,10 +195,10 @@
       var card = slider.querySelector('.product-card');
       if (card) {
         var scrollAmount = card.offsetWidth + 24;
-        slider.parentElement.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        slider.scrollLeft -= scrollAmount * 2;
       }
     });
   }
-}());
+})();
 </script>
 {% endblock %}
