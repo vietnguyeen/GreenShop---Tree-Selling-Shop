@@ -6,13 +6,13 @@
   @keyframes qvIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
   .qv-close { position: absolute; top: 1rem; right: 1rem; width: 36px; height: 36px; border-radius: 50%; background: var(--mist); border: none; font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; color: var(--forest); transition: background var(--transition); z-index: 10; }
   .qv-close:hover { background: var(--sage); color: var(--white); }
-  
+
   /* ── Trái: Khu vực Ảnh Chính ── */
   .qv-left { width: 45%; padding: 1.5rem; display: flex; flex-direction: column; background: var(--white); }
-  .qv-main-img-wrap { width: 100%; height: 100%; aspect-ratio: 4/5; border-radius: var(--radius-md); overflow: hidden; position: relative; background: var(--mist); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); }
+  .qv-main-img-wrap { width: 100%; height: 100%; aspect-ratio: 4/5; border-radius: var(--radius-md); overflow: hidden; position: relative; background: var(--mist); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); touch-action: pan-y; } /* Thêm touch-action hỗ trợ swipe mobile */
   .qv-main-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; display: block; }
   .qv-main-img-wrap:hover img { transform: scale(1.03); }
-  
+
   /* Nút qua lại trên ảnh chính */
   .qv-main-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.85); border: none; display: flex; align-items: center; justify-content: center; color: var(--forest); cursor: pointer; opacity: 0; transition: all 0.2s ease; z-index: 3; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-size: 0.9rem; }
   .qv-main-img-wrap:hover .qv-main-nav { opacity: 1; }
@@ -28,26 +28,24 @@
   .qv-cat { font-size: 0.75rem; font-weight: 700; color: var(--moss); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; }
   .qv-name { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--forest); margin-bottom: 0.8rem; line-height: 1.2; }
   .qv-price { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 700; color: var(--amber); margin-bottom: 1.5rem; }
-  
-  /* CSS Grid Specs: Hỗ trợ tự động giãn dòng khi xuất hiện thêm thông số */
   .qv-specs { background: var(--white); border: 1px solid var(--mist); border-radius: var(--radius-md); padding: 1.2rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
   .qv-spec-item { display: flex; flex-direction: column; gap: 4px; }
   .qv-spec-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
   .qv-spec-val { font-size: 0.95rem; font-weight: 600; color: var(--forest); }
-  
+
   /* Status Row */
   .qv-status { display: none; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 500; color: var(--muted); margin-bottom: 1.5rem; }
   .qv-status-dot { width: 10px; height: 10px; border-radius: 50%; }
-  
+
   .qv-btn { width: 100%; padding: 14px; border-radius: var(--radius-md); border: none; font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600; font-size: 0.95rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all var(--transition); text-decoration: none; margin-top: auto; }
   .qv-btn-add { background: var(--forest); color: var(--white); }
   .qv-btn-add:hover { background: var(--jungle); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(26,58,36,0.2); }
   .qv-btn-sold { background: #dcdcdc; color: #888; cursor: not-allowed; }
 
   /* Mobile Responsive */
-  @media (max-width: 768px) { 
-    .qv-content { flex-direction: column; max-height: 90vh; overflow-y: auto; } 
-    .qv-left, .qv-right { width: 100%; border-left: none; } 
+  @media (max-width: 768px) {
+    .qv-content { flex-direction: column; max-height: 90vh; overflow-y: auto; }
+    .qv-left, .qv-right { width: 100%; border-left: none; }
     .qv-main-img-wrap { aspect-ratio: 1/1; }
   }
 </style>
@@ -61,11 +59,11 @@
       <div class="qv-main-img-wrap" onclick="openImageNewTab()">
         <div class="qv-badge" id="qvBadge">Đã Bán</div>
         <img id="qvMainImage" src="" alt="">
-        
+
         <button class="qv-main-nav qv-main-prev" onclick="navMainImage(event, -1)">❮</button>
         <button class="qv-main-nav qv-main-next" onclick="navMainImage(event, 1)">❯</button>
-        
-        <div class="qv-zoom-hint">↗️ Phóng to</div>
+
+        <div class="qv-zoom-hint">↗️ Mở tab mới</div>
       </div>
     </div>
 
@@ -83,6 +81,7 @@
           <span class="qv-spec-label">Chiều cao</span>
           <span class="qv-spec-val" id="qvHeight"></span>
         </div>
+        <!-- THÊM KHỐI HIỂN THỊ ĐƯỜNG KÍNH CỦ ĐỒNG BỘ -->
         <div class="qv-spec-item" id="qvTuberContainer" style="display: none;">
           <span class="qv-spec-label">Đường kính củ</span>
           <span class="qv-spec-val" id="qvTuber"></span>
@@ -103,7 +102,11 @@
   let galleryImages = [];
   let currentImageIdx = 0;
 
-  // Cập nhật lại thứ tự nhận tham số, thay thế vị trí của diameter bằng tuber_diameter
+  // Biến lưu tọa độ cho tính năng Swipe trên Mobile
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  // Thay thế tham số diameter cũ thành tuber_diameter để map trực tiếp từ plant_card và kho_cay
   function openQuickView(id, name, img1, img2, img3, img4, girth, height, tuber_diameter, price, isAvailable, cat) {
     document.getElementById('qvModal').style.display = 'flex';
     document.getElementById('qvName').innerText = name;
@@ -112,13 +115,13 @@
     document.getElementById('qvGirth').innerText = girth !== '-' ? girth + ' cm' : '-';
     document.getElementById('qvHeight').innerText = height !== '-' ? height + ' m' : '-';
 
-    // Logic kiểm tra và ẩn/hiện ô Đường kính củ động
+    // Xử lý hiển thị ẩn/hiện trường Đường kính củ một cách thông minh
     const tuberContainer = document.getElementById('qvTuberContainer');
-    if (tuber_diameter && tuber_diameter !== '-' && tuber_diameter !== 'None') {
+    if (tuber_diameter && tuber_diameter !== '-' && tuber_diameter !== 'None' && tuber_diameter !== 'N/A') {
       document.getElementById('qvTuber').innerText = tuber_diameter + ' cm';
-      tuberContainer.style.display = 'flex';
+      if (tuberContainer) tuberContainer.style.display = 'flex';
     } else {
-      tuberContainer.style.display = 'none';
+      if (tuberContainer) tuberContainer.style.display = 'none';
     }
 
     // Đẩy ảnh vào mảng
@@ -150,29 +153,29 @@
       btn.className = 'qv-btn qv-btn-add';
       btn.innerHTML = '🛒 Thêm Vào Giỏ Hàng';
       var baseUrl = "{% url 'add_to_cart' 123456 %}";
-      btn.href = baseUrl.replace('123456', id); 
+      btn.href = baseUrl.replace('123456', id);
       btn.onclick = null;
       badge.style.display = 'none';
-      statusWrap.style.display = 'none';
+      statusWrap.style.display = 'none'; // Ẩn dòng chữ "Cây duy nhất"
     } else {
       btn.className = 'qv-btn qv-btn-sold';
       btn.innerHTML = '🚫 Đã Bán';
       btn.href = 'javascript:void(0)';
       btn.onclick = function(e) { e.preventDefault(); };
       badge.style.display = 'block';
-      statusWrap.style.display = 'flex';
+      statusWrap.style.display = 'flex'; // Hiện lại cảnh báo nếu hết hàng
       statusDot.style.background = 'var(--danger)';
       statusText.innerText = 'Cây này đã có chủ';
     }
   }
 
-  function closeQuickView() { 
-    document.getElementById('qvModal').style.display = 'none'; 
+  function closeQuickView() {
+    document.getElementById('qvModal').style.display = 'none';
   }
 
   // Điều khiển ảnh chính bằng mũi tên
   function navMainImage(e, dir) {
-    e.stopPropagation(); 
+    if (e && e.stopPropagation) e.stopPropagation();
     if (galleryImages.length <= 1) return;
     let nextIdx = (currentImageIdx + dir + galleryImages.length) % galleryImages.length;
     setMainImage(nextIdx);
@@ -188,6 +191,36 @@
   function openImageNewTab() {
     if (galleryImages.length > 0 && galleryImages[currentImageIdx]) {
       window.open(galleryImages[currentImageIdx], '_blank');
+    }
+  }
+
+  // ==========================================
+  // LOGIC SỰ KIỆN VUỐT (SWIPE) TRÊN MOBILE
+  // ==========================================
+  const imgContainer = document.querySelector('.qv-main-img-wrap');
+
+  if (imgContainer) {
+    // Bắt điểm chạm đầu tiên của ngón tay
+    imgContainer.addEventListener('touchstart', function(e) {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+
+    // Bắt vị trí nhấc tay ra và tính toán cú vuốt
+    imgContainer.addEventListener('touchend', function(e) {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    }, { passive: true });
+  }
+
+  function handleSwipe() {
+    const swipeThreshold = 40; // Ngưỡng pixel tối thiểu để nhận diện hành vi vuốt
+    
+    if (touchStartX - touchEndX > swipeThreshold) {
+      // Vuốt từ Phải sang Trái -> Chuyển ảnh kế tiếp (Next)
+      navMainImage(null, 1);
+    } else if (touchEndX - touchStartX > swipeThreshold) {
+      // Vuốt từ Trái sang Phải -> Lùi về ảnh trước (Prev)
+      navMainImage(null, -1);
     }
   }
 </script>

@@ -3,9 +3,6 @@ from .models import ServiceOrder
 
 
 class ServiceOrderForm(forms.ModelForm):
-   
-   
-
     class Meta:
         model  = ServiceOrder
         fields = [
@@ -31,7 +28,7 @@ class ServiceOrderForm(forms.ModelForm):
             }),
             'service_type': forms.Select(attrs={
                 'class': 'form-control',
-                'id':    'id_service_type',   # JS dựa vào id này
+                'id':    'id_service_type',   
             }),
             'grass_option': forms.Select(attrs={
                 'class': 'form-control',
