@@ -1,6 +1,6 @@
 <style>
-  /* ── Modal Chính ── */
-  .qv-modal { display: none; position: fixed; inset: 0; z-index: 9999; align-items: center; justify-content: center; padding: 1rem; }
+  /* ── Modal Chính (Quick View) ── */
+  .qv-modal { display: none; position: fixed; inset: 0; z-index: 9998; align-items: center; justify-content: center; padding: 1rem; }
   .qv-backdrop { position: absolute; inset: 0; background: rgba(14,31,21,0.7); backdrop-filter: blur(5px); }
   .qv-content { position: relative; background: var(--white); border-radius: var(--radius-xl); width: 100%; max-width: 850px; display: flex; overflow: hidden; box-shadow: var(--shadow-lg); animation: qvIn 0.3s cubic-bezier(0.2,1,0.3,1); }
   @keyframes qvIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
@@ -9,11 +9,10 @@
 
   /* ── Trái: Khu vực Ảnh Chính ── */
   .qv-left { width: 45%; padding: 1.5rem; display: flex; flex-direction: column; background: var(--white); }
-  .qv-main-img-wrap { width: 100%; height: 100%; aspect-ratio: 4/5; border-radius: var(--radius-md); overflow: hidden; position: relative; background: var(--mist); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); touch-action: pan-y; } /* Thêm touch-action hỗ trợ swipe mobile */
+  .qv-main-img-wrap { width: 100%; height: 100%; aspect-ratio: 4/5; border-radius: var(--radius-md); overflow: hidden; position: relative; background: var(--mist); cursor: pointer; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05); touch-action: pan-y; }
   .qv-main-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; display: block; }
   .qv-main-img-wrap:hover img { transform: scale(1.03); }
 
-  /* Nút qua lại trên ảnh chính */
   .qv-main-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,0.85); border: none; display: flex; align-items: center; justify-content: center; color: var(--forest); cursor: pointer; opacity: 0; transition: all 0.2s ease; z-index: 3; box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-size: 0.9rem; }
   .qv-main-img-wrap:hover .qv-main-nav { opacity: 1; }
   .qv-main-nav:hover { background: var(--white); transform: translateY(-50%) scale(1.1); color: var(--jungle); }
@@ -33,7 +32,6 @@
   .qv-spec-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
   .qv-spec-val { font-size: 0.95rem; font-weight: 600; color: var(--forest); }
 
-  /* Status Row */
   .qv-status { display: none; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 500; color: var(--muted); margin-bottom: 1.5rem; }
   .qv-status-dot { width: 10px; height: 10px; border-radius: 50%; }
 
@@ -42,13 +40,41 @@
   .qv-btn-add:hover { background: var(--jungle); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(26,58,36,0.2); }
   .qv-btn-sold { background: #dcdcdc; color: #888; cursor: not-allowed; }
 
-  /* Mobile Responsive */
   @media (max-width: 768px) {
     .qv-content { flex-direction: column; max-height: 90vh; overflow-y: auto; }
     .qv-left, .qv-right { width: 100%; border-left: none; }
     .qv-main-img-wrap { aspect-ratio: 1/1; }
   }
+
+  /* ==========================================
+     CSS CHO FULLSCREEN GALLERY (Messenger Style)
+     ========================================== */
+  .fs-modal { display: none; position: fixed; inset: 0; z-index: 9999; background: #000; flex-direction: column; opacity: 0; transition: opacity 0.3s; }
+  .fs-modal.active { opacity: 1; }
+  
+  .fs-header { position: absolute; top: 0; left: 0; right: 0; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 10; background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent); }
+  .fs-counter { color: #fff; font-size: 1rem; font-weight: 600; font-family: sans-serif; }
+  .fs-close { background: rgba(255,255,255,0.2); border: none; color: #fff; width: 40px; height: 40px; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background 0.2s; }
+  .fs-close:hover { background: rgba(255,255,255,0.4); }
+
+  .fs-body { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; touch-action: none; overflow: hidden; }
+  .fs-main-img { max-width: 100%; max-height: 100vh; object-fit: contain; transition: transform 0.2s ease-out; user-select: none; }
+  
+  /* Nút điều hướng Fullscreen (chỉ hiện trên Desktop) */
+  .fs-nav { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.1); border: none; color: white; font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .fs-nav:hover { background: rgba(255,255,255,0.3); }
+  .fs-prev { left: 20px; }
+  .fs-next { right: 20px; }
+  @media (max-width: 768px) { .fs-nav { display: none; } } /* Ẩn nút mũi tên trên điện thoại vì đã có vuốt */
+
+  /* Thanh Thumbnails bên dưới */
+  .fs-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); display: flex; justify-content: center; gap: 10px; overflow-x: auto; scrollbar-width: none; }
+  .fs-footer::-webkit-scrollbar { display: none; }
+  .fs-thumb { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; cursor: pointer; opacity: 0.5; border: 2px solid transparent; transition: all 0.2s; }
+  .fs-thumb:hover { opacity: 0.8; }
+  .fs-thumb.active { opacity: 1; border-color: var(--gold); transform: scale(1.1); }
 </style>
+
 
 <div class="qv-modal" id="qvModal">
   <div class="qv-backdrop" onclick="closeQuickView()"></div>
@@ -56,14 +82,14 @@
     <button class="qv-close" onclick="closeQuickView()">✕</button>
 
     <div class="qv-left">
-      <div class="qv-main-img-wrap" onclick="openImageNewTab()">
+      <div class="qv-main-img-wrap" onclick="openFullscreenGallery()">
         <div class="qv-badge" id="qvBadge">Đã Bán</div>
         <img id="qvMainImage" src="" alt="">
 
         <button class="qv-main-nav qv-main-prev" onclick="navMainImage(event, -1)">❮</button>
         <button class="qv-main-nav qv-main-next" onclick="navMainImage(event, 1)">❯</button>
 
-        <div class="qv-zoom-hint">↗️ Mở tab mới</div>
+        <div class="qv-zoom-hint">↗️ Phóng to</div>
       </div>
     </div>
 
@@ -81,7 +107,6 @@
           <span class="qv-spec-label">Chiều cao</span>
           <span class="qv-spec-val" id="qvHeight"></span>
         </div>
-        <!-- THÊM KHỐI HIỂN THỊ ĐƯỜNG KÍNH CỦ ĐỒNG BỘ -->
         <div class="qv-spec-item" id="qvTuberContainer" style="display: none;">
           <span class="qv-spec-label">Đường kính củ</span>
           <span class="qv-spec-val" id="qvTuber"></span>
@@ -98,15 +123,36 @@
   </div>
 </div>
 
+
+<div class="fs-modal" id="fsModal">
+  <div class="fs-header">
+    <div class="fs-counter"><span id="fsCurrentNum">1</span> / <span id="fsTotalNum">1</span></div>
+    <button class="fs-close" onclick="closeFullscreenGallery()">✕</button>
+  </div>
+  
+  <div class="fs-body" id="fsBody">
+    <button class="fs-nav fs-prev" onclick="navFsImage(event, -1)">❮</button>
+    <img id="fsMainImage" class="fs-main-img" src="" alt="">
+    <button class="fs-nav fs-next" onclick="navFsImage(event, 1)">❯</button>
+  </div>
+
+  <div class="fs-footer" id="fsThumbContainer">
+    </div>
+</div>
+
+
 <script>
   let galleryImages = [];
   let currentImageIdx = 0;
 
-  // Biến lưu tọa độ cho tính năng Swipe trên Mobile
-  let touchStartX = 0;
-  let touchEndX = 0;
+  // Biến cho Swipe Quick View
+  let qvTouchStartX = 0;
+  let qvTouchEndX = 0;
 
-  // Thay thế tham số diameter cũ thành tuber_diameter để map trực tiếp từ plant_card và kho_cay
+  // Biến cho Swipe Fullscreen
+  let fsTouchStartX = 0, fsTouchStartY = 0;
+  let fsTouchEndX = 0, fsTouchEndY = 0;
+
   function openQuickView(id, name, img1, img2, img3, img4, girth, height, tuber_diameter, price, isAvailable, cat) {
     document.getElementById('qvModal').style.display = 'flex';
     document.getElementById('qvName').innerText = name;
@@ -115,7 +161,6 @@
     document.getElementById('qvGirth').innerText = girth !== '-' ? girth + ' cm' : '-';
     document.getElementById('qvHeight').innerText = height !== '-' ? height + ' m' : '-';
 
-    // Xử lý hiển thị ẩn/hiện trường Đường kính củ một cách thông minh
     const tuberContainer = document.getElementById('qvTuberContainer');
     if (tuber_diameter && tuber_diameter !== '-' && tuber_diameter !== 'None' && tuber_diameter !== 'N/A') {
       document.getElementById('qvTuber').innerText = tuber_diameter + ' cm';
@@ -124,14 +169,13 @@
       if (tuberContainer) tuberContainer.style.display = 'none';
     }
 
-    // Đẩy ảnh vào mảng
+    // Nạp ảnh
     galleryImages = [];
     if (img1) galleryImages.push(img1);
     if (img2) galleryImages.push(img2);
     if (img3) galleryImages.push(img3);
     if (img4) galleryImages.push(img4);
 
-    // Bật/tắt nút điều hướng ảnh nếu có nhiều hơn 1 ảnh
     const mainNavs = document.querySelectorAll('.qv-main-nav');
     if (galleryImages.length <= 1) {
       mainNavs.forEach(n => n.style.display = 'none');
@@ -141,7 +185,6 @@
 
     if(galleryImages.length > 0) setMainImage(0);
 
-    // Xử lý nút giỏ hàng và ẩn/hiện trạng thái
     var btn = document.getElementById('qvBtn');
     var badge = document.getElementById('qvBadge');
     var statusWrap = document.getElementById('qvStatusWrap');
@@ -156,14 +199,14 @@
       btn.href = baseUrl.replace('123456', id);
       btn.onclick = null;
       badge.style.display = 'none';
-      statusWrap.style.display = 'none'; // Ẩn dòng chữ "Cây duy nhất"
+      statusWrap.style.display = 'none';
     } else {
       btn.className = 'qv-btn qv-btn-sold';
       btn.innerHTML = '🚫 Đã Bán';
       btn.href = 'javascript:void(0)';
       btn.onclick = function(e) { e.preventDefault(); };
       badge.style.display = 'block';
-      statusWrap.style.display = 'flex'; // Hiện lại cảnh báo nếu hết hàng
+      statusWrap.style.display = 'flex';
       statusDot.style.background = 'var(--danger)';
       statusText.innerText = 'Cây này đã có chủ';
     }
@@ -173,7 +216,6 @@
     document.getElementById('qvModal').style.display = 'none';
   }
 
-  // Điều khiển ảnh chính bằng mũi tên
   function navMainImage(e, dir) {
     if (e && e.stopPropagation) e.stopPropagation();
     if (galleryImages.length <= 1) return;
@@ -181,46 +223,100 @@
     setMainImage(nextIdx);
   }
 
-  // Set ảnh chính
   function setMainImage(idx) {
     currentImageIdx = idx;
     document.getElementById('qvMainImage').src = galleryImages[idx];
   }
 
-  // MỞ ẢNH TRONG TAB MỚI
-  function openImageNewTab() {
-    if (galleryImages.length > 0 && galleryImages[currentImageIdx]) {
-      window.open(galleryImages[currentImageIdx], '_blank');
-    }
-  }
-
-  // ==========================================
-  // LOGIC SỰ KIỆN VUỐT (SWIPE) TRÊN MOBILE
-  // ==========================================
-  const imgContainer = document.querySelector('.qv-main-img-wrap');
-
-  if (imgContainer) {
-    // Bắt điểm chạm đầu tiên của ngón tay
-    imgContainer.addEventListener('touchstart', function(e) {
-      touchStartX = e.changedTouches[0].screenX;
-    }, { passive: true });
-
-    // Bắt vị trí nhấc tay ra và tính toán cú vuốt
-    imgContainer.addEventListener('touchend', function(e) {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
+  // --- SWIPE CHO QUICK VIEW ---
+  const qvImgContainer = document.querySelector('.qv-main-img-wrap');
+  if (qvImgContainer) {
+    qvImgContainer.addEventListener('touchstart', (e) => { qvTouchStartX = e.changedTouches[0].screenX; }, { passive: true });
+    qvImgContainer.addEventListener('touchend', (e) => {
+      qvTouchEndX = e.changedTouches[0].screenX;
+      if (qvTouchStartX - qvTouchEndX > 40) navMainImage(null, 1);
+      else if (qvTouchEndX - qvTouchStartX > 40) navMainImage(null, -1);
     }, { passive: true });
   }
 
-  function handleSwipe() {
-    const swipeThreshold = 40; // Ngưỡng pixel tối thiểu để nhận diện hành vi vuốt
+  // ==========================================
+  // LOGIC CHO FULLSCREEN GALLERY (MESSENGER)
+  // ==========================================
+  const fsModal = document.getElementById('fsModal');
+  const fsMainImage = document.getElementById('fsMainImage');
+  const fsThumbContainer = document.getElementById('fsThumbContainer');
+  
+  function openFullscreenGallery() {
+    if (galleryImages.length === 0) return;
     
-    if (touchStartX - touchEndX > swipeThreshold) {
-      // Vuốt từ Phải sang Trái -> Chuyển ảnh kế tiếp (Next)
-      navMainImage(null, 1);
-    } else if (touchEndX - touchStartX > swipeThreshold) {
-      // Vuốt từ Trái sang Phải -> Lùi về ảnh trước (Prev)
-      navMainImage(null, -1);
+    fsModal.style.display = 'flex';
+    setTimeout(() => fsModal.classList.add('active'), 10);
+    
+    document.getElementById('fsTotalNum').innerText = galleryImages.length;
+    
+    // Render Thumbnails
+    fsThumbContainer.innerHTML = '';
+    if (galleryImages.length > 1) {
+      galleryImages.forEach((src, idx) => {
+        let img = document.createElement('img');
+        img.src = src;
+        img.className = 'fs-thumb' + (idx === currentImageIdx ? ' active' : '');
+        img.onclick = (e) => { e.stopPropagation(); setFsImage(idx); };
+        fsThumbContainer.appendChild(img);
+      });
     }
+    
+    setFsImage(currentImageIdx);
+  }
+
+  function closeFullscreenGallery() {
+    fsModal.classList.remove('active');
+    setTimeout(() => fsModal.style.display = 'none', 300);
+    setMainImage(currentImageIdx); // Đồng bộ lại ảnh ở ngoài QuickView
+  }
+
+  function navFsImage(e, dir) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (galleryImages.length <= 1) return;
+    let nextIdx = (currentImageIdx + dir + galleryImages.length) % galleryImages.length;
+    setFsImage(nextIdx);
+  }
+
+  function setFsImage(idx) {
+    currentImageIdx = idx;
+    fsMainImage.src = galleryImages[idx];
+    document.getElementById('fsCurrentNum').innerText = idx + 1;
+    
+    // Cập nhật viền cho Thumbnail
+    const thumbs = document.querySelectorAll('.fs-thumb');
+    thumbs.forEach(t => t.classList.remove('active'));
+    if (thumbs[idx]) thumbs[idx].classList.add('active');
+  }
+
+  // --- SWIPE CHO FULLSCREEN (VUỐT TRÁI/PHẢI CHUYỂN ẢNH, VUỐT XUỐNG ĐÓNG) ---
+  const fsBody = document.getElementById('fsBody');
+  if (fsBody) {
+    fsBody.addEventListener('touchstart', (e) => {
+      fsTouchStartX = e.changedTouches[0].screenX;
+      fsTouchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    fsBody.addEventListener('touchend', (e) => {
+      fsTouchEndX = e.changedTouches[0].screenX;
+      fsTouchEndY = e.changedTouches[0].screenY;
+      
+      let diffX = fsTouchStartX - fsTouchEndX;
+      let diffY = fsTouchStartY - fsTouchEndY;
+      
+      // Nếu vuốt dọc nhiều hơn vuốt ngang
+      if (Math.abs(diffY) > Math.abs(diffX)) {
+        // Vuốt xuống (Swipe Down) để tắt
+        if (diffY < -60) closeFullscreenGallery();
+      } else {
+        // Vuốt ngang (Vuốt Trái/Phải để chuyển ảnh)
+        if (diffX > 40) navFsImage(null, 1);
+        else if (diffX < -40) navFsImage(null, -1);
+      }
+    }, { passive: true });
   }
 </script>
