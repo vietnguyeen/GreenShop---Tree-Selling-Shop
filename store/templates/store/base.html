@@ -52,350 +52,102 @@
       padding-top: 68px;
     }
 
-    /* ── Scrollbar ── */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--cream); }
     ::-webkit-scrollbar-thumb { background: var(--moss); border-radius: 3px; }
 
-    /* ══════════════════════════════════════════════════════════
-       TYPOGRAPHY UTILITIES
-    ══════════════════════════════════════════════════════════ */
     .section-eyebrow {
       display: inline-flex; align-items: center; gap: 10px;
       font-size: 0.7rem; font-weight: 600; letter-spacing: 0.22em;
       color: var(--gold); text-transform: uppercase; margin-bottom: 0.9rem;
     }
-    .section-eyebrow::before,
-    .section-eyebrow::after {
-      content: ''; display: block;
-      width: 28px; height: 1px; background: var(--gold); opacity: 0.5;
+    .section-eyebrow::before, .section-eyebrow::after {
+      content: ''; display: block; width: 28px; height: 1px; background: var(--gold); opacity: 0.5;
     }
     .section-title {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 4vw, 3rem);
       font-weight: 700; color: var(--forest); line-height: 1.15;
     }
     .section-sub {
-      margin-top: 0.9rem; color: var(--muted);
-      max-width: 550px; line-height: 1.8; font-size: 1.05rem;
+      margin-top: 0.9rem; color: var(--muted); max-width: 550px; line-height: 1.8; font-size: 1.05rem;
     }
 
-    /* ══════════════════════════════════════════════════════════
-       LAYOUT
-    ══════════════════════════════════════════════════════════ */
     section { padding: 88px 5vw; }
 
-    /* ══════════════════════════════════════════════════════════
-       BUTTON SYSTEM
-    ══════════════════════════════════════════════════════════ */
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       gap: 7px; border: none; cursor: pointer;
       font-family: 'Be Vietnam Pro', sans-serif; font-weight: 600;
       text-decoration: none; transition: var(--transition);
-      white-space: nowrap; border-radius: 50px;
-      letter-spacing: 0.03em;
+      white-space: nowrap; border-radius: 50px; letter-spacing: 0.03em;
     }
     .btn-sm   { font-size: 0.8rem;  padding: 8px 18px; }
     .btn-md   { font-size: 0.88rem; padding: 12px 26px; }
     .btn-lg   { font-size: 0.95rem; padding: 15px 36px; }
-    .btn-full { width: 100%; border-radius: var(--radius-md); padding: 14px; font-size: 0.95rem; }
-
-    .btn-primary      { background: var(--jungle); color: var(--white); }
+    
+    .btn-primary { background: var(--jungle); color: var(--white); }
     .btn-primary:hover { background: var(--forest); transform: translateY(-1px); }
-
-    .btn-accent       { background: var(--amber); color: var(--white); }
-    .btn-accent:hover  { background: var(--ember); transform: translateY(-1px); }
-
-    .btn-outline-light {
-      border: 1.5px solid rgba(245,237,224,0.5); color: var(--white);
-      background: rgba(255,255,255,0.06); backdrop-filter: blur(4px);
-    }
-    .btn-outline-light:hover {
-      background: rgba(255,255,255,0.14); border-color: rgba(245,237,224,0.85);
-    }
-    .btn-outline-dark {
-      border: 1.5px solid var(--forest); color: var(--forest); background: transparent;
-    }
+    
+    .btn-outline-dark { border: 1.5px solid var(--forest); color: var(--forest); background: transparent; }
     .btn-outline-dark:hover { background: var(--forest); color: var(--white); }
 
-    .btn:disabled, .btn[disabled] {
-      background: #bbb !important; color: #fff !important;
-      cursor: not-allowed; transform: none !important;
-    }
-
-    /* ══════════════════════════════════════════════════════════
-       FORM ELEMENTS
-    ══════════════════════════════════════════════════════════ */
-    .form-group { margin-bottom: 1.1rem; }
-    .form-group label {
-      display: block; font-size: 0.75rem; font-weight: 600;
-      color: var(--jungle); margin-bottom: 0.4rem;
-      letter-spacing: 0.07em; text-transform: uppercase;
-    }
-    .form-control {
-      width: 100%; border: 1.5px solid var(--mist);
-      border-radius: var(--radius-sm); padding: 11px 15px;
-      font-family: 'Be Vietnam Pro', sans-serif; font-size: 0.9rem;
-      color: var(--ink); background: var(--white); outline: none;
-      transition: border-color var(--transition), box-shadow var(--transition);
-    }
-    .form-control:focus {
-      border-color: var(--moss);
-      box-shadow: 0 0 0 3px rgba(74,140,98,0.14);
-    }
-    textarea.form-control { height: 110px; resize: vertical; }
-
-    /* ══════════════════════════════════════════════════════════
-       CARD SHARED
-    ══════════════════════════════════════════════════════════ */
-    .card {
-      background: var(--white); border-radius: var(--radius-lg);
-      border: 1.5px solid var(--mist); overflow: hidden;
-      transition: transform var(--transition), box-shadow var(--transition);
-    }
+    .card { background: var(--white); border-radius: var(--radius-lg); border: 1.5px solid var(--mist); overflow: hidden; transition: transform var(--transition), box-shadow var(--transition); }
     .card:hover { transform: translateY(-7px); box-shadow: var(--shadow-lg); }
 
-    /* ══════════════════════════════════════════════════════════
-       PRODUCT CARD
-    ══════════════════════════════════════════════════════════ */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
-      gap: 1.5rem; margin-top: 2.5rem;
-    }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(255px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
     .product-card { display: flex; flex-direction: column; }
-    .product-img-wrap {
-      position: relative; height: 220px; overflow: hidden;
-      background: linear-gradient(135deg, var(--mist), #c5e0cc);
-      cursor: pointer; flex-shrink: 0;
-    }
-    .product-img-wrap img {
-      width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.38s ease; display: block;
-    }
+    .product-img-wrap { position: relative; height: 220px; overflow: hidden; background: linear-gradient(135deg, var(--mist), #c5e0cc); cursor: pointer; flex-shrink: 0; }
+    .product-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.38s ease; display: block; }
     .product-card:hover .product-img-wrap img { transform: scale(1.05); }
-    .product-img-placeholder {
-      height: 100%; display: flex; align-items: center;
-      justify-content: center; font-size: 5rem;
-    }
-    .qv-overlay {
-      position: absolute; inset: 0; background: rgba(14,31,21,0);
-      display: flex; align-items: center; justify-content: center;
-      transition: background var(--transition);
-    }
-    .qv-overlay-btn {
-      background: var(--white); color: var(--forest);
-      padding: 8px 20px; border-radius: 50px;
-      font-size: 0.78rem; font-weight: 600;
-      opacity: 0; transform: translateY(10px);
-      transition: opacity var(--transition), transform var(--transition);
-    }
+    .product-img-placeholder { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 5rem; }
+    
+    .qv-overlay { position: absolute; inset: 0; background: rgba(14,31,21,0); display: flex; align-items: center; justify-content: center; transition: background var(--transition); }
+    .qv-overlay-btn { background: var(--white); color: var(--forest); padding: 8px 20px; border-radius: 50px; font-size: 0.78rem; font-weight: 600; opacity: 0; transform: translateY(10px); transition: opacity var(--transition), transform var(--transition); }
     .product-card:hover .qv-overlay { background: rgba(14,31,21,0.28); }
     .product-card:hover .qv-overlay-btn { opacity: 1; transform: translateY(0); }
 
-    .product-body {
-      padding: 1.15rem 1.25rem 1.4rem;
-      flex: 1; display: flex; flex-direction: column;
-    }
-    .product-tag {
-      display: inline-block; background: var(--mist); color: var(--jungle);
-      font-size: 0.75rem; font-weight: 700; padding: 3px 12px;
-      border-radius: 50px; margin-bottom: 0.6rem;
-      text-transform: uppercase; letter-spacing: 0.05em;
-      align-self: flex-start; /* THUỘC TÍNH NÀY GIÚP BOX KHÔNG BỊ KÉO DÀI TRÀN VIỀN */
-    }
-    .product-name {  
-      font-family: 'Playfair Display', serif; 
-      font-size: 1.5rem; 
-      font-weight: 700; 
-      color: var(--forest);
-      line-height: 1.3; 
-      margin-bottom: 0.8rem;
-    }
-    .product-specs {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 0.4rem 0.6rem; background: var(--cream);
-      border-radius: 9px; padding: 0.9rem 1rem;
-      font-size: 0.85rem; color: var(--muted); margin-bottom: auto;
-    }
+    .product-body { padding: 1.15rem 1.25rem 1.4rem; flex: 1; display: flex; flex-direction: column; }
+    .product-tag { display: inline-block; background: var(--mist); color: var(--jungle); font-size: 0.75rem; font-weight: 700; padding: 3px 12px; border-radius: 50px; margin-bottom: 0.6rem; text-transform: uppercase; letter-spacing: 0.05em; align-self: flex-start; }
+    .product-name { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--forest); line-height: 1.3; margin-bottom: 0.8rem; }
+    .product-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 0.4rem 0.6rem; background: var(--cream); border-radius: 9px; padding: 0.9rem 1rem; font-size: 0.85rem; color: var(--muted); margin-bottom: auto; }
     .product-specs strong { color: var(--jungle); }
-    .product-footer {
-      display: flex; align-items: center;
-      justify-content: space-between; margin-top: 1.2rem;
-    }
-    .product-price {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.45rem;  /* GIẢM SIZE GIÁ TIỀN CHO GỌN GÀNG HƠN */
-      font-weight: 800;             
-      color: var(--amber);
-      letter-spacing: 0.02em;          
-      line-height: 1;               
-    }
-    .currency {
-      font-size: 0.65em; 
-      font-weight: 600;
-      font-family: 'Be Vietnam Pro', sans-serif; 
-      opacity: 0.85; 
-      vertical-align: baseline; 
-      margin-left: 2px;
-    }
-    .stock-badge-out {
-      display: inline-block; font-size: 0.7rem; font-weight: 600;
-      color: var(--danger); background: #fdecea;
-      padding: 3px 10px; border-radius: 50px;
-    }
+    
+    .product-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 1.2rem; }
+    .product-price { font-family: 'Playfair Display', serif; font-size: 1.45rem; font-weight: 800; color: var(--amber); letter-spacing: 0.02em; line-height: 1; }
+    .currency { font-size: 0.65em; font-weight: 600; font-family: 'Be Vietnam Pro', sans-serif; opacity: 0.85; vertical-align: baseline; margin-left: 2px; }
+    .stock-badge-out { display: inline-block; font-size: 0.7rem; font-weight: 600; color: var(--danger); background: #fdecea; padding: 3px 10px; border-radius: 50px; }
 
-    /* ══════════════════════════════════════════════════════════
-       TOAST  (Django messages)
-    ══════════════════════════════════════════════════════════ */
-    .toast-container {
-      position: fixed; top: 80px; right: 1.5rem;
-      z-index: 5000; display: flex; flex-direction: column; gap: 0.6rem;
-    }
-    .toast {
-      padding: 12px 20px; border-radius: var(--radius-sm);
-      font-size: 0.88rem; font-weight: 500; max-width: 340px;
-      box-shadow: var(--shadow-md); animation: toastIn 0.3s ease;
-      display: flex; align-items: center; gap: 8px;
-    }
-    @keyframes toastIn {
-      from { opacity: 0; transform: translateX(20px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
+    .toast-container { position: fixed; top: 80px; right: 1.5rem; z-index: 5000; display: flex; flex-direction: column; gap: 0.6rem; }
+    .toast { padding: 12px 20px; border-radius: var(--radius-sm); font-size: 0.88rem; font-weight: 500; max-width: 340px; box-shadow: var(--shadow-md); animation: toastIn 0.3s ease; display: flex; align-items: center; gap: 8px; }
+    @keyframes toastIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
     .toast-success { background: var(--forest); color: var(--white); }
     .toast-error   { background: var(--danger);  color: var(--white); }
-    .toast-warning { background: var(--amber);   color: var(--white); }
 
-    /* ══════════════════════════════════════════════════════════
-       FLOATING CTA
-    ══════════════════════════════════════════════════════════ */
-    .floating-cta {
-      position: fixed; bottom: 2rem; right: 2rem; z-index: 400;
-      background: var(--forest); color: var(--cream);
-      padding: 12px 22px; border-radius: 50px;
-      font-size: 0.85rem; font-weight: 600; text-decoration: none;
-      display: flex; align-items: center; gap: 8px;
-      border: 1px solid rgba(200,168,75,0.35);
-      box-shadow: 0 8px 30px rgba(14,31,21,0.35);
-      transition: transform var(--transition), box-shadow var(--transition);
-      animation: floatPulse 3.5s ease-in-out infinite;
-    }
+    .floating-cta { position: fixed; bottom: 30px; left: 30px; z-index: 400; background: var(--forest); color: var(--cream); padding: 12px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px; border: 1px solid rgba(200,168,75,0.35); box-shadow: 0 8px 30px rgba(14,31,21,0.35); transition: transform var(--transition), box-shadow var(--transition); animation: floatPulse 3.5s ease-in-out infinite; }
     .floating-cta:hover { transform: translateY(-3px); }
-    @keyframes floatPulse {
-      0%,100% { box-shadow: 0 8px 30px rgba(14,31,21,0.35); }
-      50%      { box-shadow: 0 8px 44px rgba(200,168,75,0.32); }
-    }
+    @keyframes floatPulse { 0%,100% { box-shadow: 0 8px 30px rgba(14,31,21,0.35); } 50% { box-shadow: 0 8px 44px rgba(200,168,75,0.32); } }
 
-    /* ══════════════════════════════════════════════════════════
-       FOOTER
-    ══════════════════════════════════════════════════════════ */
-    footer {
-      background: var(--ink); color: rgba(245,237,224,0.55);
-      padding: 4rem 5vw 2rem;
-    }
-    .footer-grid {
-      display: grid; grid-template-columns: 2fr 1fr 1fr;
-      gap: 3rem; margin-bottom: 3rem;
-    }
-    .footer-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.7rem; font-weight: 700;
-      color: var(--cream); margin-bottom: 0.9rem; display: block;
-    }
+    footer { background: var(--ink); color: rgba(245,237,224,0.55); padding: 4rem 5vw 2rem; }
+    .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 3rem; margin-bottom: 3rem; }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.7rem; font-weight: 700; color: var(--cream); margin-bottom: 0.9rem; display: block; }
     .footer-desc { font-size: 0.86rem; line-height: 1.8; max-width: 270px; }
-    .footer-col h4 {
-      font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--gold); margin-bottom: 1.1rem;
-    }
-    .footer-col a {
-      display: block; color: rgba(245,237,224,0.55); text-decoration: none;
-      font-size: 0.86rem; margin-bottom: 0.55rem;
-      transition: color var(--transition);
-    }
+    .footer-col h4 { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 1.1rem; }
+    .footer-col a { display: block; color: rgba(245,237,224,0.55); text-decoration: none; font-size: 0.86rem; margin-bottom: 0.55rem; transition: color var(--transition); }
     .footer-col a:hover { color: var(--cream); }
-    .footer-bottom {
-      border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1.5rem;
-      font-size: 0.78rem; display: flex; justify-content: space-between;
-      align-items: center; flex-wrap: wrap; gap: 0.8rem;
-    }
-    .footer-dot {
-      display: inline-block; width: 5px; height: 5px;
-      background: var(--moss); border-radius: 50%;
-      margin: 0 6px; vertical-align: middle;
-    }
+    .footer-bottom { border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1.5rem; font-size: 0.78rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
+    .footer-dot { display: inline-block; width: 5px; height: 5px; background: var(--moss); border-radius: 50%; margin: 0 6px; vertical-align: middle; }
 
-    /* ══════════════════════════════════════════════════════════
-       RESPONSIVE
-    ══════════════════════════════════════════════════════════ */
     @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
-    @media (max-width: 600px) {
-      .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
-      section { padding: 64px 5vw; }
-    }
+    @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; gap: 2rem; } section { padding: 64px 5vw; } .floating-cta { left: 20px; bottom: 20px; padding: 10px 16px; font-size: 0.75rem; } }
+
+    /* Zalo Button */
+    .zalo-floating-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background-color: #0068ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100000; box-shadow: 0 4px 18px rgba(0, 104, 255, 0.45); transition: all 0.3s cubic-bezier(0.27, 1.01, 1, 1); animation: zaloPulse 2s infinite; }
+    .zalo-floating-btn svg { width: 35px; height: 35px; }
+    .zalo-floating-btn:hover { transform: scale(1.1) rotate(5deg); background-color: #0056d6; }
+    @keyframes zaloPulse { 0% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 104, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0); } }
+    @media (max-width: 768px) { .zalo-floating-btn { bottom: 20px; right: 20px; width: 52px; height: 52px; } .zalo-floating-btn svg { width: 28px; height: 28px; } }
 
     {% block extra_css %}{% endblock %}
-
-      /* ==========================================
-        CSS CHO FLOATING ZALO BUTTON
-        ========================================== */
-    .zalo-floating-btn {
-        position: fixed;
-        bottom: 25px;       /* Cách lề dưới 25px */
-        right: 25px;        /* Cách lề phải 25px (đổi thành left nếu muốn để bên trái) */
-        width: 55px;
-        height: 55px;
-        background-color: #0068ff; /* Màu xanh đặc trưng của Zalo */
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 4px 15px rgba(0, 104, 255, 0.4);
-        z-index: 9999;      /* Đảm bảo luôn đè lên các phần tử khác */
-        transition: transform 0.3s ease;
-        animation: zaloPulse 2s infinite; /* Hiệu ứng tỏa sóng */
-        }
-
-    /* Kích thước icon bên trong */
-    .zalo-floating-btn img {
-      width: 32px;
-      height: 32px;
-      object-fit: contain;
-      /* Thêm bộ lọc trắng nếu bạn dùng icon đơn sắc, 
-        ở đây dùng ảnh màu nên không cần filter */
-      }
-
-    /* Hiệu ứng khi di chuột vào (Desktop) */
-    .zalo-floating-btn:hover {
-      transform: scale(1.1);
-      }
-
-    /* Keyframes tạo hiệu ứng sóng nhịp tim */
-    @keyframes zaloPulse {
-      0% {
-        box-shadow: 0 0 0 0 rgba(0, 104, 255, 0.7);
-      }
-      70% {
-        box-shadow: 0 0 0 15px rgba(0, 104, 255, 0);
-      }
-      100% {
-        box-shadow: 0 0 0 0 rgba(0, 104, 255, 0);
-      }
-    }
-
-    /* Tối ưu kích thước trên Mobile cho vừa ngón tay */
-    @media (max-width: 768px) {
-      .zalo-floating-btn {
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-        }
-      .zalo-floating-btn img {
-        width: 28px;
-        height: 28px;
-        }
-        }
   </style>
 </head>
 <body>
@@ -420,6 +172,22 @@
   {% endif %}
 
   <main>{% block content %}{% endblock content %}</main>
+
+  <section id="vi-tri-ban-do" style="padding: 0 5vw 4rem; background: var(--white);">
+      <div style="margin-bottom: 1rem;">
+        <span class="section-eyebrow">Vị Trí Của Chúng Tôi</span>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--forest);">Đến Trực Tiếp Vườn Ươm</h3>
+      </div>
+      <iframe 
+          src="https://maps.google.com/maps?q=Hóc%20Môn,%20Hồ%20Chí%20Minh,%20Việt%20Nam&t=&z=15&ie=UTF8&iwloc=&output=embed" 
+          width="100%" 
+          height="350" 
+          style="border:0; border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);" 
+          allowfullscreen="" 
+          loading="lazy" 
+          referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+  </section>
 
   <footer>
     <div class="footer-grid">
@@ -450,27 +218,27 @@
 
   <a class="floating-cta" href="{% url 'service_booking' %}">✂️ Đặt Dịch Vụ Cảnh Quan</a>
 
+  <a href="https://zalo.me/0913661945" target="_blank" rel="noopener noreferrer" class="zalo-floating-btn" aria-label="Chat Zalo">
+    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M24 4C13.51 4 5 11.52 5 20.8c0 5.44 2.92 10.26 7.52 13.34V41a2 2 0 0 0 3.06 1.71l5.48-3.41c1 .2 2 .31 2.94.31 10.49 0 19-7.52 19-16.81S34.49 4 24 4zm4.82 23.47c-.4.4-.93.6-1.57.6h-4.3v-6.9h1.15v5.7h2.7c.33 0 .6-.1.82-.3.22-.2.33-.52.33-.95 0-.44-.11-.77-.33-.97-.22-.2-.53-.3-.92-.3h-1.54v-1.1h1.74c.66 0 1.18.17 1.55.51.37.34.56.84.56 1.51s-.19 1.21-.59 1.6z" fill="#FFFFFF"/>
+    </svg>
+  </a>
+
   {% include 'store/components/_quick_view.html' %}
 
   <script>
-    /* Navbar shrink on scroll */
     var nav = document.getElementById('mainNav');
     window.addEventListener('scroll', function () {
       nav.classList.toggle('nav-scrolled', window.scrollY > 60);
     }, { passive: true });
-  </script>
 
-  {% block extra_js %}{% endblock %}
-  <script>
-    /* Tự động thu nhỏ chữ VNĐ cho toàn bộ giá tiền trên web */
     document.addEventListener("DOMContentLoaded", function() {
       document.querySelectorAll('.product-price').forEach(function(el) {
         el.innerHTML = el.innerHTML.replace(/(VNĐ|VND|đ)/gi, '<span class="currency">$1</span>');
       });
     });
   </script>
-  <a href="https://zalo.me/0913 661 945" target="_blank" rel="noopener noreferrer" class="zalo-floating-btn" aria-label="Chat Zalo">
-  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/2048px-Icon_of_Zalo.svg.png" alt="Zalo Chat">
-</a>
+
+  {% block extra_js %}{% endblock %}
 </body>
 </html>
