@@ -83,13 +83,70 @@
 .service-form-header p { font-size: 0.82rem; color: rgba(245,237,224,0.7); }
 .service-form-body { padding: 2rem 2.2rem 2.4rem; }
 
-/* Grass option wrapper – ẩn mặc định, JS sẽ toggle */
+/* ── CSS FIX CHO FORM DJANGO (ÉP FULL WIDTH) ── */
+.form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--jungle);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.03em;
+  text-transform: none; 
+}
+
+/* Áp dụng thiết kế chuẩn cho mọi input được sinh ra từ biến {{ form }} */
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100% !important;
+  max-width: 100% !important;
+  border: 1.5px solid var(--mist);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 0.95rem;
+  color: var(--ink);
+  background: var(--white);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--moss);
+  box-shadow: 0 0 0 3px rgba(74,140,98,0.14);
+}
+
+.form-group textarea {
+  height: 110px;
+  resize: vertical;
+}
+
+/* Chỉnh lại icon mũi tên cho select */
+.form-group select {
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234a8c62' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* Grass option wrapper */
 #grassOptionWrapper {
   display: none;
   background: linear-gradient(135deg, rgba(74,140,98,0.08), rgba(200,168,75,0.06));
   border: 1.5px dashed var(--sage);
   border-radius: var(--radius-md); padding: 1.2rem 1.4rem;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.1rem; width: 100%;
   animation: fadeSlideDown 0.25s ease;
 }
 @keyframes fadeSlideDown {
@@ -105,36 +162,16 @@
 }
 
 /* Form errors */
-.field-errors {
-  margin-top: 5px;
-}
-.field-error {
-  font-size: 0.78rem; color: var(--danger);
-  display: flex; align-items: center; gap: 5px; margin-top: 3px;
-}
+.field-errors { margin-top: 5px; }
+.field-error { font-size: 0.78rem; color: var(--danger); display: flex; align-items: center; gap: 5px; margin-top: 3px; }
 
 /* Divider */
-.form-divider {
-  height: 1px; background: var(--mist);
-  margin: 1.4rem 0; border: none;
-}
-
-/* Service type selector */
-.service-type-select {
-  position: relative;
-}
-.service-type-select select {
-  appearance: none; -webkit-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234a8c62' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat; background-position: right 14px center;
-  padding-right: 36px;
-}
+.form-divider { height: 1px; background: var(--mist); margin: 1.4rem 0; border: none; }
 {% endblock %}
 
 
 {% block content %}
 
-<!-- PAGE HEADER -->
 <div class="service-header">
   <div class="service-header-inner">
     <div class="section-eyebrow">Dịch Vụ Chuyên Nghiệp</div>
@@ -146,7 +183,6 @@
 <div class="service-page">
   <div class="service-layout">
 
-    <!-- SIDEBAR: Giới thiệu dịch vụ -->
     <div class="service-info-card">
       <div class="service-info-title">🌿 Các Dịch Vụ Của Chúng Tôi</div>
 
@@ -188,7 +224,6 @@
       </div>
     </div>
 
-    <!-- FORM ĐẶT DỊCH VỤ -->
     <div class="service-form-card">
       <div class="service-form-header">
         <h2>Đặt Lịch Ngay</h2>
@@ -196,11 +231,9 @@
       </div>
 
       <div class="service-form-body">
-        <form method="POST" action="{% url 'service_booking' %}" id="serviceForm"
-              novalidate>
+        <form method="POST" action="{% url 'service_booking' %}" id="serviceForm" novalidate>
           {% csrf_token %}
 
-          <!-- Tên -->
           <div class="form-group">
             <label>{{ form.customer_name.label }}</label>
             {{ form.customer_name }}
@@ -213,7 +246,6 @@
             {% endif %}
           </div>
 
-          <!-- SĐT -->
           <div class="form-group">
             <label>{{ form.phone_number.label }}</label>
             {{ form.phone_number }}
@@ -226,7 +258,6 @@
             {% endif %}
           </div>
 
-          <!-- Địa chỉ -->
           <div class="form-group">
             <label>{{ form.address.label }}</label>
             {{ form.address }}
@@ -241,12 +272,9 @@
 
           <hr class="form-divider">
 
-          <!-- Loại dịch vụ -->
           <div class="form-group">
             <label>{{ form.service_type.label }}</label>
-            <div class="service-type-select">
-              {{ form.service_type }}
-            </div>
+            {{ form.service_type }}
             {% if form.service_type.errors %}
               <div class="field-errors">
                 {% for err in form.service_type.errors %}
@@ -256,26 +284,23 @@
             {% endif %}
           </div>
 
-          <!--
-            Tùy chọn cỏ – chỉ hiện khi chọn "Lợp thảm cỏ".
-            JS bên dưới xử lý show/hide và bật/tắt required.
-          -->
           <div id="grassOptionWrapper">
-            <span class="grass-label">🌾 Chọn Loại Cỏ *</span>
-            {{ form.grass_option }}
-            {% if form.grass_option.errors %}
-              <div class="field-errors">
-                {% for err in form.grass_option.errors %}
-                  <span class="field-error">⚠ {{ err }}</span>
-                {% endfor %}
-              </div>
-            {% endif %}
-            <span class="grass-hint">
-              Cỏ Thái phù hợp sân chơi, Cỏ Lá Gừng chịu hạn tốt hơn.
-            </span>
+            <div class="form-group" style="margin-bottom: 0;">
+              <span class="grass-label">🌾 Chọn Loại Cỏ *</span>
+              {{ form.grass_option }}
+              {% if form.grass_option.errors %}
+                <div class="field-errors">
+                  {% for err in form.grass_option.errors %}
+                    <span class="field-error">⚠ {{ err }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+              <span class="grass-hint">
+                Cỏ Thái phù hợp sân chơi, Cỏ Lá Gừng chịu hạn tốt hơn.
+              </span>
+            </div>
           </div>
 
-          <!-- Ghi chú -->
           <div class="form-group">
             <label>{{ form.note.label }}</label>
             {{ form.note }}
@@ -283,7 +308,7 @@
 
           <hr class="form-divider">
 
-          <button type="submit" class="btn btn-primary btn-full">
+          <button type="submit" class="btn btn-primary btn-full" style="width: 100%; border-radius: var(--radius-md); padding: 14px; font-size: 0.95rem;">
             Gửi Yêu Cầu Dịch Vụ 🌿
           </button>
         </form>
@@ -321,10 +346,11 @@
     }
 
     // Chạy ngay khi load (trường hợp form bị lỗi & Django render lại)
-    toggleGrassOption();
-
-    // Lắng nghe mỗi khi user thay đổi lựa chọn
-    serviceSelect.addEventListener('change', toggleGrassOption);
+    if(serviceSelect) {
+        toggleGrassOption();
+        // Lắng nghe mỗi khi user thay đổi lựa chọn
+        serviceSelect.addEventListener('change', toggleGrassOption);
+    }
   })();
 </script>
 {% endblock %}

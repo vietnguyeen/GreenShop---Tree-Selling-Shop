@@ -74,6 +74,9 @@
 
     section { padding: 88px 5vw; }
 
+    /* ══════════════════════════════════════════════════════════
+       HỆ THỐNG NÚT BẤM (BUTTONS) - ĐÃ BỔ SUNG ĐẦY ĐỦ
+    ══════════════════════════════════════════════════════════ */
     .btn {
       display: inline-flex; align-items: center; justify-content: center;
       gap: 7px; border: none; cursor: pointer;
@@ -84,13 +87,43 @@
     .btn-sm   { font-size: 0.8rem;  padding: 8px 18px; }
     .btn-md   { font-size: 0.88rem; padding: 12px 26px; }
     .btn-lg   { font-size: 0.95rem; padding: 15px 36px; }
+    .btn-full { width: 100%; border-radius: var(--radius-md); padding: 14px; font-size: 0.95rem; }
     
     .btn-primary { background: var(--jungle); color: var(--white); }
     .btn-primary:hover { background: var(--forest); transform: translateY(-1px); }
+
+    .btn-accent { background: var(--amber); color: var(--white); }
+    .btn-accent:hover { background: var(--ember); transform: translateY(-1px); }
+
+    .btn-outline-light { border: 1.5px solid rgba(245,237,224,0.5); color: var(--white); background: rgba(255,255,255,0.06); backdrop-filter: blur(4px); }
+    .btn-outline-light:hover { background: rgba(255,255,255,0.14); border-color: rgba(245,237,224,0.85); }
     
     .btn-outline-dark { border: 1.5px solid var(--forest); color: var(--forest); background: transparent; }
     .btn-outline-dark:hover { background: var(--forest); color: var(--white); }
 
+    .btn:disabled, .btn[disabled] { background: #dcdcdc !important; color: #888 !important; cursor: not-allowed; transform: none !important; border: none; }
+
+    /* ══════════════════════════════════════════════════════════
+       HỆ THỐNG FORM (CHỐNG CO RÚM TRÊN TRANG GIỎ HÀNG)
+    ══════════════════════════════════════════════════════════ */
+    .form-group {
+      margin-bottom: 1.25rem; display: flex; flex-direction: column; align-items: flex-start; width: 100%;
+    }
+    .form-group label {
+      display: block; font-size: 0.85rem; font-weight: 600; color: var(--jungle); margin-bottom: 0.5rem; letter-spacing: 0.02em;
+    }
+    .form-control {
+      width: 100%; border: 1.5px solid var(--mist); border-radius: var(--radius-sm); padding: 12px 16px;
+      font-family: 'Be Vietnam Pro', sans-serif; font-size: 0.95rem; color: var(--ink);
+      background: var(--white); outline: none; transition: border-color var(--transition), box-shadow var(--transition);
+      box-sizing: border-box;
+    }
+    .form-control:focus { border-color: var(--moss); box-shadow: 0 0 0 3px rgba(74,140,98,0.14); }
+    textarea.form-control { height: 110px; resize: vertical; }
+
+    /* ══════════════════════════════════════════════════════════
+       PRODUCT CARD & OTHER UTILS
+    ══════════════════════════════════════════════════════════ */
     .card { background: var(--white); border-radius: var(--radius-lg); border: 1.5px solid var(--mist); overflow: hidden; transition: transform var(--transition), box-shadow var(--transition); }
     .card:hover { transform: translateY(-7px); box-shadow: var(--shadow-lg); }
 
@@ -142,10 +175,10 @@
 
     /* Zalo Button */
     .zalo-floating-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background-color: #0068ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100000; box-shadow: 0 4px 18px rgba(0, 104, 255, 0.45); transition: all 0.3s cubic-bezier(0.27, 1.01, 1, 1); animation: zaloPulse 2s infinite; }
-    .zalo-floating-btn svg { width: 35px; height: 35px; }
+    .zalo-floating-btn img { width: 35px; height: 35px; object-fit: contain; }
     .zalo-floating-btn:hover { transform: scale(1.1) rotate(5deg); background-color: #0056d6; }
     @keyframes zaloPulse { 0% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 104, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0); } }
-    @media (max-width: 768px) { .zalo-floating-btn { bottom: 20px; right: 20px; width: 52px; height: 52px; } .zalo-floating-btn svg { width: 28px; height: 28px; } }
+    @media (max-width: 768px) { .zalo-floating-btn { bottom: 20px; right: 20px; width: 52px; height: 52px; } .zalo-floating-btn img { width: 28px; height: 28px; } }
 
     {% block extra_css %}{% endblock %}
   </style>
@@ -219,9 +252,7 @@
   <a class="floating-cta" href="{% url 'service_booking' %}">✂️ Đặt Dịch Vụ Cảnh Quan</a>
 
   <a href="https://zalo.me/0913661945" target="_blank" rel="noopener noreferrer" class="zalo-floating-btn" aria-label="Chat Zalo">
-    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M24 4C13.51 4 5 11.52 5 20.8c0 5.44 2.92 10.26 7.52 13.34V41a2 2 0 0 0 3.06 1.71l5.48-3.41c1 .2 2 .31 2.94.31 10.49 0 19-7.52 19-16.81S34.49 4 24 4zm4.82 23.47c-.4.4-.93.6-1.57.6h-4.3v-6.9h1.15v5.7h2.7c.33 0 .6-.1.82-.3.22-.2.33-.52.33-.95 0-.44-.11-.77-.33-.97-.22-.2-.53-.3-.92-.3h-1.54v-1.1h1.74c.66 0 1.18.17 1.55.51.37.34.56.84.56 1.51s-.19 1.21-.59 1.6z" fill="#FFFFFF"/>
-    </svg>
+    <img src="{% static 'img/zalo.png' %}" alt="Zalo Chat">
   </a>
 
   {% include 'store/components/_quick_view.html' %}
