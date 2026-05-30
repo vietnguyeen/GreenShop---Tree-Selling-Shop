@@ -1,6 +1,4 @@
 name: Tự động Deploy lên VPS
-
-# Kịch bản này sẽ chạy mỗi khi bạn push code lên nhánh "main"
 on:
   push:
     branches:
@@ -20,14 +18,10 @@ jobs:
           script: |
             cd /var/www/GreenShop---Tree-Selling-Shop
             
-            # 1. Kéo code mới nhất từ GitHub về VPS
             git pull origin main
             
-            # 2. Build và khởi động lại các container (Dùng cú pháp docker compose mới)
-            docker compose up -d --build
+            docker-compose up -d --build
             
-            # 3. Tự động chạy Migrate Database (Cập nhật DB nếu có sửa Models)
-            docker compose exec -T web python manage.py migrate
+            docker-compose exec -T web python manage.py migrate
             
-            # 4. Tự động gom CSS/JS và ảnh tĩnh (icon Zalo...)
-            docker compose exec -T web python manage.py collectstatic --noinput
+            docker-compose exec -T web python manage.py collectstatic --noinput
