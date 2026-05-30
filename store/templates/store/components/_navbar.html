@@ -62,7 +62,7 @@
     list-style: none;
   }
   .nav-dropdown:hover .dropdown-menu {
-    display: flex; /* Hiện ra khi rê chuột (hover) vào Kho Cây */
+    display: flex; /* Hiện ra khi rê chuột vào */
   }
   .dropdown-menu a {
     color: rgba(245,237,224,0.72); text-decoration: none;
@@ -116,26 +116,41 @@
     }
     .nav-links.is-open { display: flex; }
     
-    /* Trang chủ, Kho cây, Dịch vụ nằm bên trái */
+    /* Các mục chính bên trái */
     .nav-links li { width: 100%; }
     .nav-links a.main-link { 
-      padding: 14px 10px; margin-bottom: 6px; font-size: 1.1rem; width: 100%; 
+      padding: 14px 10px; margin-bottom: 6px; font-size: 1.1rem; width: fit-content; 
     }
     
-    /* Phá vỡ Dropdown, chuyển thành các mục con nằm bên phải */
-    .nav-dropdown:hover .dropdown-menu { display: flex; } /* Vẫn hiển thị */
-    .dropdown-menu {
-      display: flex; position: static; /* Gắn liền vào menu chính */
-      background: transparent; border: none; padding: 0; box-shadow: none;
-      align-items: flex-end; /* Đẩy toàn bộ 4 nút cây sang sát lề phải */
-      margin-bottom: 10px;
+    /* --- Bố cục 2 cột song song cho Mobile --- */
+    .nav-dropdown {
+      position: relative; /* Làm điểm mốc tọa độ cho menu con */
+      width: 100%;
     }
+    .nav-dropdown:hover .dropdown-menu { display: flex; } 
+    
+    .dropdown-menu {
+      display: none; 
+      flex-direction: column; /* Xếp dọc các loại cây */
+      position: absolute;     /* Tách hẳn ra để thả nổi sang bên phải */
+      top: 10px;              /* Canh đỉnh ngang hàng với chữ Kho Cây */
+      right: 0;               /* Ép sát lề phải màn hình */
+      background: transparent; 
+      border: none; 
+      padding: 0; 
+      box-shadow: none;
+      gap: 16px;              /* Khoảng cách giữa các chữ Cây Bonsai, Cây Kiểng... */
+    }
+    
     .dropdown-menu a {
-      font-size: 1rem; padding: 10px 15px; 
-      color: rgba(200,168,75,0.9); /* Màu hơi vàng cho dễ nhận biết */
-      border-right: 3px solid var(--amber); /* Nhấn nhá 1 đường viền nhỏ bên phải */
+      font-size: 1rem; 
+      padding: 4px 15px; 
+      color: rgba(200,168,75,0.9);
+      border-right: 3px solid var(--amber); /* Đường line vàng bên phải */
       border-radius: 0;
-      text-align: right; width: auto;
+      text-align: right; 
+      width: auto;
+      background: transparent;
     }
 
     .nav-links li:last-child {
