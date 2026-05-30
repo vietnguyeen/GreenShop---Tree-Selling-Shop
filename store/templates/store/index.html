@@ -15,20 +15,20 @@
 .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
 @media (max-width: 640px) { 
   .hero-content h1 { 
-    font-size: 3.6rem;     /* Phóng to mạnh tiêu đề chính */
-    line-height: 1.15; 
+    font-size: 2.8rem;     /* Đã thu nhỏ từ 3.6rem xuống 2.8rem để vừa vặn */
+    line-height: 1.2; 
   } 
   .hero-content p {
-    font-size: 1.15rem;    /* Phóng to chữ mô tả */
+    font-size: 1.05rem;    /* Thu nhỏ nhẹ chữ mô tả để không chiếm quá nhiều chỗ */
     line-height: 1.6;
-    margin-bottom: 2.2rem;
+    margin-bottom: 2rem;
   }
   .hero-btns {
-    gap: 1.2rem;           /* Giãn khoảng cách giữa 2 nút */
+    gap: 1rem;             /* Căn chỉnh lại khoảng cách nút */
   }
   .hero-btns .btn-lg {
-    font-size: 1.05rem;    /* Phóng to chữ bên trong nút */
-    padding: 16px 32px;    /* Làm nút to và dễ bấm hơn */
+    font-size: 1rem;       
+    padding: 14px 28px;    /* Nút gọn gàng hơn một chút */
   }
 }
 
@@ -76,8 +76,8 @@
     </h1>
     <p>Chuyên cung cấp cây ăn quả, cây kiểng và hoa chất lượng cao. Cây khỏe, gốc đẹp, cam kết chính gốc từ vườn Hoa Kiểng Hoàng Nam.</p>
     <div class="hero-btns">
-      <a href="{% url 'kho_cay' %}" class="btn btn-accent btn-lg">Xem Kho Cây 🌱</a>
-      <a href="{% url 'service_booking' %}" class="btn btn-outline-light btn-lg">Đặt Dịch Vụ ✂️</a>
+      <a href="{% url 'kho_cay' %}" class="btn btn-accent btn-lg">Xem Kho Cây</a>
+      <a href="{% url 'service_booking' %}" class="btn btn-outline-light btn-lg">Đặt Dịch Vụ</a>
     </div>
   </div>
 </section>

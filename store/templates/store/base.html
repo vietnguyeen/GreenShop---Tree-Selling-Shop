@@ -174,11 +174,34 @@
     @media (max-width: 600px) { .footer-grid { grid-template-columns: 1fr; gap: 2rem; } section { padding: 64px 5vw; } .floating-cta { left: 20px; bottom: 20px; padding: 10px 16px; font-size: 0.75rem; } }
 
     /* Zalo Button */
-    .zalo-floating-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; background-color: #0068ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 100000; box-shadow: 0 4px 18px rgba(0, 104, 255, 0.45); transition: all 0.3s cubic-bezier(0.27, 1.01, 1, 1); animation: zaloPulse 2s infinite; }
-    .zalo-floating-btn img { width: 35px; height: 35px; object-fit: contain; }
-    .zalo-floating-btn:hover { transform: scale(1.1) rotate(5deg); background-color: #0056d6; }
-    @keyframes zaloPulse { 0% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(0, 104, 255, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 104, 255, 0); } }
-    @media (max-width: 768px) { .zalo-floating-btn { bottom: 20px; right: 20px; width: 52px; height: 52px; } .zalo-floating-btn img { width: 28px; height: 28px; } }
+    /* Nút Tư Vấn Miễn Phí (Đổi sang màu cam/hổ phách cho nổi bật) */
+    .floating-cta { position: fixed; bottom: 30px; left: 30px; z-index: 400; background: var(--amber); color: var(--white); padding: 12px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 30px rgba(212,134,58,0.35); transition: transform var(--transition); animation: floatPulse 3.5s ease-in-out infinite; }
+    .floating-cta:hover { transform: translateY(-3px); background: var(--ember); }
+    @keyframes floatPulse { 0%,100% { box-shadow: 0 8px 30px rgba(212,134,58,0.35); } 50% { box-shadow: 0 8px 44px rgba(212,134,58,0.5); } }
+
+    /* Thanh công cụ trượt dọc bên phải (Giỏ Hàng + Zalo) */
+    .floating-right-bar {
+      position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 14px; z-index: 100000;
+    }
+    .float-action-btn {
+      width: 54px; height: 54px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.15); transition: transform 0.3s;
+      text-decoration: none; border: 2.5px solid var(--white);
+    }
+    .float-action-btn:hover { transform: scale(1.1) translateY(-3px); }
+    .float-cart { background: var(--forest); font-size: 1.4rem; color: #fff; }
+    .float-zalo { background: #0068ff; }
+    .float-zalo img { width: 32px; height: 32px; object-fit: contain; }
+    
+    @media (max-width: 640px) {
+      .floating-cta { left: 15px; bottom: 20px; padding: 10px 16px; font-size: 0.8rem; }
+      .floating-right-bar { right: 10px; gap: 10px; }
+      .float-action-btn { width: 46px; height: 46px; border-width: 2px; }
+      .float-cart { font-size: 1.2rem; }
+      .float-zalo img { width: 26px; height: 26px; }
+    }
 
     {% block extra_css %}{% endblock %}
   </style>
@@ -249,9 +272,16 @@
   </footer>
 
 
-  <a href="https://zalo.me/0913661945" target="_blank" rel="noopener noreferrer" class="zalo-floating-btn" aria-label="Chat Zalo">
-    <img src="{% static 'img/Zalo.png' %}" alt="Zalo Chat">
-  </a>
+  <a class="floating-cta" href="tel:0913661945">🔔 Tư Vấn Miễn Phí</a>
+
+  <div class="floating-right-bar">
+    <a href="{% url 'cart_detail' %}" class="float-action-btn float-cart" aria-label="Giỏ hàng">
+      🛒
+    </a>
+    <a href="https://zalo.me/0913661945" target="_blank" rel="noopener noreferrer" class="float-action-btn float-zalo" aria-label="Zalo">
+      <img src="{% static 'img/zalo.png' %}" alt="Zalo">
+    </a>
+  </div>
 
   {% include 'store/components/_quick_view.html' %}
 
