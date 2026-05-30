@@ -31,22 +31,52 @@
     font-size: 0.9rem;
   }
 
-  /* Links */
+  /* --- CẤU HÌNH MENU CHO BẢN WEB (MÁY TÍNH) --- */
   .nav-links {
-    display: flex; align-items: center; gap: 0.15rem; list-style: none;
+    display: flex; align-items: center; gap: 0.25rem; list-style: none;
+    flex: 1; justify-content: flex-end; 
   }
-  .nav-links a {
+  .nav-links a.main-link {
     color: rgba(245,237,224,0.72); text-decoration: none;
-    font-size: 0.875rem; font-weight: 400;
+    font-size: 0.875rem; font-weight: 500;
     padding: 7px 13px; border-radius: 8px;
     transition: color var(--transition), background var(--transition);
+    display: block;
   }
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--cream); background: rgba(255,255,255,0.08); }
+  .nav-links a.main-link:hover,
+  .nav-links a.main-link.active { color: var(--cream); background: rgba(255,255,255,0.08); }
+  
+  /* Cấu hình Dropdown Kho Cây trên Web */
+  .nav-dropdown {
+    position: relative; 
+  }
+  .dropdown-menu {
+    position: absolute; top: 100%; left: 0; 
+    background: rgba(14,31,21,0.95);
+    border: 1px solid rgba(200,168,75,0.2);
+    border-radius: 8px; padding: 8px;
+    min-width: 180px;
+    display: none; /* Ẩn đi theo mặc định */
+    flex-direction: column; gap: 4px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    list-style: none;
+  }
+  .nav-dropdown:hover .dropdown-menu {
+    display: flex; /* Hiện ra khi rê chuột (hover) vào Kho Cây */
+  }
+  .dropdown-menu a {
+    color: rgba(245,237,224,0.72); text-decoration: none;
+    padding: 8px 12px; border-radius: 6px; font-size: 0.85rem; display: block;
+    transition: background 0.3s;
+  }
+  .dropdown-menu a:hover { background: rgba(255,255,255,0.1); color: var(--cream); }
+
+  /* Đẩy riêng nút Giỏ hàng cách xa */
+  .nav-links li:last-child { margin-left: 2.5rem; }
 
   /* Cart button */
   .nav-cart-btn {
-    display: flex; align-items: center; gap: 7px;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
     background: var(--amber); color: var(--white) !important;
     padding: 8px 18px; border-radius: 50px;
     font-size: 0.83rem; font-weight: 600; text-decoration: none;
@@ -64,26 +94,56 @@
   .nav-hamburger {
     display: none; flex-direction: column; gap: 5px;
     background: none; border: none; cursor: pointer; padding: 4px;
+    margin-left: 1.5rem;
   }
   .nav-hamburger span {
     display: block; width: 24px; height: 2px;
     background: var(--cream); border-radius: 2px;
-    transition: transform var(--transition), opacity var(--transition);
+    transition: transform 0.3s, opacity 0.3s;
   }
   .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
   .nav-hamburger.open span:nth-child(2) { opacity: 0; }
   .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  @media (max-width: 768px) {
+  /* --- CẤU HÌNH MENU CHO BẢN MOBILE (ĐIỆN THOẠI) --- */
+  @media (max-width: 860px) {
     .nav-links {
       display: none; flex-direction: column; align-items: flex-start;
       position: fixed; top: 68px; left: 0; right: 0;
       background: rgba(14,31,21,0.98); backdrop-filter: blur(12px);
-      padding: 1.2rem 5vw 2rem; border-bottom: 1px solid rgba(200,168,75,0.15);
-      gap: 0.25rem; z-index: 999;
+      padding: 1.5rem 5vw 2.5rem; border-bottom: 1px solid rgba(200,168,75,0.15);
+      gap: 0; z-index: 999;
     }
     .nav-links.is-open { display: flex; }
-    .nav-links a { padding: 10px 8px; font-size: 1rem; width: 100%; }
+    
+    /* Trang chủ, Kho cây, Dịch vụ nằm bên trái */
+    .nav-links li { width: 100%; }
+    .nav-links a.main-link { 
+      padding: 14px 10px; margin-bottom: 6px; font-size: 1.1rem; width: 100%; 
+    }
+    
+    /* Phá vỡ Dropdown, chuyển thành các mục con nằm bên phải */
+    .nav-dropdown:hover .dropdown-menu { display: flex; } /* Vẫn hiển thị */
+    .dropdown-menu {
+      display: flex; position: static; /* Gắn liền vào menu chính */
+      background: transparent; border: none; padding: 0; box-shadow: none;
+      align-items: flex-end; /* Đẩy toàn bộ 4 nút cây sang sát lề phải */
+      margin-bottom: 10px;
+    }
+    .dropdown-menu a {
+      font-size: 1rem; padding: 10px 15px; 
+      color: rgba(200,168,75,0.9); /* Màu hơi vàng cho dễ nhận biết */
+      border-right: 3px solid var(--amber); /* Nhấn nhá 1 đường viền nhỏ bên phải */
+      border-radius: 0;
+      text-align: right; width: auto;
+    }
+
+    .nav-links li:last-child {
+      margin-left: 0; margin-top: 1.5rem; 
+    }
+    .nav-cart-btn {
+      width: fit-content; padding: 12px 24px; font-size: 1rem;
+    }
     .nav-hamburger { display: flex; }
   }
 </style>
@@ -95,25 +155,20 @@
   </a>
 
   <ul class="nav-links" id="navLinks">
-    <li>
-      <a href="{% url 'home' %}"
-         {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>
-        Trang Chủ
-      </a>
-    </li>
+    <li><a href="{% url 'home' %}" class="main-link">Trang Chủ</a></li>
     
-    <li>
-      <a href="{% url 'kho_cay' %}?q=Cây Bonsai">Cây Bonsai</a>
+    <li class="nav-dropdown">
+      <a href="{% url 'kho_cay' %}" class="main-link">Kho Cây ▾</a>
+      
+      <ul class="dropdown-menu">
+        <li><a href="{% url 'kho_cay' %}?q=Cây Bonsai">Cây Bonsai</a></li>
+        <li><a href="{% url 'kho_cay' %}?q=Cây Kiểng">Cây Kiểng</a></li>
+        <li><a href="{% url 'kho_cay' %}?q=Cây Ăn Quả">Cây Ăn Quả</a></li>
+        <li><a href="{% url 'kho_cay' %}?q=Hoa">Hoa</a></li>
+      </ul>
     </li>
-    <li>
-      <a href="{% url 'kho_cay' %}?q=Cây Kiểng">Cây Kiểng</a>
-    </li>
-    <li>
-      <a href="{% url 'kho_cay' %}?q=Cây Ăn Quả">Cây Ăn Quả</a>
-    </li>
-    <li>
-      <a href="{% url 'kho_cay' %}?q=Hoa">Hoa</a>
-    </li>
+
+    <li><a href="{% url 'home' %}#contact" class="main-link">Dịch Vụ</a></li>
 
     <li>
       <a class="nav-cart-btn" href="{% url 'cart_detail' %}">
@@ -126,8 +181,7 @@
     </li>
   </ul>
 
-  <button class="nav-hamburger" id="navHamburger"
-          aria-label="Mở menu" onclick="toggleMobileNav()">
+  <button class="nav-hamburger" id="navHamburger" aria-label="Mở menu" onclick="toggleMobileNav()">
     <span></span><span></span><span></span>
   </button>
 </nav>
@@ -137,10 +191,4 @@
     document.getElementById('navLinks').classList.toggle('is-open');
     document.getElementById('navHamburger').classList.toggle('open');
   }
-  document.querySelectorAll('#navLinks a').forEach(function (a) {
-    a.addEventListener('click', function () {
-      document.getElementById('navLinks').classList.remove('is-open');
-      document.getElementById('navHamburger').classList.remove('open');
-    });
-  });
 </script>

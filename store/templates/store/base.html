@@ -179,34 +179,40 @@
     .floating-cta:hover { transform: translateY(-3px); background: var(--ember); }
     @keyframes floatPulse { 0%,100% { box-shadow: 0 8px 30px rgba(212,134,58,0.35); } 50% { box-shadow: 0 8px 44px rgba(212,134,58,0.5); } }
 
-    /* Thanh công cụ trượt dọc bên phải (Giỏ Hàng + Zalo) */
+    /* Thanh công cụ trượt dọc bám sát mép phải màn hình */
     .floating-right-bar {
-      position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 14px; z-index: 100000;
+      position: fixed; top: 50%; right: 0; /* right: 0 để gắn chặt vào mép */
+      transform: translateY(-50%);
+      display: flex; flex-direction: column; gap: 12px; z-index: 100000;
     }
+    
     .float-action-btn {
-      width: 60px; height: 60px; /* Tăng kích thước to hơn */
-      border-radius: 14px;       /* Đổi thành hình vuông bo góc nhẹ (Squircle) nhìn rất sang và chuyên nghiệp */
+      width: 58px; height: 58px; 
+      border-radius: 16px 0 0 16px; /* Chỉ bo tròn 2 góc bên trái, góc phải vuông vức */
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15); transition: transform 0.3s;
-      text-decoration: none; border: 2.5px solid var(--white);
+      box-shadow: -4px 6px 15px rgba(0,0,0,0.12); /* Đổ bóng sang trái */
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-decoration: none; 
+      border: 2.5px solid var(--white);
+      border-right: none; /* Bỏ viền bên phải để cảm giác nút mọc ra từ màn hình */
     }
-    .float-action-btn:hover { transform: scale(1.1) translateY(-3px); }
+    .float-action-btn:hover { 
+      transform: translateX(-5px); /* Khi hover, nút trượt nhẹ ra ngoài một chút */
+    }
     
-    .float-cart { background: var(--forest); font-size: 1.6rem; color: #fff; } /* Icon giỏ hàng to hơn */
+    .float-cart { background: var(--forest); font-size: 1.5rem; color: #fff; }
     .float-zalo { background: #0068ff; }
-    .float-zalo img { width: 36px; height: 36px; object-fit: contain; } /* Icon Zalo to hơn */
+    .float-zalo img { width: 34px; height: 34px; object-fit: contain; }
     
-    /* Tinh chỉnh riêng cho màn hình điện thoại */
     @media (max-width: 640px) {
-      .floating-right-bar { right: 10px; gap: 10px; }
+      .floating-right-bar { gap: 10px; }
       .float-action-btn { 
-        width: 52px; height: 52px; /* Scale to hơn so với bản cũ trên mobile */
-        border-radius: 12px;       /* Vẫn giữ hình vuông bo góc */
+        width: 50px; height: 50px; 
+        border-radius: 12px 0 0 12px;
         border-width: 2px; 
       }
-      .float-cart { font-size: 1.35rem; }
-      .float-zalo img { width: 30px; height: 30px; }
+      .float-cart { font-size: 1.3rem; }
+      .float-zalo img { width: 28px; height: 28px; }
     }
 
     {% block extra_css %}{% endblock %}
