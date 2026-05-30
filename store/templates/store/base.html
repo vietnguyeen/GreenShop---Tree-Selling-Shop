@@ -185,22 +185,28 @@
       display: flex; flex-direction: column; gap: 14px; z-index: 100000;
     }
     .float-action-btn {
-      width: 54px; height: 54px; border-radius: 50%;
+      width: 60px; height: 60px; /* Tăng kích thước to hơn */
+      border-radius: 14px;       /* Đổi thành hình vuông bo góc nhẹ (Squircle) nhìn rất sang và chuyên nghiệp */
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 6px 20px rgba(0,0,0,0.15); transition: transform 0.3s;
       text-decoration: none; border: 2.5px solid var(--white);
     }
     .float-action-btn:hover { transform: scale(1.1) translateY(-3px); }
-    .float-cart { background: var(--forest); font-size: 1.4rem; color: #fff; }
-    .float-zalo { background: #0068ff; }
-    .float-zalo img { width: 32px; height: 32px; object-fit: contain; }
     
+    .float-cart { background: var(--forest); font-size: 1.6rem; color: #fff; } /* Icon giỏ hàng to hơn */
+    .float-zalo { background: #0068ff; }
+    .float-zalo img { width: 36px; height: 36px; object-fit: contain; } /* Icon Zalo to hơn */
+    
+    /* Tinh chỉnh riêng cho màn hình điện thoại */
     @media (max-width: 640px) {
-      .floating-cta { left: 15px; bottom: 20px; padding: 10px 16px; font-size: 0.8rem; }
       .floating-right-bar { right: 10px; gap: 10px; }
-      .float-action-btn { width: 46px; height: 46px; border-width: 2px; }
-      .float-cart { font-size: 1.2rem; }
-      .float-zalo img { width: 26px; height: 26px; }
+      .float-action-btn { 
+        width: 52px; height: 52px; /* Scale to hơn so với bản cũ trên mobile */
+        border-radius: 12px;       /* Vẫn giữ hình vuông bo góc */
+        border-width: 2px; 
+      }
+      .float-cart { font-size: 1.35rem; }
+      .float-zalo img { width: 30px; height: 30px; }
     }
 
     {% block extra_css %}{% endblock %}
@@ -267,7 +273,6 @@
     </div>
     <div class="footer-bottom">
       <span>© 2026 HoaKiengHoangNam. All rights reserved.</span>
-      <span><span class="footer-dot"></span>Vườn ươm đạt chuẩn VietGAP</span>
     </div>
   </footer>
 
@@ -279,7 +284,7 @@
       🛒
     </a>
     <a href="https://zalo.me/0913661945" target="_blank" rel="noopener noreferrer" class="float-action-btn float-zalo" aria-label="Zalo">
-      <img src="{% static 'img/zalo.png' %}" alt="Zalo">
+      <img src="{% static 'img/Zalo.png' %}" alt="Zalo">
     </a>
   </div>
 

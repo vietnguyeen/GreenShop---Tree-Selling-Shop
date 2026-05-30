@@ -89,7 +89,6 @@
 </style>
 
 <nav id="mainNav">
-  <!-- Yêu cầu #1: Logo trỏ về home -->
   <a class="nav-logo" href="{% url 'home' %}">
     <span class="nav-logo-leaf">🌿</span>
     Hoa Kiểng Hoàng Nam
@@ -102,21 +101,20 @@
         Trang Chủ
       </a>
     </li>
+    
     <li>
-      <a href="{% url 'kho_cay' %}"
-         {% if request.resolver_match.url_name == 'kho_cay' %}class="active"{% endif %}>
-        Kho Cây
-      </a>
+      <a href="{% url 'kho_cay' %}?q=Cây Bonsai">Cây Bonsai</a>
     </li>
     <li>
-      <a href="{% url 'home' %}#contact">Dịch Vụ</a>
+      <a href="{% url 'kho_cay' %}?q=Cây Kiểng">Cây Kiểng</a>
     </li>
     <li>
-      <a href="{% url 'home' %}#contact"
-         style="color:rgba(200,168,75,0.85);border:1px solid rgba(200,168,75,0.3);border-radius:50px;padding:6px 14px;">
-        Liên Hệ
-      </a>
+      <a href="{% url 'kho_cay' %}?q=Cây Ăn Quả">Cây Ăn Quả</a>
     </li>
+    <li>
+      <a href="{% url 'kho_cay' %}?q=Hoa">Hoa</a>
+    </li>
+
     <li>
       <a class="nav-cart-btn" href="{% url 'cart_detail' %}">
         🛒
