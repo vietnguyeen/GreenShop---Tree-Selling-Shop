@@ -1,4 +1,5 @@
 name: Tự động Deploy lên VPS
+
 on:
   push:
     branches:
@@ -19,11 +20,18 @@ jobs:
             cd /var/www/GreenShop---Tree-Selling-Shop
             
             git pull origin main
-
-            docker-compose down 
-          
+            
+            # 1. Tắt các container hiện tại
+            docker-compose down --remove-orphans
+            
+            # 2. FIX: Dùng lệnh ép buộc tiêu diệt container web bị kẹt (nếu có)
+            docker rm -f greenshop---tree-selling-shop_web_1 || true
+            
+            # 3. Build và khởi động lại container mới tinh
             docker-compose up -d --build
             
+            # 4. Migrate Database
             docker-compose exec -T web python manage.py migrate
             
+            # 5. Gom Static files
             docker-compose exec -T web python manage.py collectstatic --noinput
