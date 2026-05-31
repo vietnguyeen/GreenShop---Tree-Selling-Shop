@@ -150,19 +150,6 @@ def cart_detail(request):
     })
 
 
-def update_cart(request, plant_id, action):
-    # Với hàng độc bản, nút tăng/giảm đã bị gỡ.
-    # Hàm này chủ yếu dùng để dự phòng nếu khách gọi xóa sản phẩm
-    cart = _get_cart(request)
-    key  = str(plant_id)
-
-    if key in cart:
-        if action == 'decrease':
-            del cart[key]
-
-    _save_cart(request, cart)
-    return redirect('cart_detail')
-
 
 def remove_from_cart(request, plant_id):
     cart = _get_cart(request)

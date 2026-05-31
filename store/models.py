@@ -31,7 +31,6 @@ class Plant(models.Model):
     image3 = models.ImageField(
         upload_to='plant_images/', null=True, blank=True, verbose_name="Ảnh phụ 2"
     )
-    # Đã thêm dấu đóng ngoặc ) cho image4
     image4 = models.ImageField(
         upload_to='plant_images/', null=True, blank=True, verbose_name="Ảnh phụ 3"
     )
@@ -109,9 +108,6 @@ class OrderItem(models.Model):
         return self.price * self.quantity
 
 
-# ─────────────────────────────────────────────────────────────────────────────
-# YÊU CẦU 2: Model Đặt Dịch Vụ Cảnh Quan
-# ─────────────────────────────────────────────────────────────────────────────
 
 class ServiceOrder(models.Model):
 
