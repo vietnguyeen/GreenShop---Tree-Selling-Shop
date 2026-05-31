@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=greenshop_db
+      - POSTGRES_USER=vietng
+      - POSTGRES_PASSWORD=130804
+    ports:
+      - "5432:5432"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+      - django_media:/app/media
+    expose:
+      - "8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  django_media:
+  caddy_data:     # Ổ cứng lưu chứng chỉ HTTPS
+  caddy_config:
+
+
+redis:
+    image: redis:7-alpine
+    restart: always
+
+celery_worker:
+    build: .
+    command: celery -A greenshop worker --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+     
