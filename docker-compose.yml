@@ -51,7 +51,7 @@ redis:
 
 celery_worker:
     build: .
-    command: celery -A greenshop worker --loglevel=info
+    command: celery -A plant_shop worker --loglevel=info
     volumes:
       - .:/code
     depends_on:
