@@ -9,17 +9,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 
-
 SECRET_KEY = os.getenv('SECRET_KEY')
-
 
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = [
-    'hoakienghoangnam.id.vn',
-    'www.hoakienghoangnam.id.vn',
-    '127.0.0.1', 'localhost' 
-    ]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://hoakienghoangnam.id.vn',
@@ -68,15 +62,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'plant_shop.wsgi.application'
 
 
-# Database
-
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'greenshop_db',
-        'USER': 'vietng',
-        'PASSWORD': '130804', 
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'), 
         'HOST': 'db', # Tên service database trong docker-compose.yml
         'PORT': '5432',
     }
@@ -116,13 +107,11 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 # CẤU HÌNH MEDIA (KHO ẢNH)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
 
 
 # Sessions lưu trong DB
