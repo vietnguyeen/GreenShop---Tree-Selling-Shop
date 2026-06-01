@@ -8,7 +8,7 @@
 
 A production-grade, containerized e-commerce platform engineered for a real-world local plant business. This system digitalizes daily inventory operations, securely processes live customer traffic, and utilizes asynchronous microservices to ensure lightning-fast checkout experiences.
 
-**[View Live Website](https://your-website-link.com) | [Report Bug](https://github.com/your-github-repo/issues)**
+**[View Live Website](https://hoakienghoangnam.id.vn/) | [Report Bug](https://github.com/vietnguyeen/GreenShop---Tree-Selling-Shop/issues)**
 
 ---
 
