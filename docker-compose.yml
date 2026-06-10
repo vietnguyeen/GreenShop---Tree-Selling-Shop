@@ -37,12 +37,41 @@ services:
       - caddy_config:/config
     depends_on:
       - web
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: greenshop_prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    networks:
+      - greenshop_network
+    restart: unless-stopped
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: greenshop_node_exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($|/)'
+    networks:
+      - greenshop_network
+    restart: unless-stopped
 
 volumes:
   postgres_data:
   django_media:
   caddy_data:     # Ổ cứng lưu chứng chỉ HTTPS
   caddy_config:
+  prometheus_data:
 
 
 redis:

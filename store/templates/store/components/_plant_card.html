@@ -79,14 +79,6 @@
                   padding:3px 10px;border-radius:50px;z-index:2;">
         Hết Hàng
       </div>
-    {% elif plant.stock <= 3 %}
-      <div style="position:absolute;top:.7rem;left:.7rem;
-                  background:var(--amber);color:#fff;
-                  font-size:.65rem;font-weight:700;
-                  padding:3px 10px;border-radius:50px;z-index:2;">
-        Còn {{ plant.stock }}
-      </div>
-    {% endif %}
   </div>
 
   {% endwith %}
@@ -96,8 +88,7 @@
     <div class="product-name">{{ plant.name }}</div>
     <div class="product-specs">
       <div><strong>Đường kính gốc:</strong>     {{ plant.girth|default:"N/A" }}</div>
-      <div><strong>Cao:</strong>        {{ plant.height|default:"N/A" }}</div>
-      <div><strong>Kho:</strong>        {{ plant.stock }}</div>
+      <div><strong>Cao:</strong>                {{ plant.height|default:"N/A" }}</div>
     </div>
     <div class="product-footer">
       <span class="product-price">{{ plant.formatted_price }}</span>
