@@ -56,21 +56,6 @@ class Plant(models.Model):
         return f"{self.price:,}".replace(',', '.') + " VNĐ"
 
 
-class PruningRequest(models.Model):
-    name         = models.CharField(max_length=200, verbose_name='Tên khách')
-    phone_number = models.CharField(max_length=20,  verbose_name='SĐT')
-    message      = models.TextField(blank=True,     verbose_name='Ghi chú')
-    created_at   = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        verbose_name        = 'Yêu cầu cắt tỉa'
-        verbose_name_plural = 'Yêu cầu cắt tỉa'
-        ordering            = ['-created_at']
-
-    def __str__(self):
-        return f"Cắt tỉa – {self.name} ({self.phone_number})"
-
-
 class Order(models.Model):
     customer_name = models.CharField(max_length=200, verbose_name='Tên khách')
     phone_number  = models.CharField(max_length=20,  verbose_name='SĐT')

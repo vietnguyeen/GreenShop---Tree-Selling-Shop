@@ -54,14 +54,12 @@ class ServiceOrderForm(forms.ModelForm):
         service = cleaned.get('service_type')
         grass   = cleaned.get('grass_option')
 
-        # Bắt buộc chọn loại cỏ khi dịch vụ là Lợp thảm cỏ
         if service == 'lop_tham_co' and not grass:
             self.add_error(
                 'grass_option',
                 'Vui lòng chọn loại cỏ cho dịch vụ Lợp thảm cỏ.'
             )
 
-        # Nếu không phải lợp thảm cỏ, xóa grass_option để không lưu rác
         if service != 'lop_tham_co':
             cleaned['grass_option'] = None
 

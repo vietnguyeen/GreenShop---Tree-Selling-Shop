@@ -7,7 +7,7 @@ from django.template.loader   import render_to_string
 from django.utils.html        import strip_tags
 from django.conf              import settings
 from .forms                   import ServiceOrderForm
-from .models                  import Category, Plant, PruningRequest, Order, OrderItem, ServiceOrder
+from .models                  import Category, Plant, Order, OrderItem, ServiceOrder
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -77,20 +77,6 @@ def kho_cay(request):
         'categories':      Category.objects.all(),
         'cart_item_count': _cart_item_count(request),
     })
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# SET PHONE
-# ─────────────────────────────────────────────────────────────────────────────
-
-def set_phone(request):
-    if request.method == 'POST':
-        phone = request.POST.get('phone_number', '').strip()
-        if phone:
-            request.session['phone_number'] = phone
-            request.session.modified = True
-        return redirect(request.POST.get('next', '/'))
-    return redirect('home')
 
 
 # ─────────────────────────────────────────────────────────────────────────────

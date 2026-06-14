@@ -8,6 +8,7 @@
     scrollbar-width: none; /* Ẩn scrollbar Firefox */
     scroll-behavior: smooth;
   }
+  
   .mini-slider-container::-webkit-scrollbar { display: none; } /* Ẩn scrollbar Chrome/Safari */
 
   .mini-slider-container > img,
@@ -45,7 +46,6 @@
          '{{ p_height|escapejs }}',
          '{{ p_diameter|escapejs }}',
          '{{ plant.formatted_price|escapejs }}',
-         '{{ plant.stock }}',
          '{{ p_cat|escapejs }}'
        )">
 

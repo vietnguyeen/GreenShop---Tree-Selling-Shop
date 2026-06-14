@@ -13,10 +13,6 @@ class PlantAdmin(admin.ModelAdmin):
     list_filter = ('category', 'is_available')
     search_fields = ('name',)
 
-@admin.register(PruningRequest)
-class PruningRequestAdmin(admin.ModelAdmin):
-    list_display = ('name', 'phone_number', 'created_at')
-    search_fields = ('name', 'phone_number')
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
