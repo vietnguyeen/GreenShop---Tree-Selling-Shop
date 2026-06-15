@@ -8,6 +8,7 @@ from django.utils.html        import strip_tags
 from django.conf              import settings
 from .forms                   import ServiceOrderForm
 from .models                  import Category, Plant, Order, OrderItem, ServiceOrder
+from django.core.paginator    import Paginator
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -20,9 +21,6 @@ def _get_cart(request):
 def _save_cart(request, cart):
     request.session['cart'] = cart
     request.session.modified = True
-
-def _cart_item_count(request):
-    return sum(item['quantity'] for item in _get_cart(request).values())
 
 def _send_html_email(subject, html_content, to_email):
     try:
@@ -53,7 +51,6 @@ def index(request):
     return render(request, 'store/index.html', {
         'all_plants':      all_plants,
         'featured_plants': featured_plants,
-        'cart_item_count': _cart_item_count(request),
     })
 
 
@@ -62,20 +59,29 @@ def index(request):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def kho_cay(request):
-    query  = request.GET.get('q', '').strip()
-    plants = Plant.objects.select_related('category').all()
+    query = request.GET.get('q', '').strip()
+    
+    # Lấy toàn bộ danh sách
+    plant_list = Plant.objects.select_related('category').all()
 
+    # Lọc theo từ khóa tìm kiếm (nếu có)
     if query:
-        plants = plants.filter(
+        plant_list = plant_list.filter(
             Q(name__icontains=query) |
             Q(category__name__icontains=query)
         )
 
+    # ─────────────────────────────────────────────────────────
+    # THÊM LOGIC PHÂN TRANG (12 sản phẩm / trang)
+    # ─────────────────────────────────────────────────────────
+    paginator = Paginator(plant_list, 12) 
+    page_number = request.GET.get('page')
+    plants = paginator.get_page(page_number)
+
     return render(request, 'store/kho_cay.html', {
-        'plants':          plants,
-        'query':           query,
-        'categories':      Category.objects.all(),
-        'cart_item_count': _cart_item_count(request),
+        'plants':     plants,  # Biến này giờ là 1 Page object thay vì list thường
+        'query':      query,
+        'categories': Category.objects.all(),
     })
 
 
@@ -132,7 +138,6 @@ def cart_detail(request):
     return render(request, 'store/cart_detail.html', {
         'cart_items':      cart_items,
         'total_price':     total,
-        'cart_item_count': len(cart_items),
     })
 
 
@@ -224,8 +229,7 @@ def checkout(request):
 def order_success(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'store/order_success.html', {
-        'order':           order,
-        'cart_item_count': _cart_item_count(request),
+        'order': order,
     })
 
 
@@ -261,18 +265,14 @@ def service_booking(request):
             return redirect('service_success')
 
         return render(request, 'store/service_booking.html', {
-            'form':            form,
-            'cart_item_count': _cart_item_count(request),
+            'form': form,
         })
 
     form = ServiceOrderForm()
     return render(request, 'store/service_booking.html', {
-        'form':            form,
-        'cart_item_count': _cart_item_count(request),
+        'form': form,
     })
 
 
 def service_success(request):
-    return render(request, 'store/service_success.html', {
-        'cart_item_count': _cart_item_count(request),
-    })
+    return render(request, 'store/service_success.html')

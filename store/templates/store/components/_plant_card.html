@@ -35,17 +35,21 @@
 
 <div class="card product-card">
 
-  {% with p_girth=plant.girth|default:"N/A" p_height=plant.height|default:"N/A" p_diameter=plant.diameter|default:"N/A" p_cat=plant.category.name|default:"Cây Giống" %}
+  {% with p_girth=plant.girth|default:"-" p_height=plant.height|default:"-" p_tuber=plant.tuber_diameter|default:"-" p_cat=plant.category.name|default:"Cây Giống" %}
 
   <div class="product-img-wrap"
        onclick="openQuickView(
          '{{ plant.id }}',
          '{{ plant.name|escapejs }}',
          '{% if plant.image %}{{ plant.image.url }}{% endif %}',
+         '{% if plant.image2 %}{{ plant.image2.url }}{% endif %}',
+         '{% if plant.image3 %}{{ plant.image3.url }}{% endif %}',
+         '{% if plant.image4 %}{{ plant.image4.url }}{% endif %}',
          '{{ p_girth|escapejs }}',
          '{{ p_height|escapejs }}',
-         '{{ p_diameter|escapejs }}',
+         '{{ p_tuber|escapejs }}',
          '{{ plant.formatted_price|escapejs }}',
+         '{{ plant.is_available|yesno:"true,false" }}',
          '{{ p_cat|escapejs }}'
        )">
 
@@ -73,12 +77,13 @@
     </div>
 
     {% if not plant.is_available %}
-      <div style="position:absolute;top:.7rem;left:.7rem;
+      <div style="position:absolute;top:.8rem;left:.8rem;
                   background:var(--danger);color:#fff;
-                  font-size:.65rem;font-weight:700;
-                  padding:3px 10px;border-radius:50px;z-index:2;">
+                  font-size:.68rem;font-weight:700;
+                  padding:3px 11px;border-radius:50px;z-index:2;">
         Hết Hàng
       </div>
+    {% endif %}
   </div>
 
   {% endwith %}
@@ -86,15 +91,17 @@
   <div class="product-body">
     <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
     <div class="product-name">{{ plant.name }}</div>
+    
     <div class="product-specs">
-      <div><strong>Đường kính gốc:</strong>     {{ plant.girth|default:"N/A" }}</div>
-      <div><strong>Cao:</strong>                {{ plant.height|default:"N/A" }}</div>
-      {% if plant.tuber_diameter and plant.tuber_diameter != '-' and plant.tuber_diameter != 'None' and plant.tuber_diameter != 'N/A' %}
-    <div style="grid-column: 1 / -1; margin-top: 4px;">
-      <strong>Đường kính củ:</strong> {{ plant.tuber_diameter }} cm
+      {% if plant.has_tuber %}
+        <div><strong>ĐK củ:</strong> {{ plant.tuber_diameter }} cm</div>
+      {% else %}
+        <div><strong>ĐK gốc:</strong> {{ plant.girth|default:"-" }}</div>
+      {% endif %}
+      
+      <div><strong>Cao:</strong> {{ plant.height|default:"-" }}</div>
     </div>
-  {% endif %}
-    </div>
+    
     <div class="product-footer">
       <span class="product-price">{{ plant.formatted_price }}</span>
       {% if plant.is_available %}

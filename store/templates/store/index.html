@@ -48,7 +48,10 @@
 
 #contact { background: var(--cream); }
 .contact-layout { display: grid; grid-template-columns: 1fr 1.25fr; gap: 5rem; margin-top: 3.5rem; align-items: start; }
-@media (max-width: 800px) { .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; } }
+@media (max-width: 800px) { 
+  .contact-layout { grid-template-columns: 1fr; gap: 2.5rem; } 
+  .contact-form-card { width: 100%; max-width: 100%; margin: 0; padding: 2rem 1.5rem; }
+}
 .contact-info-title { font-family: 'Playfair Display', serif; font-size: 1.55rem; font-weight: 700; color: var(--forest); margin-bottom: 2rem; }
 .contact-detail { display: flex; gap: 14px; align-items: flex-start; margin-bottom: 1.5rem; }
 .contact-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--mist); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
