@@ -69,55 +69,9 @@
 <div class="kho-body">
   <div class="product-grid">
     {% for plant in plants %}
-    <div class="card product-card">
+      
+      {% include 'store/components/_plant_card.html' with plant=plant %}
 
-      {% with p_girth=plant.girth|default:"-" p_height=plant.height|default:"-" p_diameter=plant.diameter|default:"-" p_cat=plant.category.name|default:"Cây Giống" %}
-      <div class="product-img-wrap" onclick="openQuickView(
-           '{{ plant.id }}',
-           '{{ plant.name|escapejs }}',
-           '{% if plant.image %}{{ plant.image.url }}{% endif %}',
-           '{% if plant.image2 %}{{ plant.image2.url }}{% endif %}',
-           '{% if plant.image3 %}{{ plant.image3.url }}{% endif %}',
-           '{% if plant.image4 %}{{ plant.image4.url }}{% endif %}',
-           '{{ p_girth|escapejs }}',
-           '{{ p_height|escapejs }}',
-           '{{ p_diameter|escapejs }}',
-           '{{ plant.formatted_price|escapejs }}',
-           '{{ plant.is_available|yesno:"true,false" }}',
-           '{{ p_cat|escapejs }}'
-         )">
-        {% if plant.image %}
-          <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
-        {% else %}
-          <div class="product-img-placeholder">🌳</div>
-        {% endif %}
-        <div class="qv-overlay"><span class="qv-overlay-btn">👁 Xem Nhanh</span></div>
-        {% if not plant.is_available %}
-          <div style="position:absolute;top:.8rem;left:.8rem;background:var(--danger);color:#fff;font-size:.68rem;font-weight:700;padding:3px 11px;border-radius:50px;z-index:2;">Hết Hàng</div>
-        {% endif %}
-      </div>
-      {% endwith %}
-
-      <div class="product-body">
-        <span class="product-tag">{{ plant.category.name|default:"Cây Giống" }}</span>
-        <div class="product-name">{{ plant.name }}</div>
-
-        <div class="product-specs">
-          <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }} cm</div>
-          <div><strong>Cao:</strong> {{ plant.height|default:"-" }} m</div>
-        </div>
-
-        <div class="product-footer">
-          <span class="product-price">{{ plant.formatted_price }}</span>
-          {% if plant.is_available %}
-            <a href="{% url 'add_to_cart' plant.id %}" class="btn btn-primary btn-sm">🛒 Thêm giỏ</a>
-          {% else %}
-            <span class="stock-badge-out">Hết Hàng</span>
-          {% endif %}
-        </div>
-      </div>
-
-    </div>
     {% empty %}
     <div class="empty-state">
       <div class="empty-icon">🌿</div>

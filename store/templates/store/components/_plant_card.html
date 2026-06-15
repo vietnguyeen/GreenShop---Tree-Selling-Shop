@@ -89,6 +89,11 @@
     <div class="product-specs">
       <div><strong>Đường kính gốc:</strong>     {{ plant.girth|default:"N/A" }}</div>
       <div><strong>Cao:</strong>                {{ plant.height|default:"N/A" }}</div>
+      {% if plant.tuber_diameter and plant.tuber_diameter != '-' and plant.tuber_diameter != 'None' and plant.tuber_diameter != 'N/A' %}
+    <div style="grid-column: 1 / -1; margin-top: 4px;">
+      <strong>Đường kính củ:</strong> {{ plant.tuber_diameter }} cm
+    </div>
+  {% endif %}
     </div>
     <div class="product-footer">
       <span class="product-price">{{ plant.formatted_price }}</span>
