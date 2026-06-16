@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Plant, PruningRequest, Order, OrderItem, ServiceOrder
+from .models import Category, Plant, Order, OrderItem, ServiceOrder
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
