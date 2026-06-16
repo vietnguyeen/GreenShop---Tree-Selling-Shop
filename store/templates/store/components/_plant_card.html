@@ -47,7 +47,6 @@
          '{% if plant.image4 %}{{ plant.image4.url }}{% endif %}',
          '{{ p_girth|escapejs }}',
          '{{ p_height|escapejs }}',
-         '{{ p_tuber|escapejs }}',
          '{{ plant.formatted_price|escapejs }}',
          '{{ plant.is_available|yesno:"true,false" }}',
          '{{ p_cat|escapejs }}'
@@ -93,7 +92,7 @@
     <div class="product-name">{{ plant.name }}</div>
     
     <div class="product-specs">
-      {% if "Cây Bonsai" in plant.category.name|lower %}
+      {% if "bonsai" in plant.category.name|lower %}
         <div><strong>Đường kính củ:</strong> {{ plant.girth|default:"-" }}</div>
       {% else %}
         <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }}</div>
