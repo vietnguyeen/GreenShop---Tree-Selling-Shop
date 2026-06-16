@@ -1,5 +1,5 @@
 {# _plant_card.html – nhận biến `plant` từ {% include ... with plant=plant %} #}
-<h1>TEST XEM CÓ HIỆN KHÔNG</h1>
+
 <style>
   /* CSS Mini Slider chạy mượt bên trong Card */
   .mini-slider-container {
@@ -92,7 +92,7 @@
     <div class="product-name">{{ plant.name }}</div>
     
     <div class="product-specs">
-      {% if "bonsai" in plant.category.name|lower %}
+      {% if plant.category.name == "Cây Bonsai" %}
         <div><strong>Đường kính củ:</strong> {{ plant.girth|default:"-" }}</div>
       {% else %}
         <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }}</div>

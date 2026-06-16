@@ -152,7 +152,7 @@
     document.getElementById('qvHeight').innerText = height !== '-' && height !== 'N/A' ? height + ' m' : '-';
 
     // LOGIC HOÁN ĐỔI GỐC <-> CỦ THÔNG MINH
-    if (cat && cat.toLowerCase().includes('bonsai')) {
+    if (cat === 'Cây Bonsai') {
       document.getElementById('qvGirthLabel').innerText = 'Đường kính củ';
     } else {
       document.getElementById('qvGirthLabel').innerText = 'Đường kính gốc';
