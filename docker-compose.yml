@@ -1,6 +1,7 @@
 services:
   db:
     image: postgres:15
+    container_name: greenshop_db
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -9,9 +10,13 @@ services:
       - POSTGRES_PASSWORD=130804
     ports:
       - "5432:5432"
+    networks:
+      - greenshop_network
+    restart: unless-stopped
 
   web:
     build: .
+    container_name: greenshop_web
     command: gunicorn plant_shop.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - .:/app
@@ -22,9 +27,14 @@ services:
       - .env
     depends_on:
       - db
+      - redis
+    networks:
+      - greenshop_network
+    restart: unless-stopped
 
   caddy:
     image: caddy:2
+    container_name: greenshop_caddy
     restart: unless-stopped
     ports:
       - "80:80"
@@ -35,7 +45,34 @@ services:
       - caddy_config:/config
     depends_on:
       - web
+    networks:
+      - greenshop_network
 
+  redis:
+    image: redis:7-alpine
+    container_name: greenshop_redis
+    restart: always
+    networks:
+      - greenshop_network
+
+  celery_worker:
+    build: .
+    container_name: greenshop_celery
+    command: celery -A plant_shop worker --loglevel=info
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+    env_file:
+      - .env
+    networks:
+      - greenshop_network
+    restart: unless-stopped
+
+  # ==========================================
+  # KHỐI GIÁM SÁT HỆ THỐNG (DEVOPS)
+  # ==========================================
   prometheus:
     image: prom/prometheus:latest
     container_name: greenshop_prometheus
@@ -65,28 +102,30 @@ services:
       - greenshop_network
     restart: unless-stopped
 
-  redis:
-    image: redis:7-alpine
-    restart: always
-
-  celery_worker:
-    build: .
-    command: celery -A plant_shop worker --loglevel=info
+  grafana:
+    image: grafana/grafana:latest
+    container_name: greenshop_grafana
+    ports:
+      - "3000:3000"
     volumes:
-      - .:/code
+      - grafana_data:/var/lib/grafana
     depends_on:
-      - db
-      - redis
-    env_file:
-      - .env
+      - prometheus
+    networks:
+      - greenshop_network
+    restart: unless-stopped
 
-# KHAI BÁO Ổ CỨNG VÀ MẠNG LUÔN ĐẶT Ở DƯỚI CÙNG
+# ==========================================
+# KHAI BÁO Ổ CỨNG VÀ MẠNG TỔNG
+# ==========================================
 volumes:
   postgres_data:
   django_media:
-  caddy_data:     # Ổ cứng lưu chứng chỉ HTTPS
+  caddy_data:     
   caddy_config:
   prometheus_data:
+  grafana_data:   # Thêm ổ cứng lưu cấu hình biểu đồ của Grafana
 
 networks:
   greenshop_network:
+    driver: bridge
