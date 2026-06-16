@@ -37,7 +37,7 @@
 
   {% with p_girth=plant.girth|default:"-" p_height=plant.height|default:"-" p_tuber=plant.tuber_diameter|default:"-" p_cat=plant.category.name|default:"Cây Giống" %}
 
-  <div class="product-img-wrap"
+ <div class="product-img-wrap"
        onclick="openQuickView(
          '{{ plant.id }}',
          '{{ plant.name|escapejs }}',
@@ -45,13 +45,13 @@
          '{% if plant.image2 %}{{ plant.image2.url }}{% endif %}',
          '{% if plant.image3 %}{{ plant.image3.url }}{% endif %}',
          '{% if plant.image4 %}{{ plant.image4.url }}{% endif %}',
+         '{{ p_cat|escapejs }}',
          '{{ p_girth|escapejs }}',
          '{{ p_height|escapejs }}',
          '{{ plant.formatted_price|escapejs }}',
-         '{{ plant.is_available|yesno:"true,false" }}',
-         '{{ p_cat|escapejs }}'
+         '{{ plant.is_available|yesno:"true,false" }}'
        )">
-
+       
     <div class="mini-slider-container">
       {% if plant.image %}
         <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
