@@ -93,8 +93,8 @@
     <div class="product-name">{{ plant.name }}</div>
     
     <div class="product-specs">
-      {% if plant.has_tuber %}
-        <div><strong>ĐK củ:</strong> {{ plant.tuber_diameter }} cm</div>
+      {% if "bonsai" in plant.category.name|lower %}
+        <div><strong>ĐK củ:</strong> {{ plant.girth|default:"-" }}</div>
       {% else %}
         <div><strong>ĐK gốc:</strong> {{ plant.girth|default:"-" }}</div>
       {% endif %}

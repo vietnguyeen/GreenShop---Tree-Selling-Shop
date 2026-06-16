@@ -152,16 +152,12 @@
     document.getElementById('qvHeight').innerText = height !== '-' && height !== 'N/A' ? height + ' m' : '-';
 
     // LOGIC HOÁN ĐỔI GỐC <-> CỦ THÔNG MINH
-    const isTuberValid = (tuber_diameter && tuber_diameter !== '-' && tuber_diameter !== 'None' && tuber_diameter !== 'N/A');
-
-    if (isTuberValid) {
+    if (cat && cat.toLowerCase().includes('bonsai')) {
       document.getElementById('qvGirthLabel').innerText = 'Đường kính củ';
-      document.getElementById('qvGirth').innerText = tuber_diameter + ' cm';
     } else {
       document.getElementById('qvGirthLabel').innerText = 'Đường kính gốc';
-      document.getElementById('qvGirth').innerText = girth !== '-' && girth !== 'N/A' ? girth + ' cm' : '-';
     }
-
+    document.getElementById('qvGirth').innerText = girth !== '-' && girth !== 'N/A' && girth !== '' ? girth + ' cm' : '-';
     galleryImages = [];
     if (img1) galleryImages.push(img1);
     if (img2) galleryImages.push(img2);
