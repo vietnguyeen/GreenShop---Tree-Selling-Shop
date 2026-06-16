@@ -1,17 +1,26 @@
-# Sử dụng Python (có thể đổi version 3.9, 3.10 tùy dự án của bạn)
-FROM python:3.10-slim
+# 1. Sử dụng Python 3.12 (Bắt buộc cho Django 6.0+)
+FROM python:3.12-slim
 
-# Tắt bộ nhớ đệm của Python để log in ra mượt hơn
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# 2. Thiết lập biến môi trường giúp log in ra mượt hơn và không tạo file rác .pyc
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# Tạo thư mục làm việc
+# 3. Tạo thư mục làm việc trong container
 WORKDIR /app
 
-# Cài đặt thư viện (Cần đảm bảo bạn có file requirements.txt)
-COPY requirements.txt /app/
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# 4. Cài đặt các lõi hệ thống cần thiết (Cực kỳ quan trọng cho Pillow và Psycopg2)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libpq-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copy toàn bộ code vào container
+# 5. Copy file requirements.txt vào trước để cài đặt
+COPY requirements.txt /app/
+
+# 6. Nâng cấp pip và cài đặt thư viện (thêm --no-cache-dir để giảm dung lượng image)
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 7. Cuối cùng, copy toàn bộ mã nguồn dự án vào container
 COPY . /app/
