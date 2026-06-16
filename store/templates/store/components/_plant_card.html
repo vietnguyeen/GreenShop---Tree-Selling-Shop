@@ -92,13 +92,37 @@
     <div class="product-name">{{ plant.name }}</div>
     
     <div class="product-specs">
-      {% if plant.category.name == "Cây Bonsai" %}
-        <div><strong>Đường kính củ:</strong> {{ plant.girth|default:"-" }}</div>
-      {% else %}
-        <div><strong>Đường kính gốc:</strong> {{ plant.girth|default:"-" }}</div>
-      {% endif %}
       
-      <div><strong>Cao:</strong> {{ plant.height|default:"-" }}</div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">
+          {% if plant.category.name == "Cây Bonsai" %}
+            Đường kính củ
+          {% else %}
+            Đường kính gốc
+          {% endif %}
+        </strong>
+        <span style="font-size: 0.95rem; font-weight: 600; color: var(--forest);">
+          {% if plant.girth and plant.girth != '-' and plant.girth != 'N/A' and plant.girth != 'None' %}
+            {{ plant.girth }} cm
+          {% else %}
+            -
+          {% endif %}
+        </span>
+      </div>
+      
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted);">
+          Chiều cao
+        </strong>
+        <span style="font-size: 0.95rem; font-weight: 600; color: var(--forest);">
+          {% if plant.height and plant.height != '-' and plant.height != 'N/A' and plant.height != 'None' %}
+            {{ plant.height }} m
+          {% else %}
+            -
+          {% endif %}
+        </span>
+      </div>
+
     </div>
     
     <div class="product-footer">

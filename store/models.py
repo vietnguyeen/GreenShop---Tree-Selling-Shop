@@ -37,9 +37,6 @@ class Plant(models.Model):
     price    = models.PositiveIntegerField(default=0,  verbose_name='Giá (VNĐ)')
     girth    = models.CharField(max_length=50,  null=True, blank=True, verbose_name='Đường kính gốc')
     height   = models.CharField(max_length=50,  null=True, blank=True, verbose_name='Chiều cao')
-
-    
-    # Đã thay thế hoàn toàn 'stock' bằng 'is_available'
     is_available = models.BooleanField(default=True, verbose_name='Còn hàng / Sẵn sàng giao')
 
     class Meta:
