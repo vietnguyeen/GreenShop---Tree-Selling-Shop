@@ -45,13 +45,13 @@
          '{% if plant.image2 %}{{ plant.image2.url }}{% endif %}',
          '{% if plant.image3 %}{{ plant.image3.url }}{% endif %}',
          '{% if plant.image4 %}{{ plant.image4.url }}{% endif %}',
-         '{{ p_cat|escapejs }}',
          '{{ p_girth|escapejs }}',
          '{{ p_height|escapejs }}',
+         '{{ p_cat|escapejs }}',
          '{{ plant.formatted_price|escapejs }}',
          '{{ plant.is_available|yesno:"true,false" }}'
        )">
-       
+
     <div class="mini-slider-container">
       {% if plant.image %}
         <img src="{{ plant.image.url }}" alt="{{ plant.name }}" loading="lazy">
