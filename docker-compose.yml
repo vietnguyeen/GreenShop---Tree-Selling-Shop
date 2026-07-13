@@ -70,51 +70,6 @@ services:
       - greenshop_network
     restart: unless-stopped
 
-  # ==========================================
-  # KHỐI GIÁM SÁT HỆ THỐNG (DEVOPS)
-  # ==========================================
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: greenshop_prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-    ports:
-      - "9090:9090"
-    networks:
-      - greenshop_network
-    restart: unless-stopped
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: greenshop_node_exporter
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    networks:
-      - greenshop_network
-    restart: unless-stopped
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: greenshop_grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-    depends_on:
-      - prometheus
-    networks:
-      - greenshop_network
-    restart: unless-stopped
-
 # ==========================================
 # KHAI BÁO Ổ CỨNG VÀ MẠNG TỔNG
 # ==========================================
@@ -123,8 +78,6 @@ volumes:
   django_media:
   caddy_data:     
   caddy_config:
-  prometheus_data:
-  grafana_data:   # Thêm ổ cứng lưu cấu hình biểu đồ của Grafana
 
 networks:
   greenshop_network:

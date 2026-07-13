@@ -42,10 +42,8 @@ def _send_html_email(subject, html_content, to_email):
 # ─────────────────────────────────────────────────────────────────────────────
 
 def index(request):
-    # Lấy toàn bộ cây đang có hàng (is_available=True) cho Slider
     all_plants = Plant.objects.select_related('category').filter(is_available=True)
     
-    # Lấy 10 cây mới nhất chưa bán để hiển thị
     featured_plants = Plant.objects.select_related('category').filter(is_available=True).order_by('-id')[:10]
     
     return render(request, 'store/index.html', {
@@ -71,22 +69,18 @@ def kho_cay(request):
             Q(category__name__icontains=query)
         )
 
-    # ─────────────────────────────────────────────────────────
-    # THÊM LOGIC PHÂN TRANG (12 sản phẩm / trang)
-    # ─────────────────────────────────────────────────────────
     paginator = Paginator(plant_list, 12) 
     page_number = request.GET.get('page')
     plants = paginator.get_page(page_number)
 
     return render(request, 'store/kho_cay.html', {
-        'plants':     plants,  # Biến này giờ là 1 Page object thay vì list thường
-        'query':      query,
+        'plants':     plants, 
         'categories': Category.objects.all(),
     })
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# GIỎ HÀNG (Logic Độc Bản)
+# GIỎ HÀNG 
 # ─────────────────────────────────────────────────────────────────────────────
 
 def add_to_cart(request, plant_id):
