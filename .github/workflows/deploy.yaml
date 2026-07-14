@@ -1,4 +1,4 @@
-name: Tự động Deploy lên VPS
+name: Auto Deploy
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Kết nối SSH và Cập nhật code
+      - name: SSH and update code 
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VPS_IP }}
